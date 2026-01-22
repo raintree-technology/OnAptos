@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart3, Bitcoin, Building2, Coins, GitBranch, TrendingUp } from "lucide-react";
+import { Bitcoin, Building2, Coins } from "lucide-react";
 import { usePathname } from "next/navigation";
 import type React from "react";
 import { useMemo, useState } from "react";
@@ -9,12 +9,10 @@ import { ErrorBoundary } from "../errors/ErrorBoundary";
 import { HeaderLogo } from "./header/HeaderLogo";
 import { MobileMenu } from "./header/MobileMenu";
 import { DesktopNavigationMenu } from "./header/NavigationMenu";
-import { WalletModal } from "./wallet/WalletModal";
 
-const HeaderComponent = (): React.ReactElement | null => {
+export function Header(): React.ReactElement | null {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showWalletModal, setShowWalletModal] = useState(false);
   const { t } = useTranslation(["common", "defi"]);
 
   // Assets dropdown navigation data (excluding Metrics and Repos which are now standalone)
@@ -67,13 +65,8 @@ const HeaderComponent = (): React.ReactElement | null => {
               navigationItems={navigationItems}
             />
           </div>
-
-          <WalletModal open={showWalletModal} onOpenChange={setShowWalletModal} />
         </div>
       </header>
     </ErrorBoundary>
   );
-};
-
-HeaderComponent.displayName = "Header";
-export const Header = HeaderComponent;
+}

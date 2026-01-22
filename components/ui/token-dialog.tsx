@@ -11,15 +11,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { TokenDialogContent } from "@/components/ui/token-dialog-content";
 import { useTranslation } from "@/lib/hooks/useTranslation";
 import type { TokenMetadata } from "@/lib/types/tokens";
-import { formatCurrency } from "@/lib/utils";
-import { logger } from "@/lib/utils/core/logger";
+import { copyToClipboard } from "@/lib/utils/browser/clipboard";
 import {
-  copyToClipboard,
   formatTokenAmount,
   formatUSDValue,
   getTokenLogoUrlSync,
-  truncateAddress,
-} from "@/lib/utils/token/token-utils";
+} from "@/lib/utils/blockchain/tokens/token-utils";
+import { logger } from "@/lib/utils/core/logger";
 
 // Generic token dialog props
 export interface TokenDialogProps {

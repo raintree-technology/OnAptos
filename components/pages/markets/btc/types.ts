@@ -2,7 +2,6 @@
 
 import type { SupplyData, Token } from "@/lib/config/tokens";
 import type { Currency } from "@/lib/types/consolidated";
-import { logger } from "@/lib/utils/core/logger";
 
 // Enhanced Market interface with better typing
 export interface Market {
@@ -119,6 +118,3 @@ export const isValidProtocolData = (data: unknown): data is ProtocolData => {
     Array.isArray((data as ProtocolData).markets)
   );
 };
-
-// Import performance utilities from dedicated module
-export { measurePerformance } from "./performance";

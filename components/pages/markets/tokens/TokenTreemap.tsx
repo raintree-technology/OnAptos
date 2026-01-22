@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Tooltip as RechartsTooltip, ResponsiveContainer, Treemap } from "recharts";
 import { Badge } from "@/components/ui/badge";
-import { STABLECOIN_SYMBOLS } from "@/lib/constants/tokens/stablecoins";
 import { TREEMAP_COLORS } from "@/lib/constants/ui/colors";
 import type { TokenData, TreemapItem } from "@/lib/types/tokens";
 import { cn } from "@/lib/utils";
@@ -66,7 +65,7 @@ export function TokenTreemap({ tokens }: TokenTreemapProps) {
       fullName: token.name,
       uniqueId: token.faAddress || token.tokenAddress || `${token.symbol}-${index}`, // Unique ID for keys
     }));
-  }, [tokens.length]);
+  }, [tokens.length, tokens]);
 
   if (treemapData.length === 0) {
     return (
@@ -331,7 +330,7 @@ const TreemapContent = ({ onCellClick, ...props }: any) => {
   const nameFontSize = Math.max(8, Math.min(14, width / 8));
   const displayName =
     name.length > Math.floor(width / 8)
-      ? name.substring(0, Math.max(3, Math.floor(width / 8) - 3)) + "..."
+      ? `${name.substring(0, Math.max(3, Math.floor(width / 8) - 3))}...`
       : name;
 
   return (

@@ -1,12 +1,16 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { TrendingUp } from "lucide-react";
-import { formatCompactNumber } from "@/lib/utils/formatters";
+import { useEffect, useRef } from "react";
+import { formatCompactNumber } from "@/lib/utils/format";
+
+interface ActivityPattern {
+  hour: string;
+  transactions: number;
+}
 
 interface MetricsChartsProps {
-  activityPatterns: any[];
+  activityPatterns: ActivityPattern[];
 }
 
 export function MetricsCharts({ activityPatterns }: MetricsChartsProps) {
@@ -25,7 +29,7 @@ export function MetricsCharts({ activityPatterns }: MetricsChartsProps) {
     // Aggregate data by hour of day (0-23)
     const hourlyAggregated: { [hour: number]: { transactions: number; count: number } } = {};
 
-    rawData.forEach((d: any) => {
+    rawData.forEach((d) => {
       // Parse the hour field which is a timestamp string
       const hourStr = d.hour;
       if (!hourStr) return;
@@ -77,13 +81,6 @@ export function MetricsCharts({ activityPatterns }: MetricsChartsProps) {
 
     // Filter to only show blocks with data
     const hourlyData = allBlocks.filter((block) => block.hasData && block.transactions > 0);
-
-    // Log for debugging
-    console.log("Hourly chart data (4-hour blocks):", {
-      totalBlocks: hourlyData.length,
-      blocksWithData: hourlyData.filter((h) => h.hasData).length,
-      data: hourlyData,
-    });
 
     const svg = d3.select(hourlyChartRef.current);
     svg.selectAll("*").remove();
@@ -149,8 +146,8 @@ export function MetricsCharts({ activityPatterns }: MetricsChartsProps) {
       .attr("width", x.bandwidth())
       .attr("height", cellHeight)
       .attr("rx", 6)
-      .attr("fill", (d: any) => {
-        if (d.transactions === 0) return "#e5e7eb"; // light gray for blocks with no data
+      .attr("fill", (d) => {
+        if (d.transactions === 0) return "#e5e7eb";
         return colorScale(d.transactions);
       })
       .attr("stroke", "#e5e7eb")
@@ -264,14 +261,17 @@ export function MetricsCharts({ activityPatterns }: MetricsChartsProps) {
       .style("font-size", "9px");
   }, [activityPatterns]);
 
+  if (!activityPatterns || activityPatterns.length === 0) {
+    return null;
+  }
+
   return (
-    <>
-      {/* Hourly Activity Heatmap */}
-      {activityPatterns && activityPatterns.length > 0 && (
-        <div className="h-[200px] sm:h-[220px]">
-          <svg ref={hourlyChartRef} className="w-full h-full"></svg>
-        </div>
-      )}
-    </>
+    <div
+      className="h-[200px] sm:h-[220px]"
+      role="img"
+      aria-label="Hourly transaction activity heatmap"
+    >
+      <svg ref={hourlyChartRef} className="w-full h-full" />
+    </div>
   );
 }

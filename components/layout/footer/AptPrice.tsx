@@ -11,22 +11,6 @@ export const AptPrice = memo(function AptPrice() {
   const { t } = useTranslation("common");
   const [currentPrice, setCurrentPrice] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<any>(null);
-
-  const aptIconProps = {
-    src: "/icons/apt.png",
-    alt: "APT token",
-    width: 16,
-    height: 16,
-    className: "w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 flex-shrink-0 rounded-full dark:invert",
-    priority: false,
-    quality: 90,
-    unoptimized: false,
-    onError: (e: React.SyntheticEvent<HTMLImageElement>) => {
-      const img = e.target as HTMLImageElement;
-      img.src = "/placeholder.jpg";
-    },
-  };
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -34,20 +18,14 @@ export const AptPrice = memo(function AptPrice() {
         const currentResponse = await dedupeFetch(
           "/api/unified/prices?tokens=0x1::aptos_coin::AptosCoin"
         );
-        if (!currentResponse.ok) {
-          throw new Error("Failed to fetch current price");
-        }
-        const currentData = await currentResponse.json();
+        if (!currentResponse.ok) return;
 
-        if (currentData.prices && currentData.prices["0x1::aptos_coin::AptosCoin"]) {
-          const latestPrice = currentData.prices["0x1::aptos_coin::AptosCoin"];
-          setCurrentPrice(latestPrice);
-          setError(null);
-        } else {
-          throw new Error("No price data available");
+        const currentData = await currentResponse.json();
+        if (currentData.prices?.["0x1::aptos_coin::AptosCoin"]) {
+          setCurrentPrice(currentData.prices["0x1::aptos_coin::AptosCoin"]);
         }
-      } catch (err) {
-        setError(err instanceof Error ? err : new Error(String(err)));
+      } catch {
+        // Silent fail - show unavailable state
       } finally {
         setLoading(false);
       }
@@ -55,17 +33,24 @@ export const AptPrice = memo(function AptPrice() {
 
     fetchPrice();
     const interval = setInterval(fetchPrice, 60 * 1000);
-
     return () => clearInterval(interval);
   }, []);
 
-  if (loading || error || currentPrice === null) {
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.target as HTMLImageElement;
+    img.src = "/placeholder.jpg";
+  };
+
+  if (loading || currentPrice === null) {
     return (
       <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
         <Image
-          {...aptIconProps}
-          className={`${aptIconProps.className} opacity-50`}
-          alt={aptIconProps.alt}
+          src="/icons/apt.png"
+          alt="APT token"
+          width={16}
+          height={16}
+          className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 flex-shrink-0 rounded-full dark:invert opacity-50"
+          onError={handleImageError}
         />
         <span className="truncate">
           {loading
@@ -78,7 +63,14 @@ export const AptPrice = memo(function AptPrice() {
 
   return (
     <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] xs:text-xs sm:text-sm">
-      <Image {...aptIconProps} alt={aptIconProps.alt} />
+      <Image
+        src="/icons/apt.png"
+        alt="APT token"
+        width={16}
+        height={16}
+        className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 flex-shrink-0 rounded-full dark:invert"
+        onError={handleImageError}
+      />
       <span className="font-medium whitespace-nowrap text-muted-foreground">
         ${currentPrice.toFixed(2)}
       </span>

@@ -13,10 +13,7 @@ export {
 
 // Export API response utilities (from consolidated response.ts)
 export {
-  buildCachedResponse,
   buildErrorResponse,
-  buildFallbackResponse,
-  buildFreshResponse,
   buildSuccessResponse,
   CACHE_DURATIONS,
   CACHE_HEADERS,
@@ -27,6 +24,9 @@ export {
   type ResponseOptions,
   successResponse,
 } from "./api/response";
+// ===== BLOCKCHAIN/TOKEN UTILITIES =====
+// Re-export all blockchain utilities
+export * from "./blockchain/tokens";
 // Request deduplication exports
 export * from "./cache/request-deduplication";
 // ===== CACHE UTILITIES =====
@@ -103,7 +103,7 @@ export {
   formatTokenSupply,
   getFormatCacheStats,
   UnifiedFormatters,
-} from "./formatting/unified-formatters";
+} from "./format/unified-formatters";
 // ===== INFRASTRUCTURE UTILITIES =====
 // Re-export infrastructure utilities (selective export for client safety)
 export { setupGracefulShutdown } from "./infrastructure/graceful-shutdown";
@@ -112,9 +112,6 @@ export {
   IPFS_GATEWAYS,
   resolveIPFSUrl,
 } from "./infrastructure/ipfs-gateway-fallback";
-// ===== TOKEN UTILITIES =====
-// Re-export all token utilities
-export * from "./token";
 // sitemap is server-only, not exported here
 
 // ===== SERVER-SIDE ONLY EXPORTS =====

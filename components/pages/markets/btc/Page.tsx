@@ -22,11 +22,11 @@ import { BTC_METADATA } from "@/lib/config/tokens/btc";
 import { BTC_COLORS } from "@/lib/constants/ui/colors";
 import { useBitcoinPrice } from "@/lib/hooks/useMarketPrice";
 import { usePageTranslation } from "@/lib/hooks/useTranslation";
-import { copyToClipboard } from "@/lib/utils/clipboard";
+import { copyToClipboard } from "@/lib/utils/browser/clipboard";
 import { logger } from "@/lib/utils/core/logger";
 import { formatAmount, formatAmountFull, formatCurrency } from "@/lib/utils/format/format";
 import { getTokenIcon, truncateAddress } from "./shared";
-import { ChartDataItem, type Token } from "./types";
+import type { Token } from "./types";
 
 // Removed unused imports
 // Removed complex suspense boundaries for simpler implementation
@@ -36,7 +36,7 @@ const TOKEN_METADATA = BTC_METADATA;
 
 // truncateAddress and copyToClipboard are imported from shared utils
 
-// Ultra-optimized token card with comprehensive memoization
+// Token card component
 const TokenCard = memo(function TokenCard({
   token,
   totalBTC,
@@ -50,71 +50,51 @@ const TokenCard = memo(function TokenCard({
 }): React.ReactElement {
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  // Consolidated token calculations
-  const tokenData = useMemo(() => {
-    const btcValue = parseFloat(token.formatted_supply || "0");
-    const usdValue = bitcoinPrice ? btcValue * bitcoinPrice : 0;
-    const marketSharePercent = totalBTC > 0 ? (btcValue / totalBTC) * 100 : 0;
-    const metadata = TOKEN_METADATA[token.symbol];
-
-    return {
-      marketSharePercent: marketSharePercent.toFixed(1),
-      btcValue,
-      usdValue,
-      metadata,
-    };
-  }, [token, totalBTC, bitcoinPrice]);
-
-  const handleImageLoad = useCallback(() => {
-    setImageLoaded(true);
-  }, []);
+  const btcValue = parseFloat(token.formatted_supply || "0");
+  const usdValue = bitcoinPrice ? btcValue * bitcoinPrice : 0;
+  const marketSharePercent = totalBTC > 0 ? ((btcValue / totalBTC) * 100).toFixed(1) : "0.0";
+  const metadata = TOKEN_METADATA[token.symbol];
 
   return (
-    <>
-      <div className="group">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-5 h-5 relative">
-            {!imageLoaded && (
-              <div className="absolute inset-0 bg-muted animate-pulse rounded-full" />
-            )}
-            <Image
-              src={getTokenIcon(token.symbol, tokenData.metadata)}
-              alt={`${token.symbol} icon`}
-              width={20}
-              height={20}
-              className={`object-contain rounded-full ${!imageLoaded ? "opacity-0" : ""}`}
-              onLoad={handleImageLoad}
-              onError={(e) => {
-                const img = e.target as HTMLImageElement;
-                img.src = "/placeholder.jpg";
-                handleImageLoad();
-              }}
-            />
-          </div>
-          <h3 className="text-base font-semibold">{token.symbol}</h3>
+    <div className="group">
+      <div className="flex items-center gap-2 mb-2">
+        <div className="w-5 h-5 relative">
+          {!imageLoaded && <div className="absolute inset-0 bg-muted animate-pulse rounded-full" />}
+          <Image
+            src={getTokenIcon(token.symbol, metadata)}
+            alt={`${token.symbol} icon`}
+            width={20}
+            height={20}
+            className={`object-contain rounded-full ${!imageLoaded ? "opacity-0" : ""}`}
+            onLoad={() => setImageLoaded(true)}
+            onError={(e) => {
+              const img = e.target as HTMLImageElement;
+              img.src = "/placeholder.jpg";
+              setImageLoaded(true);
+            }}
+          />
         </div>
-        <p className="text-lg font-bold font-mono mb-0.5">
-          {formatAmount(tokenData.btcValue, "BTC")}
-          {bitcoinPrice && (
-            <span className="text-xs font-normal text-muted-foreground ml-2">
-              ≈ {formatCurrency(tokenData.usdValue, "USD", { decimals: 0 })}
-            </span>
-          )}
-        </p>
-        <div className="flex items-baseline justify-between mb-1">
-          <span className="text-xs text-muted-foreground">{t("btc:stats.market_share")}</span>
-          <span className="text-xs text-muted-foreground font-mono">
-            {tokenData.marketSharePercent}%
-          </span>
-        </div>
-        <Progress className="h-1" value={parseFloat(tokenData.marketSharePercent)} />
+        <h3 className="text-base font-semibold">{token.symbol}</h3>
       </div>
-    </>
+      <p className="text-lg font-bold font-mono mb-0.5">
+        {formatAmount(btcValue, "BTC")}
+        {bitcoinPrice && (
+          <span className="text-xs font-normal text-muted-foreground ml-2">
+            ≈ {formatCurrency(usdValue, "USD", { decimals: 0 })}
+          </span>
+        )}
+      </p>
+      <div className="flex items-baseline justify-between mb-1">
+        <span className="text-xs text-muted-foreground">{t("btc:stats.market_share")}</span>
+        <span className="text-xs text-muted-foreground font-mono">{marketSharePercent}%</span>
+      </div>
+      <Progress className="h-1" value={parseFloat(marketSharePercent)} />
+    </div>
   );
 });
 
-// Ultra-optimized loading state component
-const LoadingState = memo(function LoadingState(): React.ReactElement {
+// Loading state component
+function LoadingState(): React.ReactElement {
   return (
     <div className="space-y-6">
       {/* Mobile: Show total supply skeleton at top */}
@@ -157,10 +137,10 @@ const LoadingState = memo(function LoadingState(): React.ReactElement {
       </div>
     </div>
   );
-});
+}
 
-// Ultra-optimized error state component
-const ErrorState = memo(function ErrorState({
+// Error state component
+function ErrorState({
   error,
   onRetry,
   t,
@@ -195,7 +175,7 @@ const ErrorState = memo(function ErrorState({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [initialSeconds, error]);
+  }, [initialSeconds]);
 
   return (
     <Card className="border-destructive mb-6">
@@ -237,7 +217,7 @@ const ErrorState = memo(function ErrorState({
       </CardContent>
     </Card>
   );
-});
+}
 
 function BitcoinPage(): React.ReactElement {
   const { t } = usePageTranslation("btc");

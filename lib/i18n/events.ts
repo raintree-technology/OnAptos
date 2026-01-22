@@ -1,16 +1,12 @@
-import { EventEmitter } from "events";
-
 import { logger } from "@/lib/utils/core/logger";
 
-// Singleton event emitter for i18n events
-class I18nEventManager extends EventEmitter {
+// Browser-compatible event manager for i18n events
+class I18nEventManager {
   private static instance: I18nEventManager;
   private languageChangeCallbacks = new Set<(lng: string) => void>();
 
   private constructor() {
-    super();
-    // Increase max listeners to prevent warnings
-    this.setMaxListeners(100);
+    // Browser-compatible implementation
   }
 
   static getInstance(): I18nEventManager {

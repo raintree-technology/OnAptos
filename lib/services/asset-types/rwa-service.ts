@@ -1,5 +1,4 @@
 import { API_CONFIG } from "@/lib/config/app";
-import { CACHE_TTL } from "@/lib/constants/api/cache";
 import { enhancedFetch } from "@/lib/utils/api/fetch-utils";
 import { UnifiedCache } from "@/lib/utils/cache/unified-cache";
 import { logger } from "@/lib/utils/core/logger";

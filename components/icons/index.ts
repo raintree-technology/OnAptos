@@ -1,5 +1,1 @@
-/**
- * Icon components
- */
-
-export { FaGlobe, GitHubIcon, TwitterIcon, XTwitterIcon } from "./SocialIcons";
+export { FaGlobe, FaGithub, FaXTwitter } from "./SocialIcons";

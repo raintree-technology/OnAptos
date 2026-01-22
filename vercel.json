@@ -35,6 +35,14 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains; preload"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.arweave.net https://arweave.net https://ipfs.io https://*.ipfs.io https://cloudflare-ipfs.com https://nftstorage.link https://*.aptoslabs.com https://raw.githubusercontent.com https://*.githubusercontent.com; connect-src 'self' https://api.llama.fi https://api.mainnet.aptoslabs.com https://fullnode.mainnet.aptoslabs.com https://pro-api.coinmarketcap.com https://api.coingecko.com https://api.panora.exchange https://api.rwa.xyz https://on-chain-data-seven.vercel.app https://vercel.live https://va.vercel-scripts.com wss://*.walletconnect.com https://*.walletconnect.com; font-src 'self' data:; frame-ancestors 'self'; frame-src 'self' https://verify.walletconnect.com; object-src 'none'; base-uri 'self'; form-action 'self'"
         }
       ]
     },

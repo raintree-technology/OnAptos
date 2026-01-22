@@ -1,11 +1,9 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { navigationSections } from "@/components/landing/data/landing-data";
-import { STABLECOIN_SYMBOLS } from "@/lib/constants/tokens/stablecoins";
 import type { TokenData } from "@/lib/types/tokens";
 
 // Dynamic imports for code splitting - hero loads immediately, rest are lazy
@@ -49,78 +47,9 @@ export function OnboardingPage() {
   } | null>(null);
   const [isLoadingValues, setIsLoadingValues] = useState(true);
   const [activeSection, setActiveSection] = useState("overview");
-  const [isNavOpen, setIsNavOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [totalTokenCount, setTotalTokenCount] = useState<number>(0);
 
-  useEffect(() => {
-    fetchInitialData();
-
-    // Ensure page loads at the top (overview section)
-    window.scrollTo(0, 0);
-
-    // Clear any hash in the URL
-    if (window.location.hash) {
-      window.history.replaceState(null, "", window.location.pathname);
-    }
-  }, []);
-
-  useEffect(() => {
-    // Throttle scroll handler for better performance
-    let rafId: number | null = null;
-
-    const handleScroll = () => {
-      if (rafId !== null) return;
-
-      rafId = requestAnimationFrame(() => {
-        const sections = navigationSections.map((section) => document.getElementById(section.id));
-        const scrollPosition = window.scrollY + 200;
-
-        for (let i = sections.length - 1; i >= 0; i--) {
-          const section = sections[i];
-          if (section && section.offsetTop <= scrollPosition) {
-            const newSection = navigationSections[i].id;
-            setActiveSection(newSection);
-
-            // Update URL hash without triggering scroll
-            const newHash = `#${newSection}`;
-            if (window.location.hash !== newHash) {
-              window.history.replaceState(null, "", newHash);
-            }
-
-            // Auto-scroll mobile nav to center active button
-            const mobileNav = document.getElementById("mobile-nav-container");
-            const activeButton = document.getElementById(`mobile-nav-${newSection}`);
-            if (mobileNav && activeButton && window.innerWidth < 1024) {
-              const navRect = mobileNav.getBoundingClientRect();
-              const buttonRect = activeButton.getBoundingClientRect();
-              const scrollLeft =
-                mobileNav.scrollLeft +
-                buttonRect.left -
-                navRect.left -
-                navRect.width / 2 +
-                buttonRect.width / 2;
-
-              mobileNav.scrollTo({ left: scrollLeft, behavior: "smooth" });
-            }
-
-            break;
-          }
-        }
-
-        rafId = null;
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (rafId !== null) cancelAnimationFrame(rafId);
-    };
-  }, []);
-
-  const fetchInitialData = async () => {
+  const fetchInitialData = useCallback(async () => {
     try {
       setLoadingTokens(true);
       setIsLoadingValues(true);
@@ -158,31 +87,86 @@ export function OnboardingPage() {
             isVerified: token.isVerified || false,
           }));
           setTokens(processedTokens);
-          setTotalTokenCount(tokensData.totalTokens || 0);
         }
-      } else {
-        console.error("Failed to fetch tokens:", tokensResponse.status, tokensResponse.statusText);
       }
 
       // Process asset values
       if (assetValuesResponse.ok) {
         const assetData = await assetValuesResponse.json();
         setAssetValues(assetData);
-      } else {
-        console.error(
-          "Failed to fetch asset values:",
-          assetValuesResponse.status,
-          assetValuesResponse.statusText
-        );
       }
     } catch (err) {
-      console.error("Failed to fetch data:", err);
       setError(err instanceof Error ? err.message : "Failed to load data");
     } finally {
       setLoadingTokens(false);
       setIsLoadingValues(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchInitialData();
+
+    // Ensure page loads at the top (overview section)
+    window.scrollTo(0, 0);
+
+    // Clear any hash in the URL
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, [fetchInitialData]);
+
+  useEffect(() => {
+    let rafId: number | null = null;
+
+    const handleScroll = () => {
+      if (rafId !== null) return;
+
+      rafId = requestAnimationFrame(() => {
+        const scrollPosition = window.scrollY + 200;
+
+        // Find active section
+        for (let i = navigationSections.length - 1; i >= 0; i--) {
+          const section = document.getElementById(navigationSections[i].id);
+          if (section && section.offsetTop <= scrollPosition) {
+            const newSection = navigationSections[i].id;
+            setActiveSection(newSection);
+
+            // Update URL hash
+            const newHash = `#${newSection}`;
+            if (window.location.hash !== newHash) {
+              window.history.replaceState(null, "", newHash);
+            }
+
+            // Center active button in mobile nav
+            if (window.innerWidth < 1024) {
+              const mobileNav = document.getElementById("mobile-nav-container");
+              const activeButton = document.getElementById(`mobile-nav-${newSection}`);
+              if (mobileNav && activeButton) {
+                const navRect = mobileNav.getBoundingClientRect();
+                const buttonRect = activeButton.getBoundingClientRect();
+                const scrollLeft =
+                  mobileNav.scrollLeft +
+                  buttonRect.left -
+                  navRect.left -
+                  navRect.width / 2 +
+                  buttonRect.width / 2;
+                mobileNav.scrollTo({ left: scrollLeft, behavior: "smooth" });
+              }
+            }
+            break;
+          }
+        }
+
+        rafId = null;
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
@@ -190,7 +174,6 @@ export function OnboardingPage() {
       const offset = 80;
       const sectionPosition = section.offsetTop - offset;
       window.scrollTo({ top: sectionPosition, behavior: "smooth" });
-      setIsNavOpen(false);
     }
   };
 
@@ -301,7 +284,7 @@ export function OnboardingPage() {
           loadingTokens={loadingTokens}
           error={error}
           displayMetrics={displayMetrics}
-          totalTokenCount={totalTokenCount}
+          totalTokenCount={displayMetrics.tokenCount}
           stableTokens={stableTokens}
           fetchInitialData={fetchInitialData}
         />

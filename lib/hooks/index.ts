@@ -16,8 +16,6 @@ export { useDataPrefetch } from "./useDataPrefetching";
 export { useDebounce, useDebouncedCallback } from "./useDebounce";
 // usePortfolioQuery removed - functionality consolidated into portfolio services
 export { useDefiMetrics } from "./useDefiMetrics";
-// Error handling hooks
-export { useAsyncError, useErrorBoundary } from "./useErrorBoundary";
 export {
   useIntersectionObserver,
   useOnScreen,

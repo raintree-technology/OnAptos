@@ -2,14 +2,8 @@ import { CACHE_CONFIG } from "@/lib/config/cache";
 import { BTC_TOKENS } from "@/lib/config/tokens/btc";
 import { UnifiedCache } from "@/lib/utils/cache/unified-cache";
 import { logger } from "@/lib/utils/core/logger";
-import {
-  calculatePercentage,
-  formatNumber,
-  formatTokenAmountFromRaw,
-} from "@/lib/utils/format/format";
 import type { BTCAnalytics, BTCSupply } from "../shared/types";
 import { BaseAssetService } from "../shared/utils/base-service";
-import { UnifiedGraphQLClient } from "../shared/utils/unified-graphql-client";
 
 // Define all BTC token configurations
 interface BTCTokenConfig {
@@ -229,10 +223,10 @@ export class BitcoinService extends BaseAssetService {
           // Get coin supply
           try {
             const coinResult = await BitcoinService.fetchCoinSupplyViaRestAPI(token);
-            if (coinResult && coinResult.supply) {
+            if (coinResult?.supply) {
               coinSupplyVal = coinResult.supply;
             }
-          } catch (error) {
+          } catch (_error) {
             logger.debug(`No coin supply for ${token.symbol}`);
           }
 
@@ -260,7 +254,7 @@ export class BitcoinService extends BaseAssetService {
                   faSupplyVal = data.data.fungible_asset_metadata[0].supply_v2.toString();
                 }
               }
-            } catch (error) {
+            } catch (_error) {
               logger.debug(`No FA supply for ${token.symbol}`);
             }
           }
@@ -333,10 +327,10 @@ export class BitcoinService extends BaseAssetService {
           // Try to get coin supply
           try {
             const coinResult = await BitcoinService.fetchCoinSupplyViaRestAPI(token);
-            if (coinResult && coinResult.supply) {
+            if (coinResult?.supply) {
               coinSupply = coinResult.supply;
             }
-          } catch (error) {
+          } catch (_error) {
             logger.debug(`No coin supply for ${token.symbol}`);
           }
 
@@ -363,7 +357,7 @@ export class BitcoinService extends BaseAssetService {
                 faSupply = data.data.fungible_asset_metadata[0].supply_v2.toString();
               }
             }
-          } catch (error) {
+          } catch (_error) {
             logger.debug(`No FA supply for ${token.symbol}`);
           }
 
@@ -624,55 +618,6 @@ export class BitcoinService extends BaseAssetService {
       total_supply_formatted: totalFormatted.toFixed(2),
       supplies: suppliesWithPercentage,
       timestamp: new Date().toISOString(),
-    };
-  }
-
-  /**
-   * Fetch BTC supplies from Aptos indexer (legacy method - kept for compatibility)
-   */
-  private static async fetchFromIndexer(): Promise<BTCSupply> {
-    const detailed = await BitcoinService.getBTCSupplyDetailed();
-    return BitcoinService.getBTCSupply(); // Use the new method internally
-  }
-
-  /**
-   * Aggregate supplies from multiple sources (legacy method - kept for compatibility)
-   */
-  private static aggregateSupplies(
-    supplies: Array<{
-      protocol: string;
-      amount: number;
-      assetType: string;
-      decimals: number;
-    }>
-  ): BTCSupply {
-    const sources = [];
-    let totalFormatted = 0;
-
-    for (const supply of supplies) {
-      const formattedAmount = formatTokenAmountFromRaw(supply.amount, supply.decimals);
-      totalFormatted += formattedAmount;
-
-      sources.push({
-        protocol: supply.protocol,
-        amount: supply.amount,
-        rawAmount: supply.amount,
-        decimals: supply.decimals,
-        formattedAmount: formattedAmount,
-        displayAmount: formatNumber(formattedAmount),
-        percentage: 0,
-      });
-    }
-
-    // Calculate percentages
-    sources.forEach((source) => {
-      source.percentage = calculatePercentage(source.formattedAmount, totalFormatted);
-    });
-
-    return {
-      total: totalFormatted,
-      totalRaw: sources.reduce((sum, s) => sum + s.amount, 0),
-      sources: sources.sort((a, b) => b.formattedAmount - a.formattedAmount),
     };
   }
 }

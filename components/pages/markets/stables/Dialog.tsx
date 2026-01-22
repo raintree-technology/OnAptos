@@ -1,8 +1,7 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
-import Image from "next/image";
-import React, { memo, useCallback, useMemo } from "react";
+import { memo, useMemo } from "react";
 
 import {
   AddressDisplay,
@@ -10,12 +9,21 @@ import {
   createCopyHandler,
   DialogInfoRow,
   DialogSection,
-  type DialogTokenMetadata,
-  measurePerformance,
   TokenHeader,
   TokenIcon,
 } from "@/components/shared/dialogs";
-import { Button } from "@/components/ui/button";
+import type { StaticImageData } from "next/image";
+
+interface DialogTokenMetadata {
+  symbol: string;
+  name: string;
+  address: string;
+  decimals: number;
+  thumbnail?: string | StaticImageData;
+  logoUrl?: string;
+  description?: string;
+  type?: string;
+}
 import { useTranslation } from "@/lib/hooks/useTranslation";
 import { errorLogger } from "@/lib/utils/core/logger";
 
@@ -55,7 +63,7 @@ const StablecoinsAddressDisplay = memo<{
 }>(({ metadata, symbolParts, onCopy, t }) => {
   const addresses = metadata.address ? metadata.address.split("\n") : [];
   const labels = symbolParts.map(
-    (part, i) =>
+    (part, _i) =>
       `${part || t("common:labels.token", "Token")} ${t("common:labels.address", "Address")}`
   );
 
@@ -102,66 +110,49 @@ const TokenSupplyDisplay = memo<{
   t: (key: string, fallback?: string) => string;
 }>(({ symbol, supply, fullSupplyData, metadata, susdePrice, t: _t }) => {
   const formattedAmount = useMemo(() => {
-    return measurePerformance(() => {
-      try {
-        // Get the raw value from supply data
-        const rawSupply = fullSupplyData[symbol];
-        if (!rawSupply) return supply; // Fall back to abbreviated value if not found
+    try {
+      const rawSupply = fullSupplyData[symbol];
+      if (!rawSupply) return supply;
 
-        // Convert to decimal based on token decimals
-        const tokenCount = Number(BigInt(rawSupply)) / 10 ** metadata.decimals;
+      const tokenCount = Number(BigInt(rawSupply)) / 10 ** metadata.decimals;
+      const formattedTokenCount = new Intl.NumberFormat("en-US", {
+        maximumFractionDigits: 0,
+        useGrouping: true,
+      }).format(tokenCount);
 
-        // Format the token count with full precision and commas
-        const formattedTokenCount = new Intl.NumberFormat("en-US", {
-          maximumFractionDigits: 0,
-          useGrouping: true,
-        }).format(tokenCount);
-
-        // For sUSDe, always show token count with @ price as a clickable link
-        if (symbol === "sUSDe") {
-          // Only show price if available
-          if (typeof susdePrice === "number" && !isNaN(susdePrice) && susdePrice > 0) {
-            return (
-              <>
-                {formattedTokenCount}
-                <a
-                  href={COINMARKETCAP_SUSDE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline ml-1"
-                >
-                  <ExternalLink className="h-3 w-3 inline" />
-                </a>
-              </>
-            );
-          }
-          return formattedTokenCount;
+      if (symbol === "sUSDe") {
+        if (typeof susdePrice === "number" && !Number.isNaN(susdePrice) && susdePrice > 0) {
+          return (
+            <>
+              {formattedTokenCount}
+              <a
+                href={COINMARKETCAP_SUSDE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline ml-1"
+              >
+                <ExternalLink className="h-3 w-3 inline" />
+              </a>
+            </>
+          );
         }
-
-        // For USDe, just show the token count
-        if (symbol === "USDe") {
-          return formattedTokenCount;
-        }
-
-        // For USDT and USDC, show formatted number without $ sign
-        if (symbol === "USDt" || symbol === "USDC") {
-          return formattedTokenCount;
-        }
-
-        // For other tokens, show the full USD value with commas
-        const formattedDollarValue = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-          maximumFractionDigits: 0,
-          useGrouping: true,
-        }).format(tokenCount);
-
-        return formattedDollarValue;
-      } catch (error) {
-        errorLogger.error("Error formatting token amount:", error);
-        return supply;
+        return formattedTokenCount;
       }
-    }, `format-${symbol}`);
+
+      if (symbol === "USDe" || symbol === "USDt" || symbol === "USDC") {
+        return formattedTokenCount;
+      }
+
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+        useGrouping: true,
+      }).format(tokenCount);
+    } catch (error) {
+      errorLogger.error("Error formatting token amount:", error);
+      return supply;
+    }
   }, [symbol, supply, fullSupplyData, metadata.decimals, susdePrice]);
 
   return (

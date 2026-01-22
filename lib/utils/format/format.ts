@@ -137,7 +137,7 @@ export function formatCurrency(
     maximumFractionDigits?: number;
   } = {}
 ): string {
-  if (amount === null || amount === undefined || isNaN(amount)) {
+  if (amount === null || amount === undefined || Number.isNaN(amount)) {
     return "—";
   }
 
@@ -264,7 +264,7 @@ export function formatCurrencyMobile(
   amount: number,
   currencyCode: Currency | string = "USD"
 ): string {
-  if (amount === null || amount === undefined || isNaN(amount)) {
+  if (amount === null || amount === undefined || Number.isNaN(amount)) {
     return "—";
   }
 
@@ -356,13 +356,13 @@ export function formatLargeNumber(value: number, decimals: number = 1): string {
 
   if (absValue >= 1_000_000_000) {
     const billions = value / 1_000_000_000;
-    return billions.toFixed(decimals).replace(/\.0$/, "") + "b";
+    return `${billions.toFixed(decimals).replace(/\.0$/, "")}b`;
   } else if (absValue >= 1_000_000) {
     const millions = value / 1_000_000;
-    return millions.toFixed(decimals).replace(/\.0$/, "") + "m";
+    return `${millions.toFixed(decimals).replace(/\.0$/, "")}m`;
   } else if (absValue >= 1_000) {
     const thousands = value / 1_000;
-    return thousands.toFixed(decimals).replace(/\.0$/, "") + "k";
+    return `${thousands.toFixed(decimals).replace(/\.0$/, "")}k`;
   }
 
   // Under 1000, use specified decimals or default to 2
@@ -424,7 +424,7 @@ export function formatTokenAmount(
   }
 ): string {
   // Early return for zero/invalid amounts
-  if (!amount || isNaN(amount)) return "0";
+  if (!amount || Number.isNaN(amount)) return "0";
 
   // Check cache first
   const cacheKey = getCacheKey("tokenAmount", amount, decimals, options);
@@ -446,13 +446,13 @@ export function formatTokenAmount(
   if (useCompact && absAmount >= 10000) {
     // Pre-calculate divisions to avoid repeated calculations
     if (absAmount >= 1e12) {
-      formatted = (amount / 1e12).toFixed(1).replace(/\.0$/, "") + "T";
+      formatted = `${(amount / 1e12).toFixed(1).replace(/\.0$/, "")}T`;
     } else if (absAmount >= 1e9) {
-      formatted = (amount / 1e9).toFixed(1).replace(/\.0$/, "") + "B";
+      formatted = `${(amount / 1e9).toFixed(1).replace(/\.0$/, "")}B`;
     } else if (absAmount >= 1e6) {
-      formatted = (amount / 1e6).toFixed(1).replace(/\.0$/, "") + "M";
+      formatted = `${(amount / 1e6).toFixed(1).replace(/\.0$/, "")}M`;
     } else {
-      formatted = (amount / 1e3).toFixed(1).replace(/\.0$/, "") + "K";
+      formatted = `${(amount / 1e3).toFixed(1).replace(/\.0$/, "")}K`;
     }
   } else {
     // For amounts under 10K, use standard formatting
@@ -488,7 +488,7 @@ export function formatTokenPrice(
   // Convert to number if it's a string
   const numPrice = typeof price === "string" ? parseFloat(price) : price;
 
-  if (!numPrice || numPrice <= 0 || isNaN(numPrice)) {
+  if (!numPrice || numPrice <= 0 || Number.isNaN(numPrice)) {
     return showSymbol ? `${currencySymbol}0` : "0";
   }
 
@@ -514,7 +514,7 @@ export function formatTokenPrice(
         const subscriptZeros = leadingZeros
           .toString()
           .split("")
-          .map((digit) => "₀₁₂₃₄₅₆₇₈₉"[parseInt(digit)])
+          .map((digit) => "₀₁₂₃₄₅₆₇₈₉"[parseInt(digit, 10)])
           .join("");
 
         const compactNotation = `0.0₍${subscriptZeros}₎${significantDigits}`;
@@ -608,7 +608,7 @@ export function convertRawTokenAmount(
       if (rawAmount.includes(".")) {
         // If it's already a decimal string, parse it as a float
         const floatValue = parseFloat(rawAmount);
-        if (!isNaN(floatValue)) {
+        if (!Number.isNaN(floatValue)) {
           return floatValue;
         }
       }
@@ -618,7 +618,7 @@ export function convertRawTokenAmount(
       } catch {
         // If BigInt conversion fails, try parsing as float
         const floatValue = parseFloat(rawAmount);
-        if (!isNaN(floatValue)) {
+        if (!Number.isNaN(floatValue)) {
           return floatValue;
         }
         logger.warn("Failed to parse rawAmount:", rawAmount);
@@ -718,7 +718,7 @@ export function formatDate(
 ): string {
   const dateObj = new Date(date);
 
-  if (isNaN(dateObj.getTime())) {
+  if (Number.isNaN(dateObj.getTime())) {
     return "Invalid date";
   }
 

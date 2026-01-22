@@ -9,7 +9,6 @@ import type {
   YieldStrategy,
   YieldStrategyStep,
 } from "./types";
-import { sanitizeFilters, sanitizeWalletAddress, sanitizeYieldOpportunities } from "./validation";
 
 export class YieldAggregatorService {
   private static instance: YieldAggregatorService;

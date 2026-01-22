@@ -185,22 +185,34 @@ export function normalizeIssuer(issuer: string | TokenIssuer | undefined): Token
   return issuer;
 }
 
-// Token data for treemap visualization
+// Token data for treemap visualization and token pages
 export interface TokenData {
-  panoraId?: string;
-  symbol: string;
+  chainId: number;
+  panoraId: string;
+  tokenAddress: string | null;
+  faAddress: string | null;
   name: string;
+  symbol: string;
+  decimals: number;
+  bridge?: string | null;
+  panoraSymbol: string;
+  usdPrice: string;
+  logoUrl?: string | null;
+  websiteUrl?: string | null;
+  panoraUI: boolean;
+  panoraTags: string[];
+  panoraIndex: number;
+  coinGeckoId?: string | null;
+  coinMarketCapId?: number | null;
+  isInPanoraTokenList: boolean;
+  isBanned: boolean;
+  // Calculated fields
   price: number;
   supply?: number;
-  fdv?: number;
-  logoUrl?: string | null;
-  panoraTags?: string[];
-  panoraUI?: boolean;
   marketCap?: number;
+  fdv?: number;
   volume24h?: number;
   priceChange24h?: number;
-  faAddress?: string | null;
-  tokenAddress?: string | null;
 }
 
 // Token data for token list displays
@@ -258,4 +270,42 @@ export function getThumbnailUrl(metadata: TokenMetadata, fallback = "/placeholde
     return metadata.logoUrl;
   }
   return fallback;
+}
+
+// Category data for token categorization
+export interface CategoryData {
+  count: number;
+  total_market_cap: number;
+  tokens: TokenData[];
+}
+
+// Altcoins data structure from API
+export interface AltcoinsData {
+  summary: {
+    total_market_cap_non_apt: number;
+    total_market_cap_with_apt: number;
+    apt_market_cap: number;
+    tokens_with_supply: number;
+    tokens_analyzed: number;
+    tokens_returned: number;
+    total_tokens: number;
+    average_market_cap: number;
+    median_market_cap: number;
+    timestamp: string;
+  };
+  distribution: {
+    above1B: number;
+    from100MTo1B: number;
+    from10MTo100M: number;
+    from1MTo10M: number;
+    from100KTo1M: number;
+    below100K: number;
+  };
+  categories: {
+    stablecoins: CategoryData;
+    bitcoin: CategoryData;
+    defi: CategoryData;
+    liquid_staking: CategoryData;
+  };
+  tokens: TokenData[];
 }

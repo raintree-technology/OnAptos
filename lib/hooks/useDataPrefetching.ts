@@ -73,16 +73,16 @@ export function useDataPrefetch(pageOrConfig?: PageType | PrefetchConfig) {
       abortController.current?.abort();
       hasPrefetched.current = false;
     };
-  }, [enabled, symbols.join(","), onError]);
+  }, [enabled, onError]);
 
   // Reset prefetch flag when symbols change
   useEffect(() => {
     hasPrefetched.current = false;
-  }, [symbols.join(",")]);
+  }, []);
 }
 
 // Helper to check if data is stale (older than 5 minutes)
-function isDataStale(data: any): boolean {
+function _isDataStale(data: any): boolean {
   if (!data?.updated) return true;
 
   const updatedTime = new Date(data.updated).getTime();

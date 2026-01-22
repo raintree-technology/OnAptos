@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { filterData, paginateData, sortData } from "@/lib/utils/tables";
+import { filterData, paginateData, sortData } from "@/lib/utils/ui/tables";
 
 export interface UseTableStateOptions<T> {
   data: T[];
@@ -84,7 +84,7 @@ export function useTableState<T extends Record<string, any>>({
   // Reset displayed count when data changes
   useEffect(() => {
     setDisplayedCount(pageSize);
-  }, [data.length, pageSize]);
+  }, [pageSize]);
 
   // Process data
   const filteredData = useMemo(() => filterData(data, filters), [data, filters]);

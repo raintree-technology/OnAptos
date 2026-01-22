@@ -1,95 +1,77 @@
 "use client";
 
-import type React from "react";
-
 import { Button } from "@/components/ui/button";
-import { useTranslation } from "@/lib/hooks/useTranslation";
 
-type ErrorLevel = "dialog" | "component" | "page";
+const LEVELS = {
+  dialog: {
+    container: "py-8 text-center",
+    title: "Details Unavailable",
+    message: "An error occurred. Try closing and reopening this dialog.",
+  },
+  component: {
+    container: "p-4 rounded-md bg-destructive/10 text-destructive",
+    title: "Something went wrong",
+    message: "Please try again or refresh the page.",
+  },
+  page: {
+    container: "flex min-h-screen items-center justify-center p-4",
+    title: "Something went wrong",
+    message: "We apologize for the inconvenience. Please try refreshing.",
+  },
+} as const;
 
-interface ErrorFallbackProps {
+type ErrorLevel = keyof typeof LEVELS;
+
+export interface FallbackProps {
+  error?: Error;
+  resetErrorBoundary?: () => void;
+}
+
+interface ErrorFallbackProps extends FallbackProps {
   level?: ErrorLevel;
-  onRetry?: () => void;
   onClose?: () => void;
   className?: string;
 }
 
-export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
+export function ErrorFallback({
   level = "component",
-  onRetry,
+  error,
+  resetErrorBoundary,
   onClose,
   className = "",
-}) => {
-  const { t } = useTranslation("common");
+}: ErrorFallbackProps) {
+  const config = LEVELS[level];
 
-  const config = {
-    dialog: {
-      container: "py-8 text-center",
-      title: "text-lg font-semibold mb-3 text-card-foreground",
-      message: "text-sm text-muted-foreground mb-6",
-      titleText: t("messages.details_unavailable", "Details Unavailable"),
-      messageText: t(
-        "messages.dialog_error_message",
-        "An error occurred while trying to display the information. You can try closing and reopening this dialog."
-      ),
-      buttonVariant: "outline" as const,
-      buttonText: t("actions.close_dialog", "Close Dialog"),
-      showRetry: false,
-    },
-    component: {
-      container: "p-4 rounded-md bg-destructive/10 text-destructive",
-      title: "text-lg font-semibold mb-2",
-      message: "text-sm",
-      titleText: "Application Error",
-      messageText:
-        "We're experiencing technical difficulties. Please refresh the page or contact support if the issue persists.",
-      buttonVariant: "default" as const,
-      buttonText: "Retry",
-      showRetry: true,
-    },
-    page: {
-      container: "flex min-h-screen items-center justify-center p-4",
-      title: "text-2xl font-bold mb-4",
-      message: "text-muted-foreground mb-4",
-      titleText: "Something went wrong",
-      messageText: "We apologize for the inconvenience. Please try refreshing the page.",
-      buttonVariant: "default" as const,
-      buttonText: "Refresh Page",
-      showRetry: true,
-    },
+  const handleAction = () => {
+    if (level === "page") {
+      window.location.reload();
+    } else if (resetErrorBoundary) {
+      resetErrorBoundary();
+    } else if (onClose) {
+      onClose();
+    }
   };
 
-  const currentConfig = config[level];
-  const handleAction = level === "page" ? () => window.location.reload() : onRetry || onClose;
+  const hasAction = level === "page" || resetErrorBoundary || onClose;
+  const buttonText = level === "page" ? "Refresh Page" : level === "dialog" ? "Close" : "Retry";
+  const buttonVariant = level === "dialog" ? "outline" : "default";
 
   return (
-    <div className={`${currentConfig.container} ${className}`}>
-      {level === "page" && (
-        <div className="text-center">
-          <h2 className={currentConfig.title}>{currentConfig.titleText}</h2>
-          <p className={currentConfig.message}>{currentConfig.messageText}</p>
-          {handleAction && (
-            <button
-              onClick={handleAction}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-            >
-              {currentConfig.buttonText}
-            </button>
-          )}
-        </div>
-      )}
-
-      {level !== "page" && (
-        <>
-          <h3 className={currentConfig.title}>{currentConfig.titleText}</h3>
-          <p className={currentConfig.message}>{currentConfig.messageText}</p>
-          {handleAction && (
-            <Button onClick={handleAction} variant={currentConfig.buttonVariant}>
-              {currentConfig.buttonText}
-            </Button>
-          )}
-        </>
-      )}
+    <div className={`${config.container} ${className}`}>
+      <div className={level === "page" ? "text-center" : ""}>
+        <h3 className="text-lg font-semibold mb-2">{config.title}</h3>
+        <p className="text-sm text-muted-foreground mb-4">{config.message}</p>
+        {process.env.NODE_ENV === "development" && error && (
+          <pre className="text-xs text-left bg-muted p-2 rounded mb-4 overflow-auto max-h-32">
+            {error.message}
+          </pre>
+        )}
+        {hasAction && (
+          <Button onClick={handleAction} variant={buttonVariant}>
+            {buttonText}
+          </Button>
+        )}
+      </div>
     </div>
   );
-};
+}

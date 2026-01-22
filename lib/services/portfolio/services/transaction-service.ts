@@ -42,7 +42,7 @@ export class TransactionService {
 
     const apiKey = getEnvVar("APTOS_BUILD_SECRET");
     if (apiKey) {
-      headers["Authorization"] = `Bearer ${apiKey}`;
+      headers.Authorization = `Bearer ${apiKey}`;
     }
 
     return headers;

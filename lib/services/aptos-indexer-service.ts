@@ -486,7 +486,7 @@ export function calculateGasStatistics(gasData: any) {
   // Calculate gas fees from individual transactions
   const gasFees = transactions
     .filter((tx: any) => tx.gas_used && tx.gas_unit_price)
-    .map((tx: any) => (parseInt(tx.gas_used) * parseInt(tx.gas_unit_price)) / 100000000); // Convert to APT
+    .map((tx: any) => (parseInt(tx.gas_used, 10) * parseInt(tx.gas_unit_price, 10)) / 100000000); // Convert to APT
 
   if (gasFees.length === 0) return null;
 

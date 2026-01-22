@@ -3,8 +3,8 @@
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { Copy, LogOut, User, Wallet } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 import {
   DropdownMenu,
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAnsName } from "@/lib/hooks/useAnsName";
 import { useTranslation } from "@/lib/hooks/useTranslation";
-import { copyToClipboard } from "@/lib/utils/clipboard";
+import { copyToClipboard } from "@/lib/utils/browser/clipboard";
 import { logger } from "@/lib/utils/core/logger";
 import { WalletModal } from "./WalletModal";
 
@@ -26,7 +26,6 @@ interface WalletDropdownProps {
 
 export function WalletDropdown({ className }: WalletDropdownProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const { account, disconnect } = useWallet();
   const { ansName, ansData } = useAnsName();
   const { t } = useTranslation("common");

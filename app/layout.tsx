@@ -1,14 +1,14 @@
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { headers } from "next/headers";
 import Script from "next/script";
 import type React from "react";
 import type { ReactNode } from "react";
 
 import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
+
 import { LayoutContent } from "@/components/layout/LayoutContent";
-import { ThemeProvider } from "@/components/layout/theme-provider";
+import { ThemeProvider } from "next-themes";
 import { I18nProvider } from "@/components/providers/I18nProvider";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { Toaster } from "@/components/ui/sonner";

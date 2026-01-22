@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { createPage } from "@/lib/utils/page-factory";
+import { createPage } from "@/lib/utils/ui/pages/factory";
 
 // Lazy load the RWAsPageComponent component
 const RWAsPageComponent = dynamic(() => import("@/components/pages/markets/rwas/Page"), {

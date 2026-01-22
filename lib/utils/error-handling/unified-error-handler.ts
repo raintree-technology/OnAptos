@@ -144,7 +144,7 @@ export class UnifiedErrorHandler {
   /**
    * Sleep utility for delays
    */
-  private static sleep(ms: number): Promise<void> {
+  static sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
@@ -403,7 +403,7 @@ export class UnifiedErrorHandler {
 }
 
 // Convenience functions for common patterns
-export const sleep = (ms: number) => UnifiedErrorHandler["sleep"](ms);
+export const sleep = (ms: number) => UnifiedErrorHandler.sleep(ms);
 export const withRetry = UnifiedErrorHandler.withRetry;
 export const withTimeout = UnifiedErrorHandler.withTimeout;
 export const withRetryAndTimeout = UnifiedErrorHandler.withRetryAndTimeout;

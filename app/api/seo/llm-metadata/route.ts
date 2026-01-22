@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(structuredData, {
       headers: SEO_HEADERS.JSON_LD,
     });
-  } catch (error) {
+  } catch (_error) {
     // Fallback structured data for error cases
     const config = getSEOConfig();
     const fallbackData = {

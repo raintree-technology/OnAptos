@@ -10,7 +10,6 @@ import {
   Grid3x3,
   List,
   Loader2,
-  X,
 } from "lucide-react";
 import Image from "next/image";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -24,13 +23,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { unifiedScanner } from "@/lib/services/defi/unified-scanner";
-import type { DeFiPosition } from "@/lib/types/defi";
 import { cn } from "@/lib/utils";
 import { logger } from "@/lib/utils/core/logger";
 import { sanitizeImageUrl, sanitizeNFTMetadata } from "@/lib/utils/core/security";
 import { formatCurrency, formatTokenAmount } from "@/lib/utils/format/format";
-import { cleanProtocolName, getProtocolLogo } from "./shared/PortfolioMetrics";
+import { cleanProtocolName } from "./shared/PortfolioMetrics";
 import { UnifiedNFTGrid } from "./shared/UnifiedNFTGrid";
 import { NFTTreemap } from "./shared/WalletSummaryComponents";
 import type { NFT } from "./types";
@@ -744,7 +741,7 @@ export const NFTSummaryView: React.FC<NFTSummaryViewProps> = ({
             )}
 
             <button
-              onClick={() => onNFTSelect && onNFTSelect(null)}
+              onClick={() => onNFTSelect?.(null)}
               className="text-sm text-primary hover:underline"
             >
               ← Back to collections

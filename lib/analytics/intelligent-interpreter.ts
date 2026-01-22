@@ -3,6 +3,7 @@
  * Provides smart insights and explanations for blockchain data
  */
 
+import { safeDivide } from "@/lib/utils/monitoring/metrics";
 import { AdvancedAptosQueries } from "./advanced-queries";
 
 export interface NetworkInsight {
@@ -38,7 +39,7 @@ export class AptosIntelligentAnalyzer {
     const insights: NetworkInsight[] = [];
 
     // User Activity Analysis
-    const dailyActiveRatio = metrics.dailyActiveAddresses / metrics.totalAccounts;
+    const dailyActiveRatio = safeDivide(metrics.dailyActiveAddresses, metrics.totalAccounts, 0);
     const userActivityInsight = this.analyzeUserActivity(
       metrics.dailyActiveAddresses,
       metrics.behaviorDailyActiveUsers,
@@ -47,7 +48,7 @@ export class AptosIntelligentAnalyzer {
     insights.push(userActivityInsight);
 
     // Transaction Efficiency Analysis
-    const txEfficiency = metrics.totalSignatures / metrics.totalTransactions;
+    const txEfficiency = safeDivide(metrics.totalSignatures, metrics.totalTransactions, 1);
     const efficiencyInsight = this.analyzeTransactionEfficiency(
       txEfficiency,
       metrics.avgSuccessRate
@@ -55,12 +56,13 @@ export class AptosIntelligentAnalyzer {
     insights.push(efficiencyInsight);
 
     // Economic Activity Analysis
-    const gasPerUser = metrics.dailyGasFeesUSD / metrics.dailyActiveAddresses;
+    const gasPerUser = safeDivide(metrics.dailyGasFeesUSD, metrics.dailyActiveAddresses, 0);
     const economicInsight = this.analyzeEconomicActivity(gasPerUser, metrics.dailyGasFeesUSD);
     insights.push(economicInsight);
 
     // Network Performance Analysis
-    const networkUtilization = (metrics.dailyTransactions / (metrics.maxTPS * 86400)) * 100;
+    const networkUtilization =
+      safeDivide(metrics.dailyTransactions, metrics.maxTPS * 86400, 0) * 100;
     const performanceInsight = this.analyzeNetworkPerformance(
       networkUtilization,
       metrics.maxTPS,
@@ -94,7 +96,7 @@ export class AptosIntelligentAnalyzer {
     behaviorActive: number,
     activeRatio: number
   ): NetworkInsight {
-    const discrepancy = Math.abs(dailyActive - behaviorActive) / dailyActive;
+    const discrepancy = safeDivide(Math.abs(dailyActive - behaviorActive), dailyActive, 0);
 
     if (discrepancy > 0.3) {
       return {
@@ -117,12 +119,14 @@ export class AptosIntelligentAnalyzer {
             ? "moderate"
             : "concerning";
 
+    const totalAccounts = safeDivide(dailyActive, activeRatio, dailyActive);
+
     return {
       metric: "User Engagement Quality",
       value: `${(activeRatio * 100).toFixed(1)}%`,
       interpretation: `${engagementLevel.toUpperCase()} user engagement with ${(activeRatio * 100).toFixed(1)}% of all accounts being active daily. This indicates ${this.getEngagementExplanation(activeRatio)}.`,
       significance: activeRatio > 0.4 ? "high" : "medium",
-      context: `${dailyActive.toLocaleString()} daily active users from ${(dailyActive / activeRatio).toLocaleString()} total accounts`,
+      context: `${dailyActive.toLocaleString()} daily active users from ${totalAccounts.toLocaleString()} total accounts`,
     };
   }
 
@@ -227,11 +231,14 @@ export class AptosIntelligentAnalyzer {
   }
 
   private calculateEcosystemHealthScore(metrics: any): number {
-    const userScore = Math.min((metrics.dailyActiveAddresses / metrics.totalAccounts) * 100, 100);
+    const userScore = Math.min(
+      safeDivide(metrics.dailyActiveAddresses, metrics.totalAccounts, 0) * 100,
+      100
+    );
     const performanceScore = Math.min(parseFloat(metrics.networkUptime) || 0, 100);
-    const economicScore = Math.min((metrics.dailyGasFeesUSD / 100000) * 100, 100);
+    const economicScore = Math.min(safeDivide(metrics.dailyGasFeesUSD, 100000, 0) * 100, 100);
     const utilizationScore = Math.min(
-      (metrics.dailyTransactions / (metrics.maxTPS * 86400)) * 100 * 2,
+      safeDivide(metrics.dailyTransactions, metrics.maxTPS * 86400, 0) * 100 * 2,
       100
     );
 
@@ -242,7 +249,7 @@ export class AptosIntelligentAnalyzer {
 
   private calculateUserGrowthScore(metrics: any): number {
     // Based on user engagement ratio
-    const engagementRatio = metrics.dailyActiveAddresses / metrics.totalAccounts;
+    const engagementRatio = safeDivide(metrics.dailyActiveAddresses, metrics.totalAccounts, 0);
     return Math.min(engagementRatio * 100, 100);
   }
 
@@ -256,13 +263,13 @@ export class AptosIntelligentAnalyzer {
   }
 
   private calculateEconomicActivityScore(metrics: any): number {
-    const gasPerUser = metrics.dailyGasFeesUSD / metrics.dailyActiveAddresses;
+    const gasPerUser = safeDivide(metrics.dailyGasFeesUSD, metrics.dailyActiveAddresses, 0);
     return Math.min(gasPerUser * 200, 100); // Scale where $0.5/user = 100 points
   }
 
   private calculateNetworkStabilityScore(metrics: any): number {
     const uptimeScore = parseFloat(metrics.networkUptime) || 0;
-    const tpsUtilization = (metrics.dailyTransactions / (metrics.maxTPS * 86400)) * 100;
+    const tpsUtilization = safeDivide(metrics.dailyTransactions, metrics.maxTPS * 86400, 0) * 100;
     const stabilityBuffer = Math.max(0, 100 - tpsUtilization * 2); // Penalty for being near capacity
 
     return Math.min(uptimeScore * 0.7 + stabilityBuffer * 0.3, 100);
@@ -273,9 +280,10 @@ export class AptosIntelligentAnalyzer {
     strength: number;
     reasoning: string;
   } {
-    const userEngagement = metrics.dailyActiveAddresses / metrics.totalAccounts;
-    const networkUtilization = (metrics.dailyTransactions / (metrics.maxTPS * 86400)) * 100;
-    const economicActivity = metrics.dailyGasFeesUSD / metrics.dailyActiveAddresses;
+    const userEngagement = safeDivide(metrics.dailyActiveAddresses, metrics.totalAccounts, 0);
+    const networkUtilization =
+      safeDivide(metrics.dailyTransactions, metrics.maxTPS * 86400, 0) * 100;
+    const economicActivity = safeDivide(metrics.dailyGasFeesUSD, metrics.dailyActiveAddresses, 0);
 
     let bullishFactors = 0;
     let bearishFactors = 0;
@@ -303,7 +311,11 @@ export class AptosIntelligentAnalyzer {
     }
 
     const netSentiment = bullishFactors - bearishFactors;
-    const strength = Math.abs(netSentiment) / Math.max(bullishFactors + bearishFactors, 1);
+    const strength = safeDivide(
+      Math.abs(netSentiment),
+      Math.max(bullishFactors + bearishFactors, 1),
+      0
+    );
 
     return {
       direction: netSentiment > 0 ? "bullish" : netSentiment < 0 ? "bearish" : "neutral",

@@ -20,7 +20,7 @@ export function useAptPrice(refreshInterval = 60000) {
         }
 
         const data = await response.json();
-        if (data.prices && data.prices["0x1::aptos_coin::AptosCoin"]) {
+        if (data.prices?.["0x1::aptos_coin::AptosCoin"]) {
           setAptPrice(data.prices["0x1::aptos_coin::AptosCoin"]);
         }
       } catch (err) {

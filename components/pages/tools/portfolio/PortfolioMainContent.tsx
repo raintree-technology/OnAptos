@@ -1,9 +1,8 @@
 "use client";
 
-import { GeistMono } from "geist/font/mono";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -12,10 +11,9 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useClickOutside } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
+import { getTokenLogoUrlWithFallbackSync } from "@/lib/utils/blockchain/tokens/token-utils";
 import {
   safeWindowOpen,
   sanitizeImageUrl,
@@ -23,13 +21,7 @@ import {
   sanitizeText,
 } from "@/lib/utils/core/security";
 import { formatCurrency, formatTokenAmount } from "@/lib/utils/format/format";
-import { getTokenLogoUrlWithFallbackSync } from "@/lib/utils/token/token-utils";
 import { NFTSummaryView } from "./SummaryViews";
-import {
-  cleanProtocolName,
-  getDetailedProtocolInfo,
-  getProtocolLogo,
-} from "./shared/PortfolioMetrics";
 import { TokenChart } from "./TokenChart";
 import { TransactionHistoryTable } from "./TransactionHistoryTable";
 import { WalletSummary } from "./WalletSummary";
@@ -121,7 +113,7 @@ export function PortfolioMainContent({
         !nftDetailRef.current.contains(event.target as Node)
       ) {
         const sidebar = document.querySelector("[data-nft-grid]");
-        if (sidebar && sidebar.contains(event.target as Node)) {
+        if (sidebar?.contains(event.target as Node)) {
           return;
         }
         setSelectedNFT(null);
@@ -135,7 +127,7 @@ export function PortfolioMainContent({
         !assetDetailRef.current.contains(event.target as Node)
       ) {
         const sidebar = document.querySelector("[data-asset-table]");
-        if (sidebar && sidebar.contains(event.target as Node)) {
+        if (sidebar?.contains(event.target as Node)) {
           return;
         }
         handleAssetSelect(null);

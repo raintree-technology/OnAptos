@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 
 import { usePortfolio } from "./usePortfolio";
 import { usePortfolioData } from "./usePortfolioData";

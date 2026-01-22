@@ -7,6 +7,21 @@ const MAX_URL_LENGTH = 2048;
 const MAX_QUERY_PARAMS = 50;
 const MAX_HEADER_SIZE = 16384; // Match NODE_OPTIONS max-http-header-size
 
+// Content Security Policy
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://va.vercel-scripts.com",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://*.arweave.net https://arweave.net https://ipfs.io https://*.ipfs.io https://cloudflare-ipfs.com https://nftstorage.link https://*.aptoslabs.com https://raw.githubusercontent.com https://*.githubusercontent.com",
+  "connect-src 'self' https://api.llama.fi https://api.mainnet.aptoslabs.com https://fullnode.mainnet.aptoslabs.com https://pro-api.coinmarketcap.com https://api.coingecko.com https://api.panora.exchange https://api.rwa.xyz https://on-chain-data-seven.vercel.app https://vercel.live https://va.vercel-scripts.com wss://*.walletconnect.com https://*.walletconnect.com",
+  "font-src 'self' data:",
+  "frame-ancestors 'self'",
+  "frame-src 'self' https://verify.walletconnect.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join("; ");
+
 /**
  * Security middleware for API routes
  */
@@ -58,6 +73,11 @@ export function middleware(request: NextRequest) {
     response.headers.set("X-Frame-Options", "DENY");
     response.headers.set("X-XSS-Protection", "1; mode=block");
     response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    response.headers.set(
+      "Strict-Transport-Security",
+      "max-age=31536000; includeSubDomains; preload"
+    );
+    response.headers.set("Content-Security-Policy", CSP);
 
     // CORS headers for API routes
     if (request.nextUrl.pathname.startsWith("/api/")) {

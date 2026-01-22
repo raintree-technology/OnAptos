@@ -32,7 +32,7 @@ export function validateEnv(): EnvConfig {
 
     const errors = result.error.issues || [];
     const missingVars = errors
-      .filter((err: any) => err.message && err.message.includes("required"))
+      .filter((err: any) => err.message?.includes("required"))
       .map((err: any) => (err.path ? err.path.join(".") : "unknown"));
 
     if (missingVars.length > 0) {

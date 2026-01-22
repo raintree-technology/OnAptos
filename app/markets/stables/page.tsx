@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { createPage } from "@/lib/utils/page-factory";
+import { createPage } from "@/lib/utils/ui/pages/factory";
 
 // Lazy load the StablesPage component
 const StablesPage = dynamic(() => import("@/components/pages/markets/stables/Page"), {

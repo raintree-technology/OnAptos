@@ -363,7 +363,7 @@ function calculateNFTMetrics(nftData: any) {
 
   // Basic metrics
   const totalNFTs = ownerships.reduce(
-    (sum: number, ownership: any) => sum + parseInt(ownership.amount || 0),
+    (sum: number, ownership: any) => sum + parseInt(ownership.amount || 0, 10),
     0
   );
 
@@ -373,12 +373,12 @@ function calculateNFTMetrics(nftData: any) {
   // Collection analysis
   const totalCollections = collections.length;
   const totalSupply = collections.reduce(
-    (sum: number, collection: any) => sum + parseInt(collection.current_supply || 0),
+    (sum: number, collection: any) => sum + parseInt(collection.current_supply || 0, 10),
     0
   );
 
   const totalMaxSupply = collections.reduce(
-    (sum: number, collection: any) => sum + parseInt(collection.max_supply || 0),
+    (sum: number, collection: any) => sum + parseInt(collection.max_supply || 0, 10),
     0
   );
 
@@ -407,14 +407,17 @@ function calculateNFTMetrics(nftData: any) {
 
     // Top collections
     topCollections: collections
-      .sort((a: any, b: any) => parseInt(b.current_supply || 0) - parseInt(a.current_supply || 0))
+      .sort(
+        (a: any, b: any) =>
+          parseInt(b.current_supply || 0, 10) - parseInt(a.current_supply || 0, 10)
+      )
       .slice(0, 10)
       .map((collection: any) => ({
         name: collection.collection_name,
         creator: collection.creator_address,
-        supply: parseInt(collection.current_supply || 0),
-        maxSupply: parseInt(collection.max_supply || 0),
-        totalMinted: parseInt(collection.total_minted_v2 || 0),
+        supply: parseInt(collection.current_supply || 0, 10),
+        maxSupply: parseInt(collection.max_supply || 0, 10),
+        totalMinted: parseInt(collection.total_minted_v2 || 0, 10),
       })),
   };
 }

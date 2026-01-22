@@ -114,7 +114,7 @@ export function useTokenPrice(
     } finally {
       setIsLoading(false);
     }
-  }, [tokenAddress, includeHistory, historyTimeframe, downsampleTo]);
+  }, [tokenAddress, includeHistory, historyTimeframe, downsampleTo, priceHistory.length]);
 
   // Calculate price change
   const priceChange = useMemo(() => {

@@ -3,7 +3,7 @@
  * Helper functions for protocol identification and data transformation
  */
 
-import { getProtocolsByType, PROTOCOLS } from "@/lib/constants/protocols/protocol-registry";
+import { getProtocolsByType } from "@/lib/constants/protocols/protocol-registry";
 import { ProtocolType } from "@/lib/protocols/types";
 import type { DeFiPosition } from "@/lib/types/defi";
 import type { LPTokenInfo, ProtocolInfo } from "./types";

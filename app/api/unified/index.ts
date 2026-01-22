@@ -16,7 +16,6 @@
  * - Response time tracking
  * - Data source attribution
  *
- * For detailed usage and patterns, see README.md in this directory.
  *
  * @example
  * ```typescript

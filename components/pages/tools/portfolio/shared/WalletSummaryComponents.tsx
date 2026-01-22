@@ -262,7 +262,7 @@ const TreemapContent = React.memo((props: any) => {
   const nameFontSize = Math.max(7, Math.min(12, width / 8));
   const displayName =
     name.length > Math.floor(width / 6)
-      ? name.substring(0, Math.max(3, Math.floor(width / 6) - 3)) + "..."
+      ? `${name.substring(0, Math.max(3, Math.floor(width / 6) - 3))}...`
       : name;
 
   return (

@@ -1,13 +1,7 @@
 import type { NextRequest } from "next/server";
 import { SERVICE_CONFIG } from "@/lib/config/cache";
 import { BitcoinService } from "@/lib/services/asset-types/bitcoin-service";
-import {
-  ApiError,
-  buildFreshResponse,
-  type ErrorContext,
-  formatApiError,
-  withErrorHandling,
-} from "@/lib/utils";
+import { ApiError, type ErrorContext, formatApiError, withErrorHandling } from "@/lib/utils";
 import { withApiEnhancements } from "@/lib/utils/api/server-api";
 import { apiLogger } from "@/lib/utils/core/logger";
 
@@ -25,7 +19,7 @@ export async function GET(request: NextRequest) {
     () =>
       withErrorHandling(async () => {
         try {
-          const startTime = Date.now();
+          const _startTime = Date.now();
           const data = await BitcoinService.getBTCSupplyDetailed(false);
 
           // Return data directly - withApiEnhancements will wrap it

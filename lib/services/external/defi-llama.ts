@@ -8,7 +8,6 @@ import { CACHE_KEYS } from "@/lib/constants/api/endpoints";
 import { ENDPOINTS as API_ENDPOINTS } from "@/lib/constants/endpoints";
 import { PROTOCOLS } from "@/lib/constants/protocols/protocol-registry";
 import { BaseAssetService } from "@/lib/services/shared/utils/base-service";
-import type { ProtocolType } from "@/lib/types/defi";
 import { cacheInstances } from "@/lib/utils/cache/unified-cache";
 import { serviceLogger } from "@/lib/utils/core/logger";
 
@@ -505,7 +504,7 @@ class DeFiLlamaService extends BaseAssetService {
    * Fetch all chains data from DeFi Llama
    */
   static async getChains(): Promise<DeFiLlamaChain[]> {
-    const cacheKey = CACHE_KEYS.defiProtocols + "-chains";
+    const cacheKey = `${CACHE_KEYS.defiProtocols}-chains`;
 
     return DeFiLlamaService.getCachedOrFetch(cacheKey, async () => {
       const response = await DeFiLlamaService.enhancedFetch(
@@ -780,7 +779,7 @@ class DeFiLlamaService extends BaseAssetService {
    * Get protocols on Aptos
    */
   static async getAptosProtocols(): Promise<DeFiLlamaProtocol[]> {
-    const cacheKey = CACHE_KEYS.defiProtocols + "-aptos";
+    const cacheKey = `${CACHE_KEYS.defiProtocols}-aptos`;
 
     return DeFiLlamaService.getCachedOrFetch(cacheKey, async () => {
       try {
@@ -813,7 +812,7 @@ class DeFiLlamaService extends BaseAssetService {
     change24h?: number;
     isAptosSpecific?: boolean;
   } | null> {
-    const cacheKey = `${CACHE_KEYS.defiProtocols}-volume-protocol-${protocolName}-aptos`;
+    const _cacheKey = `${CACHE_KEYS.defiProtocols}-volume-protocol-${protocolName}-aptos`;
 
     try {
       // DeFi Llama uses slug format for protocol names (lowercase, spaces replaced with dashes)
@@ -836,7 +835,7 @@ class DeFiLlamaService extends BaseAssetService {
       // Check if there's chain-specific volume data
       if (data.totalDataChartBreakdown && data.totalDataChartBreakdown.length > 0) {
         const latestData = data.totalDataChartBreakdown[data.totalDataChartBreakdown.length - 1];
-        if (latestData && latestData.Aptos) {
+        if (latestData?.Aptos) {
           aptosVolume24h = latestData.Aptos;
         }
       }
@@ -921,9 +920,9 @@ class DeFiLlamaService extends BaseAssetService {
         // Extract Aptos-specific data
         // First try currentChainTvls for current TVL
         let latestAptosTvl = 0;
-        if (data.currentChainTvls && data.currentChainTvls.Aptos) {
+        if (data.currentChainTvls?.Aptos) {
           latestAptosTvl = data.currentChainTvls.Aptos;
-        } else if (data.chainTvls && data.chainTvls.Aptos) {
+        } else if (data.chainTvls?.Aptos) {
           // Fall back to historical data
           const aptosTvl = data.chainTvls.Aptos;
           latestAptosTvl =
@@ -934,12 +933,7 @@ class DeFiLlamaService extends BaseAssetService {
 
         // Calculate Aptos-specific changes
         let aptosChange1d, aptosChange7d;
-        if (
-          data.chainTvls &&
-          data.chainTvls.Aptos &&
-          data.chainTvls.Aptos.tvl &&
-          data.chainTvls.Aptos.tvl.length > 1
-        ) {
+        if (data.chainTvls?.Aptos?.tvl && data.chainTvls.Aptos.tvl.length > 1) {
           const aptosTvl = data.chainTvls.Aptos;
           const oneDayAgo = aptosTvl.tvl[Math.max(0, aptosTvl.tvl.length - 2)];
           const sevenDaysAgo = aptosTvl.tvl[Math.max(0, aptosTvl.tvl.length - 8)];
@@ -1165,7 +1159,7 @@ class DeFiLlamaService extends BaseAssetService {
 
       // Extract lending/borrowing rates from pools
       let borrowRates, supplyRates;
-      if (pools && pools.lending) {
+      if (pools?.lending) {
         const protocolPools = pools.lending.filter(
           (p: DeFiLlamaBorrowRate) => p.project?.toLowerCase() === protocolName.toLowerCase()
         );

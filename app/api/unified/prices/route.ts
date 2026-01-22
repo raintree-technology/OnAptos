@@ -16,6 +16,7 @@ import {
   OPTIONS,
   PANORA_API_ENDPOINT,
 } from "../shared";
+import { serverCached } from "@/lib/utils/server/cache";
 
 // Cache price data for 5 minutes
 export const revalidate = 300;
@@ -76,78 +77,85 @@ async function unifiedPricesHandler(request: NextRequest) {
       );
     }
 
-    // Handle specific token price requests
-    let priceData: PriceData = {};
-    let dataSource = source;
+    // Handle specific token price requests with server cache per token set
+    const cacheKey = ["unified:prices", tokens.join(","), source, date_utc || "latest"];
 
-    if (source === "panora" || source === "auto") {
-      try {
-        // Try Panora first
-        const panoraPrices = await UnifiedPanoraService.getTokenPrices(tokens);
+    const response = await serverCached(
+      cacheKey,
+      async () => {
+        let priceData: PriceData = {};
+        let dataSource = source;
 
-        if (panoraPrices && panoraPrices.size > 0) {
-          priceData = Object.fromEntries(panoraPrices);
-          dataSource = "panora";
-        }
-      } catch (panoraError) {
-        apiLogger.warn("Panora price fetch failed", {
-          error: panoraError instanceof Error ? panoraError.message : String(panoraError),
-        });
-
-        if (source === "panora") {
-          throw panoraError; // If explicitly requested Panora, fail
-        }
-      }
-    }
-
-    // Fallback to analytics if needed
-    if ((source === "analytics" || source === "auto") && Object.keys(priceData).length === 0) {
-      try {
-        const analyticsPromises = tokens.map(async (token) => {
-          const priceArray = await aptosAnalytics.getTokenLatestPrice({
-            address: token,
-            date_utc,
-          });
-          // Extract the price from the first element of the array
-          const price =
-            Array.isArray(priceArray) && priceArray.length > 0 ? priceArray[0]?.price_usd : null;
-          return { token, price };
-        });
-
-        const analyticsResults = await Promise.allSettled(analyticsPromises);
-
-        analyticsResults.forEach((result) => {
-          if (
-            result.status === "fulfilled" &&
-            result.value.price &&
-            typeof result.value.price === "number"
-          ) {
-            priceData[result.value.token] = result.value.price;
+        if (source === "panora" || source === "auto") {
+          try {
+            const panoraPrices = await UnifiedPanoraService.getTokenPrices(tokens);
+            if (panoraPrices && panoraPrices.size > 0) {
+              priceData = Object.fromEntries(panoraPrices);
+              dataSource = "panora";
+            }
+          } catch (panoraError) {
+            apiLogger.warn("Panora price fetch failed", {
+              error: panoraError instanceof Error ? panoraError.message : String(panoraError),
+            });
+            if (source === "panora") {
+              throw panoraError;
+            }
           }
-        });
-
-        if (Object.keys(priceData).length > 0) {
-          dataSource = "analytics";
         }
-      } catch (analyticsError) {
-        apiLogger.warn("Analytics price fetch failed", {
-          error: analyticsError instanceof Error ? analyticsError.message : String(analyticsError),
-        });
-      }
-    }
 
-    // Format response
-    const response: UnifiedPriceResponse = {
-      prices: priceData,
-      source: dataSource,
-      tokens: Object.keys(priceData).length,
-      requested: tokens.length,
-      timestamp: new Date().toISOString(),
-    };
+        if ((source === "analytics" || source === "auto") && Object.keys(priceData).length === 0) {
+          try {
+            const analyticsPromises = tokens.map(async (token) => {
+              const priceArray = await aptosAnalytics.getTokenLatestPrice({
+                address: token,
+                date_utc,
+              });
+              const price =
+                Array.isArray(priceArray) && priceArray.length > 0
+                  ? priceArray[0]?.price_usd
+                  : null;
+              return { token, price };
+            });
+
+            const analyticsResults = await Promise.allSettled(analyticsPromises);
+
+            analyticsResults.forEach((result) => {
+              if (
+                result.status === "fulfilled" &&
+                result.value.price &&
+                typeof result.value.price === "number"
+              ) {
+                priceData[result.value.token] = result.value.price;
+              }
+            });
+
+            if (Object.keys(priceData).length > 0) {
+              dataSource = "analytics";
+            }
+          } catch (analyticsError) {
+            apiLogger.warn("Analytics price fetch failed", {
+              error:
+                analyticsError instanceof Error ? analyticsError.message : String(analyticsError),
+            });
+          }
+        }
+
+        const payload: UnifiedPriceResponse = {
+          prices: priceData,
+          source: dataSource,
+          tokens: Object.keys(priceData).length,
+          requested: tokens.length,
+          timestamp: new Date().toISOString(),
+        };
+
+        return payload;
+      },
+      { revalidate: CACHE_DURATIONS.MEDIUM, tags: ["unified:prices"] }
+    );
 
     return successResponse(response, CACHE_DURATIONS.MEDIUM, {
       ...getResponseTimeHeaders(startTime),
-      "X-Data-Source": dataSource,
+      "X-Data-Source": response.source,
     });
   } catch (error) {
     apiLogger.error("Unified price API error", {

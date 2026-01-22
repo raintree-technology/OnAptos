@@ -240,14 +240,6 @@ export class UnifiedDeFiScanner {
   }
 
   /**
-   * Extract token symbol from address
-   */
-  private extractTokenSymbol(tokenAddress: string): string {
-    const match = tokenAddress.match(/::([^:]+)$/);
-    return match ? match[1].toUpperCase() : "UNKNOWN";
-  }
-
-  /**
    * Enrich positions with fungible asset balances
    */
   private async enrichPositionsWithFungibleAssets(

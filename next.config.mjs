@@ -1,6 +1,19 @@
 import withBundleAnalyzer from "@next/bundle-analyzer";
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
+
+// Content Security Policy configuration
+const ContentSecurityPolicy = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://va.vercel-scripts.com",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://*.arweave.net https://arweave.net https://ipfs.io https://*.ipfs.io https://cloudflare-ipfs.com https://nftstorage.link https://*.aptoslabs.com https://raw.githubusercontent.com https://*.githubusercontent.com",
+  "connect-src 'self' https://api.llama.fi https://api.mainnet.aptoslabs.com https://fullnode.mainnet.aptoslabs.com https://pro-api.coinmarketcap.com https://api.coingecko.com https://api.panora.exchange https://api.rwa.xyz https://on-chain-data-seven.vercel.app https://vercel.live https://va.vercel-scripts.com wss://*.walletconnect.com https://*.walletconnect.com",
+  "font-src 'self' data:",
+  "frame-ancestors 'self'",
+  "frame-src 'self' https://verify.walletconnect.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join("; ");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -79,6 +92,11 @@ const nextConfig = {
         destination: "/tools/portfolio",
         permanent: true,
       },
+      {
+        source: "/dashboard",
+        destination: "/tools/portfolio",
+        permanent: true,
+      },
     ];
   },
 
@@ -92,6 +110,14 @@ const nextConfig = {
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "X-XSS-Protection", value: "1; mode=block" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: ContentSecurityPolicy,
+          },
         ],
       },
     ];
@@ -118,6 +144,14 @@ const nextConfig = {
         util: false,
       };
     }
+
+    // Handle "node:" prefixed imports for Node.js built-ins
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "node:events": "events",
+      "node:fs/promises": "fs/promises",
+      "node:path": "path",
+    };
 
     return config;
   },

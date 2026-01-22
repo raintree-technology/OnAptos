@@ -1,330 +1,193 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChevronDown, ChevronUp, TrendingUp } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import {
-  aptosExchanges,
-  bridgeGuides,
-  liveBridges,
-  wallets,
-} from "@/components/landing/data/landing-data";
+import { useMemo, useState } from "react";
+import { FADE_UP } from "@/lib/constants/animations";
+import { bridges, exchanges, wallets } from "@/components/landing/data/landing-data";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import {
-  cardEntrance,
-  scaleBlur,
-  sectionHeader,
-  slideInRight,
-  staggerContainer,
-} from "../shared/animations";
 import ExchangeCard from "../shared/ExchangeCard";
+import { ExpandToggle } from "../shared/ExpandToggle";
+import { Section } from "../shared/Section";
+import SectionHeader from "../shared/SectionHeader";
 import WalletCard from "../shared/WalletCard";
 
 export default function GettingStartedSection() {
   const [showAllExchanges, setShowAllExchanges] = useState(false);
   const [showAllBridges, setShowAllBridges] = useState(false);
+
+  const aptosExchanges = useMemo(() => exchanges.filter((ex) => ex.chain === "Aptos"), []);
+  const liveBridges = useMemo(() => bridges.filter((b) => b.status === "Live"), []);
+
   return (
-    <section
-      id="getting-started"
-      className="py-12 md:py-16 lg:py-20 px-4 sm:px-6 relative overflow-hidden"
-    >
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background pointer-events-none" />
-      <div className="container mx-auto relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <motion.div className="text-center mb-16" {...sectionHeader}>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-foreground">
-              Getting Started
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-3xl mx-auto leading-relaxed">
-              Set up your wallet, acquire APT, explore the ecosystem
-            </p>
-          </motion.div>
+    <Section id="getting-started">
+      <SectionHeader
+        title="Getting Started"
+        description="Set up your wallet, acquire APT, and explore the ecosystem"
+      />
 
-          {/* Wallets First */}
-          <motion.div className="mb-20" {...staggerContainer}>
-            <h3 className="text-2xl font-bold text-foreground mb-4 text-center">
-              Choose Your Wallet
-            </h3>
-            <p className="text-center text-foreground/70 mb-8 max-w-2xl mx-auto">
-              Install a wallet to manage assets and connect to dApps
-            </p>
+      <motion.div className="mb-16" {...FADE_UP}>
+        <h3 className="text-xl font-semibold text-foreground mb-2 text-center">
+          Choose Your Wallet
+        </h3>
+        <p className="text-sm text-muted-foreground mb-6 text-center">
+          Install a wallet to manage assets and connect to dApps
+        </p>
 
-            <div className="grid md:grid-cols-3 gap-4 md:gap-6 mb-8">
-              {wallets.map((wallet, index) => (
-                <motion.div key={index} variants={cardEntrance}>
-                  <WalletCard
-                    logo={wallet.logo}
-                    name={wallet.name}
-                    description={wallet.description}
-                    href={wallet.href}
-                    recommended={index === 0}
-                    invertLogoInDarkMode={wallet.name === "Aptos Connect"}
-                  />
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Quick Setup Guide - No container, blends with background */}
-            <div className="py-12 md:py-16 px-4 sm:px-6">
-              <div className="text-center mb-12">
-                <h4 className="font-bold text-xl sm:text-2xl md:text-3xl text-foreground mb-3">
-                  Four Simple Steps
-                </h4>
-              </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-6xl mx-auto">
-                <div className="flex flex-col items-center text-center space-y-4 group relative min-h-[44px]">
-                  <div className="absolute -top-2 -right-2 w-10 h-10 md:w-8 md:h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                    <span className="text-base md:text-sm font-bold text-primary font-mono">1</span>
-                  </div>
-                  <div className="w-20 h-20 mb-2 flex items-center justify-center group-hover:scale-105 transition-transform duration-200 bg-gradient-to-br from-muted/40 to-muted/20 rounded-2xl p-3 min-w-[44px] min-h-[44px]">
-                    <img
-                      src="/icons/petra.webp"
-                      alt="Petra"
-                      className="w-full h-full object-contain rounded-full"
-                    />
-                  </div>
-                  <h5 className="font-bold text-foreground text-base">Install Petra Wallet</h5>
-                  <p className="text-sm text-foreground/60 leading-relaxed">
-                    Download the Petra browser extension and create your secure wallet
-                  </p>
-                </div>
-                <div className="flex flex-col items-center text-center space-y-4 group relative">
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-bold text-primary font-mono">2</span>
-                  </div>
-                  <div className="w-20 h-20 mb-2 flex items-center justify-center group-hover:scale-105 transition-transform duration-200 bg-gradient-to-br from-muted/40 to-muted/20 rounded-2xl p-3">
-                    <Image
-                      src="/icons/apt.png"
-                      alt="APT"
-                      width={80}
-                      height={80}
-                      className="w-full h-full object-contain rounded-full dark:invert"
-                    />
-                  </div>
-                  <h5 className="font-bold text-foreground text-base">Get APT Tokens</h5>
-                  <p className="text-sm text-foreground/60 leading-relaxed">
-                    Buy APT on a CEX or through an onboarding partner like MoonPay
-                  </p>
-                </div>
-                <div className="flex flex-col items-center text-center space-y-4 group relative">
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-bold text-primary font-mono">3</span>
-                  </div>
-                  <div className="w-20 h-20 mb-2 flex items-center justify-center group-hover:scale-105 transition-transform duration-200 bg-gradient-to-br from-muted/40 to-muted/20 rounded-2xl p-3">
-                    <img
-                      src="/ans.webp"
-                      alt="ANS"
-                      className="w-full h-full object-contain rounded-full"
-                    />
-                  </div>
-                  <h5 className="font-bold text-foreground text-base">Claim Your .apt Name</h5>
-                  <p className="text-sm text-foreground/60 leading-relaxed">
-                    Register your identity on{" "}
-                    <a
-                      href="https://www.aptosnames.com/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline font-medium"
-                    >
-                      Aptos Names
-                    </a>
-                  </p>
-                </div>
-                <div className="flex flex-col items-center text-center space-y-4 group relative">
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-bold text-primary font-mono">4</span>
-                  </div>
-                  <div className="w-20 h-20 mb-2 flex items-center justify-center group-hover:scale-105 transition-transform duration-200 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl p-3">
-                    <TrendingUp className="w-12 h-12 text-primary" />
-                  </div>
-                  <h5 className="font-bold text-foreground text-base">Explore DeFi</h5>
-                  <p className="text-sm text-foreground/60 leading-relaxed">
-                    Start trading, lending, and earning yield on Aptos protocols
-                  </p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Exchanges */}
-          <motion.div className="mb-20" {...slideInRight}>
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h3 className="text-2xl font-bold text-foreground">Buy APT on Exchanges</h3>
-                <p className="text-sm text-foreground/70 mt-1">
-                  Trade Aptos tokens globally on leading exchanges
-                </p>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowAllExchanges(!showAllExchanges)}
-                className="gap-2"
-              >
-                {showAllExchanges ? (
-                  <>
-                    Show Less <ChevronUp className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    Show All <ChevronDown className="w-4 h-4" />
-                  </>
-                )}
-              </Button>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-              {aptosExchanges.slice(0, showAllExchanges ? undefined : 4).map((exchange, index) => (
-                <ExchangeCard
-                  key={index}
-                  logo={exchange.logo}
-                  name={exchange.name}
-                  region={exchange.region}
-                  usdt={exchange.usdt}
-                  usdc={exchange.usdc}
-                  link={exchange.link}
-                />
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Bridges */}
-          <motion.div {...scaleBlur}>
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h3 className="text-2xl font-bold text-foreground">Bridge Assets to Aptos</h3>
-                <p className="text-sm text-foreground/70 mt-1">
-                  Transfer from Ethereum, Solana, and more with LayerZero, Circle CCTP, and Wormhole
-                </p>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowAllBridges(!showAllBridges)}
-                className="gap-2"
-              >
-                {showAllBridges ? (
-                  <>
-                    Show Less <ChevronUp className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    Show All <ChevronDown className="w-4 h-4" />
-                  </>
-                )}
-              </Button>
-            </div>
-
-            {/* Bridge Comparison Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
-              {liveBridges.slice(0, showAllBridges ? undefined : 3).map((bridge, index) => (
-                <Link key={index} href={bridge.href} target="_blank" rel="noopener noreferrer">
-                  <Card className="group relative p-4 sm:p-6 hover:shadow-lg transition-all duration-200 h-full bg-gradient-to-br from-card to-card/50 border-2 hover:border-primary/30">
-                    {/* Status Badge */}
-                    <Badge
-                      variant="default"
-                      className="absolute top-3 right-3 text-xs bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20"
-                    >
-                      {bridge.status}
-                    </Badge>
-
-                    <div className="flex flex-col space-y-4">
-                      {/* Logo and Name */}
-                      <div className="flex items-start gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-background to-muted p-2 shadow-md flex items-center justify-center flex-shrink-0">
-                          <img
-                            src={bridge.logo}
-                            alt={bridge.name}
-                            className="w-full h-full object-contain rounded-full"
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-foreground group-hover:text-primary transition-colors mb-1">
-                            {bridge.name}
-                          </h3>
-                          <Badge variant="secondary" className="text-[10px]">
-                            {bridge.protocol}
-                          </Badge>
-                        </div>
-                      </div>
-
-                      {/* Bridge Stats */}
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 md:gap-3 pt-3 border-t border-border/50">
-                        <div className="text-center">
-                          <p className="text-[10px] sm:text-xs text-muted-foreground mb-1">Time</p>
-                          <p className="text-xs sm:text-sm font-semibold text-foreground font-mono">
-                            {bridge.bridgeTime}
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-[10px] sm:text-xs text-muted-foreground mb-1">Fees</p>
-                          <p className="text-xs sm:text-sm font-semibold text-foreground font-mono">
-                            {bridge.fees}
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-[10px] sm:text-xs text-muted-foreground mb-1">
-                            Networks
-                          </p>
-                          <p className="text-xs sm:text-sm font-semibold text-foreground font-mono">
-                            {bridge.networks}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Description */}
-                      <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">
-                        {bridge.description}
-                      </p>
-                    </div>
-
-                    {/* Hover effect overlay */}
-                    <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-                  </Card>
-                </Link>
-              ))}
-
-              {/* Bridging Guide Card */}
-              {(showAllBridges ? bridgeGuides : []).map((bridge, index) => (
-                <Link
-                  key={`guide-${index}`}
-                  href={bridge.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Card className="group relative p-4 sm:p-6 hover:shadow-lg transition-all duration-200 h-full bg-gradient-to-br from-primary/5 to-card border-2 border-primary/20 hover:border-primary/40">
-                    <Badge variant="default" className="absolute top-3 right-3 text-xs">
-                      Guide
-                    </Badge>
-
-                    <div className="flex flex-col items-center text-center space-y-4 justify-center h-full">
-                      <div className="w-16 h-16 rounded-xl bg-primary/10 p-3 flex items-center justify-center">
-                        <img
-                          src={bridge.logo}
-                          alt={bridge.name}
-                          className="w-full h-full object-contain dark:invert rounded-full"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors">
-                          {bridge.name}
-                        </h3>
-                        <p className="text-sm text-foreground/70 leading-relaxed">
-                          {bridge.description}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          </motion.div>
+        <div className="grid md:grid-cols-3 gap-4 mb-10">
+          {wallets.map((wallet, index) => (
+            <WalletCard
+              key={index}
+              logo={wallet.logo}
+              name={wallet.name}
+              description={wallet.description}
+              href={wallet.href}
+              recommended={index === 0}
+              invertLogoInDarkMode={wallet.name === "Aptos Connect"}
+            />
+          ))}
         </div>
-      </div>
-    </section>
+
+        {/* Quick Setup Steps */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-8 border-t border-border">
+          <div className="text-center">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-muted flex items-center justify-center">
+              <img src="/icons/petra.webp" alt="Petra" className="w-8 h-8 rounded-full" />
+            </div>
+            <p className="text-sm font-medium text-foreground mb-1">1. Install Wallet</p>
+            <p className="text-xs text-muted-foreground">Download Petra extension</p>
+          </div>
+          <div className="text-center">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-muted flex items-center justify-center">
+              <Image
+                src="/icons/apt.png"
+                alt="APT"
+                width={32}
+                height={32}
+                className="dark:invert"
+              />
+            </div>
+            <p className="text-sm font-medium text-foreground mb-1">2. Get APT</p>
+            <p className="text-xs text-muted-foreground">Buy on an exchange</p>
+          </div>
+          <div className="text-center">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-muted flex items-center justify-center">
+              <img src="/ans.webp" alt="ANS" className="w-8 h-8 rounded-full" />
+            </div>
+            <p className="text-sm font-medium text-foreground mb-1">3. Claim .apt Name</p>
+            <p className="text-xs text-muted-foreground">
+              <a
+                href="https://www.aptosnames.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+              >
+                Register on Aptos Names
+              </a>
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-muted flex items-center justify-center">
+              <ArrowRight className="w-5 h-5 text-foreground" />
+            </div>
+            <p className="text-sm font-medium text-foreground mb-1">4. Explore DeFi</p>
+            <p className="text-xs text-muted-foreground">Start trading and earning</p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Exchanges */}
+      <motion.div className="mb-16" {...FADE_UP}>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h3 className="text-xl font-semibold text-foreground">Buy APT on Exchanges</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Trade Aptos tokens on leading exchanges
+            </p>
+          </div>
+          <ExpandToggle
+            expanded={showAllExchanges}
+            onToggle={() => setShowAllExchanges(!showAllExchanges)}
+          />
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {aptosExchanges.slice(0, showAllExchanges ? undefined : 4).map((exchange, index) => (
+            <ExchangeCard
+              key={index}
+              logo={exchange.logo}
+              name={exchange.name}
+              region={exchange.region}
+              usdt={exchange.usdt}
+              usdc={exchange.usdc}
+              link={exchange.link}
+            />
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Bridges */}
+      <motion.div {...FADE_UP}>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h3 className="text-xl font-semibold text-foreground">Bridge Assets to Aptos</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Transfer from Ethereum, Solana, and more
+            </p>
+          </div>
+          <ExpandToggle
+            expanded={showAllBridges}
+            onToggle={() => setShowAllBridges(!showAllBridges)}
+          />
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {liveBridges.slice(0, showAllBridges ? undefined : 3).map((bridge, index) => (
+            <Link key={index} href={bridge.href} target="_blank" rel="noopener noreferrer">
+              <div className="group p-4 rounded-lg border border-border bg-card hover:bg-muted/50 transition-colors h-full">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-muted p-1.5 flex items-center justify-center flex-shrink-0">
+                    <img
+                      src={bridge.logo}
+                      alt={bridge.name}
+                      className="w-full h-full object-contain rounded-full"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="font-medium text-foreground">{bridge.name}</h4>
+                      <Badge variant="outline" className="text-xs">
+                        {bridge.protocol}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3 py-3 border-t border-border">
+                  <div className="text-center">
+                    <p className="text-xs text-muted-foreground mb-0.5">Time</p>
+                    <p className="text-sm font-mono text-foreground">{bridge.bridgeTime}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-muted-foreground mb-0.5">Fees</p>
+                    <p className="text-sm font-mono text-foreground">{bridge.fees}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-muted-foreground mb-0.5">Networks</p>
+                    <p className="text-sm font-mono text-foreground">{bridge.networks}</p>
+                  </div>
+                </div>
+
+                <p className="text-sm text-muted-foreground mt-3 line-clamp-2">
+                  {bridge.description}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </motion.div>
+    </Section>
   );
 }

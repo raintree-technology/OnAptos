@@ -262,7 +262,7 @@ export class UnifiedPanoraService {
 
       if (Array.isArray(prices) && prices.length > 0) {
         const price = parseFloat(prices[0].usdPrice);
-        return isNaN(price) ? fallbackPrice : price;
+        return Number.isNaN(price) ? fallbackPrice : price;
       }
 
       return fallbackPrice;

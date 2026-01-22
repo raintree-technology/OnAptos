@@ -13,7 +13,7 @@ export async function GET() {
     };
 
     if (aptosSecret) {
-      headers["Authorization"] = `Bearer ${aptosSecret}`;
+      headers.Authorization = `Bearer ${aptosSecret}`;
     }
 
     // Query 1: All-time transaction count (from latest transaction version)
@@ -83,7 +83,7 @@ export async function GET() {
       apiLogger.info("All-time transactions response:", data);
       const latestTx = data.data?.user_transactions?.[0];
       if (latestTx) {
-        allTimeTransactions = parseInt(latestTx.version) || 0;
+        allTimeTransactions = parseInt(latestTx.version, 10) || 0;
         apiLogger.info(`Latest transaction version (total transactions): ${allTimeTransactions}`);
       }
     } else {
@@ -98,8 +98,8 @@ export async function GET() {
       if (transactions.length > 0) {
         // Calculate average gas fee in APT
         const totalGasFees = transactions.reduce((sum: number, tx: any) => {
-          const gasUsed = parseInt(tx.gas_used) || 0;
-          const gasPrice = parseInt(tx.gas_unit_price) || 0;
+          const gasUsed = parseInt(tx.gas_used, 10) || 0;
+          const gasPrice = parseInt(tx.gas_unit_price, 10) || 0;
           return sum + gasUsed * gasPrice;
         }, 0);
         avgGasFeeAPT = totalGasFees / transactions.length / 1e8; // Convert octa to APT

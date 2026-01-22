@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PerformancePage from "@/components/pages/performance/Page";
+import PerformancePage from "./_performance-client";
 
 export const metadata: Metadata = {
   title: "Aptos Performance Comparison",

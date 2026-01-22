@@ -22,7 +22,7 @@ interface VirtualizedProtocolTableProps
   height?: number; // Made optional since we're not using virtualization
 }
 
-const DESKTOP_ROW_HEIGHT = 88;
+const _DESKTOP_ROW_HEIGHT = 88;
 
 export const VirtualizedProtocolTable = React.memo(function VirtualizedProtocolTable({
   filteredProtocols,
@@ -86,14 +86,14 @@ export const VirtualizedProtocolTable = React.memo(function VirtualizedProtocolT
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredProtocols.map((protocol, index) => {
+          {filteredProtocols.map((protocol, _index) => {
             const socialLinks = getSocialLinks(protocol);
 
             // Helper function to format numbers with cleaner display
-            const formatNumber = (num: string | number | undefined) => {
+            const _formatNumber = (num: string | number | undefined) => {
               if (!num) return "-";
               const n = typeof num === "string" ? parseFloat(num.replace(/[^0-9.-]/g, "")) : num;
-              if (isNaN(n)) return "-";
+              if (Number.isNaN(n)) return "-";
 
               if (n >= 1e9) {
                 // For billions, show 1 decimal place if less than 10B, otherwise no decimals
@@ -113,7 +113,7 @@ export const VirtualizedProtocolTable = React.memo(function VirtualizedProtocolT
               return n < 1 ? `$${n.toFixed(4)}` : `$${n.toFixed(2)}`;
             };
 
-            const formatPercent = (percent: string | undefined, positive = true) => {
+            const _formatPercent = (percent: string | undefined, positive = true) => {
               if (!percent) return "-";
               const val = parseFloat(percent);
               const color = val >= 0 ? "text-green-600" : "text-red-600";

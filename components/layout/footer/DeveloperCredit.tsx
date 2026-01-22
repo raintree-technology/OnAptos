@@ -1,12 +1,9 @@
 "use client";
 
-import React, { memo } from "react";
+import { memo } from "react";
 import { DEVELOPER_CONFIG } from "@/lib/config/app";
-import { useTranslation } from "@/lib/hooks/useTranslation";
 
 export const DeveloperCredit = memo(function DeveloperCredit() {
-  const { t } = useTranslation("common");
-
   return (
     <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
       <span>

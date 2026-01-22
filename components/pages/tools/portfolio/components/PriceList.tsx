@@ -263,7 +263,7 @@ export function PriceList({ className }: PriceListProps) {
   // Reset displayed count when search or category changes
   useEffect(() => {
     setDisplayedCount(12);
-  }, [searchTerm, selectedCategory]);
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {

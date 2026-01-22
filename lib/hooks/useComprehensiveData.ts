@@ -48,7 +48,7 @@ export function useComprehensiveData(): UseComprehensiveDataReturn {
           if (!response.ok) {
             throw new Error("Failed to fetch comprehensive data");
           }
-        } catch (fetchError) {
+        } catch (_fetchError) {
           // If the file doesn't exist or can't be fetched, use mock data
           // Development warning: Could not fetch comprehensive data, using mock data
 

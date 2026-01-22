@@ -4,7 +4,6 @@ import { InfoIcon } from "lucide-react";
 import Image from "next/image";
 import type React from "react";
 import { useMemo, useState } from "react";
-import { Disclaimer } from "@/components/layout/Disclaimer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -43,7 +42,7 @@ interface MoneyMarketsProps {
 
 export default function MoneyMarkets({ echelonData, supplyData }: MoneyMarketsProps) {
   const { t } = usePageTranslation("btc");
-  const [selectedMarket, setSelectedMarket] = useState<Market | null>(null);
+  const [_selectedMarket, setSelectedMarket] = useState<Market | null>(null);
 
   // Calculate Echo data based on configuration and real data
   const echoData = useMemo((): ProtocolData | null => {

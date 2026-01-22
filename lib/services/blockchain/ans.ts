@@ -279,7 +279,7 @@ export class AnsService {
       };
 
       if (process.env.APTOS_BUILD_SECRET) {
-        headers["Authorization"] = `Bearer ${process.env.APTOS_BUILD_SECRET}`;
+        headers.Authorization = `Bearer ${process.env.APTOS_BUILD_SECRET}`;
       }
 
       const response = await fetch(AnsService.GRAPHQL_URL, {

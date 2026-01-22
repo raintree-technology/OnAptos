@@ -34,10 +34,6 @@ export function formatUSD(value: number): string {
   }).format(value);
 }
 
-export function formatPercentage(value: number): string {
-  return `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
-}
-
 export function roundToDecimals(value: number, decimals: number = 2): number {
   return Math.round(value * 10 ** decimals) / 10 ** decimals;
 }

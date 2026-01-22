@@ -6,11 +6,9 @@
 // Error handling
 export { ErrorBoundary } from "./errors/ErrorBoundary";
 export { ErrorFallback } from "./errors/ErrorFallback";
-export { RootErrorBoundary } from "./errors/RootErrorBoundary";
 export { Footer } from "./layout/Footer";
 // Layout components
 export { Header } from "./layout/Header";
-export { ThemeProvider } from "./layout/theme-provider";
 export { ThemeToggle } from "./layout/theme-toggle";
 // Shared page components
 export * from "./shared/pages";

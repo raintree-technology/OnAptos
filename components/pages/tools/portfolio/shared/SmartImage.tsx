@@ -3,8 +3,8 @@
 import Image from "next/image";
 import React from "react";
 import { convertIPFSToHTTPSync } from "@/lib/services/portfolio/nft-metadata-helper";
+import { getTokenLogoUrlWithFallbackSync } from "@/lib/utils/blockchain/tokens/token-utils";
 import { logger } from "@/lib/utils/core/logger";
-import { getTokenLogoUrlWithFallbackSync } from "@/lib/utils/token/token-utils";
 import { NFTMedia } from "./MediaRenderer";
 
 interface SmartImageProps {

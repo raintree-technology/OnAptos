@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
         "Last-Modified": new Date().toUTCString(),
       },
     });
-  } catch (error) {
+  } catch (_error) {
     // Fallback content for error cases
     const fallbackContent = `# On Aptos - API Documentation
 

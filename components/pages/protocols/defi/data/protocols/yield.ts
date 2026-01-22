@@ -4,7 +4,6 @@ import {
   LeveragedFarmingImplementation,
   LiquidityManagerImplementation,
   LiquidStakingImplementation,
-  YieldAggregatorImplementation,
 } from "../types";
 
 // Yield farming and staking protocols

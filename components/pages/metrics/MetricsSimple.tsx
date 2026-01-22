@@ -2,7 +2,6 @@
 
 import { GeistMono } from "geist/font/mono";
 import type React from "react";
-import { useState } from "react";
 
 import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
 import {

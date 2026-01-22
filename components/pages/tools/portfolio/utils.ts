@@ -28,13 +28,13 @@ export const formatTimestamp = (timestamp: string | undefined) => {
     } else {
       // Unix timestamp (in microseconds for Aptos)
       const numTimestamp = Number(timestamp);
-      if (isNaN(numTimestamp)) return "Invalid date";
+      if (Number.isNaN(numTimestamp)) return "Invalid date";
       date = new Date(numTimestamp / 1000);
     }
 
-    if (isNaN(date.getTime())) return "Invalid date";
+    if (Number.isNaN(date.getTime())) return "Invalid date";
     return formatDate(date, { format: "medium", includeTime: true });
-  } catch (error) {
+  } catch (_error) {
     return "Invalid date";
   }
 };
@@ -45,7 +45,7 @@ export const isPhantomAsset = (assetType: string, metadata?: any): boolean => {
 };
 
 // Export copyToClipboard from centralized utility
-export { copyToClipboard } from "@/lib/utils/clipboard";
+export { copyToClipboard } from "@/lib/utils/browser/clipboard";
 
 // Helper function to get detailed protocol information
 export const getDetailedProtocolInfo = (protocolName: string) => {

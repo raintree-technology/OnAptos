@@ -93,7 +93,7 @@ export async function scanWalletPositions(
   const positions: DeFiPosition[] = [];
   const detectionResults = await ProtocolDetector.detectBatch(resources);
 
-  for (const [resourceType, detection] of detectionResults) {
+  for (const [_resourceType, detection] of detectionResults) {
     const position = convertToDefiPosition(detection, walletAddress);
     if (position) {
       // Include all positions, even with 0 value (they exist but may need price data)

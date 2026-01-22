@@ -5,14 +5,9 @@
 
 import { getEnvVar } from "@/lib/config/validate-env";
 import type { DeFiPosition } from "@/lib/types/defi";
-import { graphQLRequest } from "@/lib/utils/api/fetch-utils";
 import { logger } from "@/lib/utils/core/logger";
 import { AssetService } from "../../portfolio/services/asset-service";
-import {
-  buildLPTokenPosition,
-  buildPositionDetailsWithPrices,
-  calculatePositionValueWithPrices,
-} from "./position-builders";
+import { buildLPTokenPosition } from "./position-builders";
 import {
   getBridgePositions,
   getDerivativesPositions,
@@ -21,8 +16,6 @@ import {
   getLendingPositions,
   getLiquidStakingPositions,
 } from "./protocol-scanners";
-// Import from our new modules
-import type { ComprehensivePositionSummary, DetailedPosition } from "./types";
 import {
   getTokenDecimals,
   getTokenSymbol,
@@ -31,7 +24,7 @@ import {
   mapProtocolTypeToDefiType,
 } from "./utils";
 
-const INDEXER = "https://api.mainnet.aptoslabs.com/v1/graphql";
+const _INDEXER = "https://api.mainnet.aptoslabs.com/v1/graphql";
 const APTOS_API_KEY = getEnvVar("APTOS_BUILD_SECRET");
 
 export class DeFiBalanceService {

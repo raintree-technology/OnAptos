@@ -1,10 +1,9 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
-import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import IconContainer from "./IconContainer";
 
 interface CTACardProps {
   icon: LucideIcon;
@@ -14,25 +13,28 @@ interface CTACardProps {
   className?: string;
 }
 
-export default function CTACard({ icon, title, description, href, className }: CTACardProps) {
+export default function CTACard({ icon: Icon, title, description, href, className }: CTACardProps) {
   return (
     <Link href={href}>
-      <Card
+      <div
         className={cn(
-          "group p-4 sm:p-6 hover:shadow-lg transition-all duration-200 h-full bg-gradient-to-br from-card to-card/50 border-2 hover:border-primary/30",
+          "group p-6 rounded-lg border border-border bg-card hover:bg-muted/50 transition-colors h-full",
           className
         )}
       >
-        <div className="flex flex-col items-center text-center space-y-4">
-          <IconContainer icon={icon} size="lg" />
-          <div>
-            <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+            <Icon className="w-5 h-5 text-foreground" />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-medium text-foreground mb-1 flex items-center gap-2">
               {title}
+              <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
             </h3>
-            <p className="text-sm text-foreground/70 leading-relaxed">{description}</p>
+            <p className="text-sm text-muted-foreground">{description}</p>
           </div>
         </div>
-      </Card>
+      </div>
     </Link>
   );
 }

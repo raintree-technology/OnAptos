@@ -52,7 +52,7 @@ export const formatMarketShare = (value: number, total: number): string => {
 export const safeParseFloat = (value: string | number, fallback = 0): number => {
   if (typeof value === "number") return value;
   const parsed = parseFloat(value);
-  return isNaN(parsed) ? fallback : parsed;
+  return Number.isNaN(parsed) ? fallback : parsed;
 };
 
 /**
@@ -105,7 +105,7 @@ export const formatTokenValue = (
   displayDecimals = 2
 ): string => {
   const numValue = typeof value === "string" ? parseFloat(value) : value;
-  if (isNaN(numValue)) return "0";
+  if (Number.isNaN(numValue)) return "0";
 
   const adjustedValue = numValue / 10 ** decimals;
 

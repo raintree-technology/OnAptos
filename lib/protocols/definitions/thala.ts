@@ -124,7 +124,7 @@ export const ThalaProtocol: ProtocolDefinition = {
             amount: (data as any)?.coin?.value || "0",
           },
         ],
-        extractMetadata: (data) => ({
+        extractMetadata: (_data) => ({
           isStablecoin: true,
           cdpPosition: true,
         }),

@@ -1,23 +1,15 @@
 import { GeistMono } from "geist/font/mono";
-import { FileText, Github, Lock, Mail, Shield, Twitter, Users } from "lucide-react";
-import Link from "next/link";
-import React, { type FC, memo, type ReactElement } from "react";
 
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { LanguageToggle } from "@/components/ui/language-toggle";
-import { DEVELOPER_CONFIG } from "@/lib/config/app";
 
 import { ErrorBoundary } from "../errors/ErrorBoundary";
 
 interface FooterProps {
-  showAptosAttribution?: boolean;
   className?: string;
 }
 
-const FooterComponent: FC<FooterProps> = ({
-  showAptosAttribution: _showAptosAttribution = true,
-  className,
-}): ReactElement => {
+export function Footer({ className }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -56,8 +48,4 @@ const FooterComponent: FC<FooterProps> = ({
       </footer>
     </ErrorBoundary>
   );
-};
-
-FooterComponent.displayName = "FooterComponent";
-
-export const Footer = memo(FooterComponent);
+}

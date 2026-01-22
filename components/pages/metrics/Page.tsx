@@ -16,7 +16,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useMetricsData } from "@/lib/hooks/useMetricsData";
-import { formatCompactNumber } from "@/lib/utils";
 
 // Helper function to format numbers without currency symbol
 function formatCompactMetric(value: number): string {

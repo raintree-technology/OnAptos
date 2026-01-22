@@ -107,7 +107,6 @@ export function MobileMenu({ isOpen, onToggle, onClose, navigationItems }: Mobil
           <nav
             id="mobile-navigation"
             className="fixed top-0 right-0 h-full w-72 max-w-[85vw] bg-background border-l border-border z-50 md:hidden shadow-xl"
-            role="navigation"
             aria-label="Mobile navigation"
           >
             <div className="flex flex-col h-full">
@@ -203,10 +202,6 @@ export function MobileMenu({ isOpen, onToggle, onClose, navigationItems }: Mobil
                         <p className="text-xs text-muted-foreground">
                           {ansName ||
                             `${normalizedAddress.slice(0, 6)}...${normalizedAddress.slice(-4)}`}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {normalizedAddress.slice(0, 8)}...
-                          {normalizedAddress.slice(-6)}
                         </p>
                       </div>
                       <button

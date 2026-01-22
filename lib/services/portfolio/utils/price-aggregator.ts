@@ -1,6 +1,5 @@
 import { DefaultPriceService } from "@/lib/services/external/price-service";
 import { logger } from "@/lib/utils/core/logger";
-import type { AssetPrice } from "../types";
 
 interface PriceData {
   price: number;

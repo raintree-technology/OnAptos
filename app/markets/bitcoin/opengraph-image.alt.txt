@@ -1,1 +1,0 @@
-Bitcoin on Aptos - Track wrapped Bitcoin assets, liquidity pools, and yield opportunities across the Aptos DeFi ecosystem

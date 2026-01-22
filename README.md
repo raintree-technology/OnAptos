@@ -27,6 +27,18 @@ A comprehensive blockchain analytics platform for the Aptos ecosystem, providing
 
 ### Installation
 
+#### Option 1: Automated Setup (Recommended)
+
+```bash
+git clone https://github.com/yourusername/on-aptos.git
+cd on-aptos
+bun run setup
+```
+
+The setup script will install dependencies and create your `.env` file.
+
+#### Option 2: Manual Setup
+
 1. Clone and install:
 
 ```bash
@@ -38,17 +50,29 @@ bun install
 2. Configure environment:
 
 ```bash
-cp .env.example .env.local
+cp .env.example .env
 ```
 
-3. Add API keys to `.env.local`:
+3. Add required API keys to `.env`:
 
 ```env
-NEXT_PUBLIC_SITE_URL=https://on-aptos.com
-APTOS_BUILD_SECRET=your_key    # From geomi.dev
-PANORA_API_KEY=your_key        # See CLAUDE.md for public key
+# Required
 CMC_API_KEY=your_key           # From coinmarketcap.com/api
-RWA_API_KEY=your_key           # Contact for access
+RWA_API_KEY=your_key           # Contact RWA.xyz for access
+
+# Optional (for better rate limits)
+APTOS_BUILD_SECRET=your_key    # From developers.aptoslabs.com
+PANORA_API_KEY=your_key        # Leave empty for public key
+```
+
+4. (Optional) Customize branding in `.env`:
+
+```env
+NEXT_PUBLIC_SITE_NAME=Your Site Name
+NEXT_PUBLIC_DEVELOPER_NAME=Your Name
+NEXT_PUBLIC_DEVELOPER_EMAIL=your@email.com
+NEXT_PUBLIC_DEVELOPER_GITHUB=https://github.com/yourusername/your-repo
+# See .env.example for all customization options
 ```
 
 4. Start development:
@@ -66,6 +90,25 @@ bun run lint      # Run linting with Biome
 bun run typecheck # TypeScript checking
 bun run test      # Run tests
 ```
+
+## Forking & Customization
+
+This project is designed to be easily forked and customized:
+
+1. **Branding**: All site branding (name, description, developer info) is controlled via environment variables in `.env`
+2. **Configuration**: Core configs are in `lib/config/`:
+   - `site.ts` - Site and developer settings
+   - `app.ts` - Application configuration
+   - `tokens/` - Token definitions and metadata
+   - `protocols/` - DeFi protocol configurations
+3. **Styling**: Customize colors and themes in `tailwind.config.ts` and `app/globals.css`
+4. **No hardcoded personal info**: All attribution is environment-based
+
+To fully customize your fork:
+- Update `.env` with your information (see `.env.example`)
+- Replace `public/favicon.ico` and `public/og-image.png` with your branding
+- Update `package.json` name, description, and repository URLs
+- Modify color schemes in Tailwind config
 
 ## Security
 

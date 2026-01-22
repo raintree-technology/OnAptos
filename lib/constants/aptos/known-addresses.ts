@@ -6,10 +6,9 @@
  */
 
 import { PROTOCOLS } from "../protocols/protocol-registry";
-import { CEX_ADDRESSES, NFT_PLATFORMS } from "./platforms";
 
 // Helper to get protocol name by address
-const getProtocolName = (address: string): string | undefined => {
+const _getProtocolName = (address: string): string | undefined => {
   for (const protocol of Object.values(PROTOCOLS)) {
     if (protocol.addresses.includes(address)) {
       return protocol.name;

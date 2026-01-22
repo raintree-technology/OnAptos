@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation as useI18NextTranslation } from "react-i18next";
-import type {
-  TranslatableString,
-  TranslatableStringArray,
-} from "@/components/pages/protocols/defi/data/types";
 import { type Namespace, preloadPageTranslations, type SupportedLanguage } from "@/lib/i18n";
 import { i18nEventManager } from "@/lib/i18n/events";
 import { errorLogger, logger } from "@/lib/utils/core/logger";
@@ -20,7 +16,7 @@ export function useTranslation(namespace: Namespace | Namespace[] = "common") {
   const [translationsLoaded, setTranslationsLoaded] = useState(false);
 
   // Stable namespace key for dependencies
-  const namespaceKey = useMemo(() => [...namespaces].sort().join(","), [namespaces.join(",")]);
+  const _namespaceKey = useMemo(() => [...namespaces].sort().join(","), [namespaces]);
 
   // Track when component is mounted (client-side only)
   useEffect(() => {
@@ -87,7 +83,7 @@ export function useTranslation(namespace: Namespace | Namespace[] = "common") {
       mounted = false;
       cleanup();
     };
-  }, [i18n, namespaceKey, isMounted]);
+  }, [i18n, isMounted, namespaces]);
 
   // Memoize namespace check function
   const hasLoadedNamespaces = useMemo(

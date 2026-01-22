@@ -1,6 +1,6 @@
 import { getEnvVar } from "@/lib/config/validate-env";
+import { graphQLRequest } from "@/lib/utils/api/fetch-utils";
 import { logger } from "@/lib/utils/core/logger";
-import { graphQLRequest } from "@/lib/utils/fetch-utils";
 
 import { APTOS_INDEXER_URL, ERROR_MESSAGES } from "../constants";
 
@@ -195,7 +195,7 @@ export async function executeGraphQLQuery<T>(
       apiKeyLength: apiKey?.length || 0,
     });
     if (apiKey) {
-      headers["Authorization"] = `Bearer ${apiKey}`;
+      headers.Authorization = `Bearer ${apiKey}`;
     }
   }
 

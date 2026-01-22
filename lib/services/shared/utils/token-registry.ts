@@ -130,11 +130,11 @@ export class TokenRegistry {
     }
 
     // Handle bridged tokens
-    if (address && address.includes("::asset::USDC")) return "USDC";
-    if (address && address.includes("::asset::USDT")) return "USDT";
-    if (address && address.includes("::asset::WETH")) return "WETH";
-    if (address && address.includes("::asset::WBTC")) return "WBTC";
-    if (address && address.includes("::asset::DAI")) return "DAI";
+    if (address?.includes("::asset::USDC")) return "USDC";
+    if (address?.includes("::asset::USDT")) return "USDT";
+    if (address?.includes("::asset::WETH")) return "WETH";
+    if (address?.includes("::asset::WBTC")) return "WBTC";
+    if (address?.includes("::asset::DAI")) return "DAI";
 
     // Handle protocol tokens
     if (address && (address.includes("::thl_coin::") || address.includes("::THL"))) return "THL";

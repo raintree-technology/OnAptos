@@ -121,7 +121,7 @@ const i18nConfig = {
       credentials: "same-origin",
     },
     // Custom request with retry logic and better error handling
-    request: async (options: any, url: string, payload: any, callback: any) => {
+    request: async (options: any, url: string, _payload: any, callback: any) => {
       const maxRetries = 2;
       let attempt = 0;
 
@@ -181,21 +181,32 @@ if (isServer) {
   // Client: Use HTTP backend for lazy loading
   i18n.use(HttpApi).use(initReactI18next).init(i18nConfig);
 
-  // After initialization, check for saved language preference
-  if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
-    try {
-      const saved = localStorage.getItem("i18n-language") as SupportedLanguage;
-      if (saved && supportedLanguages.includes(saved) && saved !== i18n.language) {
-        logger.info(`Found saved language preference: ${saved}, applying...`);
-        i18n.changeLanguage(saved);
-      }
-    } catch (error) {
-      logger.warn(
-        `Failed to apply saved language preference: ${error instanceof Error ? error.message : String(error)}`
-      );
-    }
-  }
+  // NOTE: Language preference is now applied via applySavedLanguage() called from
+  // I18nProvider's useEffect to prevent React hydration mismatch errors (#418).
+  // The server renders with default language "en", and the client must hydrate
+  // with the same content before switching to the user's saved preference.
 }
+
+/**
+ * Apply saved language preference from localStorage.
+ * This should be called AFTER React hydration is complete (in a useEffect)
+ * to prevent hydration mismatch errors.
+ */
+export const applySavedLanguage = (): void => {
+  if (typeof window === "undefined") return;
+
+  try {
+    const saved = localStorage.getItem("i18n-language") as SupportedLanguage;
+    if (saved && supportedLanguages.includes(saved) && saved !== i18n.language) {
+      logger.info(`Applying saved language preference: ${saved}`);
+      i18n.changeLanguage(saved);
+    }
+  } catch (error) {
+    logger.warn(
+      `Failed to apply saved language preference: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
+};
 
 // Client-side language management
 if (!isServer) {

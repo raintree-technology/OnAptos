@@ -1,4 +1,3 @@
-import type { LucideIcon } from "lucide-react";
 import {
   Code,
   Eye,
@@ -69,7 +68,7 @@ export const wallets = [
   },
 ];
 
-const allBridges = [
+export const bridges = [
   {
     name: "Stargate (LayerZero)",
     description:
@@ -80,7 +79,7 @@ const allBridges = [
     fees: "~0.06%",
     networks: "39+",
     protocol: "LAYERZERO",
-    status: "Live",
+    status: "Live" as const,
   },
   {
     name: "Circle CCTP",
@@ -91,7 +90,7 @@ const allBridges = [
     fees: "0%",
     networks: "10+",
     protocol: "CIRCLE NATIVE",
-    status: "Live",
+    status: "Live" as const,
   },
   {
     name: "Wormhole Portal",
@@ -103,7 +102,7 @@ const allBridges = [
     fees: "~0.1%",
     networks: "30+",
     protocol: "WORMHOLE",
-    status: "Live",
+    status: "Live" as const,
   },
   {
     name: "Echo aBTC Bridge",
@@ -114,7 +113,7 @@ const allBridges = [
     fees: "~0.3%",
     networks: "5+",
     protocol: "BSQUARED",
-    status: "Live",
+    status: "Live" as const,
   },
   {
     name: "Gas.zip",
@@ -126,7 +125,7 @@ const allBridges = [
     fees: "Variable",
     networks: "Multiple",
     protocol: "GAS REFUEL",
-    status: "Live",
+    status: "Live" as const,
   },
   {
     name: "Zach's Bridging Guide",
@@ -138,14 +137,9 @@ const allBridges = [
     fees: "N/A",
     networks: "Guide",
     protocol: "EDUCATIONAL",
-    status: "Guide",
+    status: "Guide" as const,
   },
-];
-
-// Pre-filtered static exports for performance
-export const bridges = allBridges;
-export const liveBridges = allBridges.filter((b) => b.status === "Live");
-export const bridgeGuides = allBridges.filter((b) => b.status === "Guide");
+] as const;
 
 type Region = "US" | "KR" | "Global";
 
@@ -546,9 +540,6 @@ export const exchanges: Exchange[] = [
   },
 ];
 
-// Pre-filtered exchanges for performance
-export const aptosExchanges = exchanges.filter((ex) => ex.chain === "Aptos");
-
 export const developerTools = [
   {
     name: "Gas Profiler",
@@ -629,4 +620,93 @@ export const navigationSections = [
   { id: "tokens", label: "Markets" },
   { id: "developers", label: "Developers" },
   { id: "community", label: "Community" },
+];
+
+export const socialLinks = [
+  { name: "Discord", url: "https://discord.gg/aptosnetwork" },
+  { name: "X (Aptos Labs)", url: "https://twitter.com/aptoslabs" },
+  { name: "X (Aptos Network)", url: "https://twitter.com/Aptos_Network" },
+  { name: "YouTube", url: "https://www.youtube.com/@aptosnetwork" },
+  { name: "LinkedIn", url: "https://www.linkedin.com/company/aptoslabs" },
+  { name: "Forum", url: "https://forum.aptoslabs.com/" },
+  { name: "Medium", url: "https://medium.com/aptoslabs" },
+  {
+    name: "Collective",
+    url: "https://aptosfoundation.org/currents/join-the-aptos-collective",
+  },
+];
+
+export const regionalCommunities = [
+  { name: "Poland", url: "https://twitter.com/Aptos_polska" },
+  { name: "India", url: "https://twitter.com/aptos_ind" },
+  { name: "Indonesia", url: "https://twitter.com/Aptos_Indonesia" },
+  { name: "Japan", url: "https://twitter.com/aptos_japan" },
+  { name: "China", url: "https://twitter.com/aptoscnofficial" },
+  { name: "France", url: "https://twitter.com/aptosfrance" },
+  { name: "Russia", url: "https://twitter.com/aptos_ru" },
+  { name: "Turkey", url: "https://twitter.com/AptosTurkiye" },
+  { name: "Africa", url: "https://twitter.com/Aptos_Africa" },
+];
+
+export const officialLinks = [
+  { name: "Aptos Labs", url: "https://aptoslabs.com/" },
+  { name: "Aptos Foundation", url: "https://aptosfoundation.org/" },
+  {
+    name: "Ecosystem Projects",
+    url: "https://aptosfoundation.org/ecosystem/projects/all",
+  },
+  { name: "Foundation Blog", url: "https://aptosfoundation.org/currents" },
+  { name: "Open Roles", url: "https://aptoslabs.com/careers" },
+];
+
+export const usdtCostData = [
+  { chain: "Aptos", cost: "$0.0001", logo: "/icons/apt.png", isLowest: true },
+  {
+    chain: "Polygon",
+    cost: "$0.0003",
+    logo: "/icons/performance/polygon.png",
+    isLowest: false,
+  },
+  {
+    chain: "Avalanche",
+    cost: "$0.0003",
+    logo: "/icons/performance/avax.png",
+    isLowest: false,
+  },
+  {
+    chain: "Solana",
+    cost: "$0.002-0.12",
+    logo: "/icons/performance/sol.png",
+    isLowest: false,
+  },
+  {
+    chain: "BNB Chain",
+    cost: "$0.0026",
+    logo: "/icons/performance/bnb.png",
+    isLowest: false,
+  },
+  {
+    chain: "Polkadot",
+    cost: "$0.0061",
+    logo: "/icons/performance/polkadot.png",
+    isLowest: false,
+  },
+  {
+    chain: "Ethereum",
+    cost: "$0.0277",
+    logo: "/icons/performance/eth.png",
+    isLowest: false,
+  },
+  {
+    chain: "TON",
+    cost: "$0.0444",
+    logo: "/icons/performance/ton.png",
+    isLowest: false,
+  },
+  {
+    chain: "TRON",
+    cost: "$2-4",
+    logo: "/icons/performance/trx.png",
+    isLowest: false,
+  },
 ];

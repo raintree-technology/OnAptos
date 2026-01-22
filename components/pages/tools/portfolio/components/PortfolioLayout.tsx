@@ -1,4 +1,3 @@
-import React from "react";
 import { cn } from "@/lib/utils";
 import { PortfolioMainContent } from "../PortfolioMainContent";
 import { NewSidebar } from "./NewSidebar";

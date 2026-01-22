@@ -1,5 +1,5 @@
 import PortfolioPage from "@/components/pages/tools/portfolio/Page";
-import { createPage } from "@/lib/utils/page-factory";
+import { createPage } from "@/lib/utils/ui/pages/factory";
 
 const pageConfig = createPage({
   title: "Your Complete Aptos Portfolio",

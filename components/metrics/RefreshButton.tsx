@@ -1,25 +1,19 @@
 "use client";
 
-import { useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function RefreshButton() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const router = useRouter();
 
-  const handleRefresh = async () => {
+  const handleRefresh = () => {
     setIsRefreshing(true);
+    router.refresh();
 
-    try {
-      // Force revalidate the page data
-      router.refresh();
-
-      // Keep spinner active for a minimum time to show feedback
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } finally {
-      setIsRefreshing(false);
-    }
+    // Reset after minimum feedback time
+    setTimeout(() => setIsRefreshing(false), 800);
   };
 
   return (

@@ -1,22 +1,31 @@
 "use client";
 
 import { Bitcoin } from "lucide-react";
-import React, { memo, useCallback, useMemo } from "react";
+import { memo, useMemo } from "react";
 import {
   AddressDisplay,
   BaseDialog,
-  type BtcDialogProps,
   createCopyHandler,
   DialogInfoRow,
   DialogSection,
-  type DialogTokenMetadata,
   TokenHeader,
 } from "@/components/shared/dialogs";
-import { TokenDialogContent } from "@/components/ui/token-dialog-content";
+import type { StaticImageData } from "next/image";
+
+interface DialogTokenMetadata {
+  symbol: string;
+  name: string;
+  address: string;
+  decimals: number;
+  thumbnail?: string | StaticImageData;
+  logoUrl?: string;
+  description?: string;
+  type?: string;
+}
 import { usePageTranslation } from "@/lib/hooks/useTranslation";
 import { convertRawTokenAmount } from "@/lib/utils";
 import { logger } from "@/lib/utils/core/logger";
-import { BTC_DECIMAL_PLACES, BTCFormattingError, measurePerformance } from "./types";
+import { BTC_DECIMAL_PLACES, BTCFormattingError } from "./types";
 
 interface BtcTokenDialogProps {
   isOpen: boolean;
@@ -83,7 +92,7 @@ const calculateSupplyData = (supply: string, decimals: number, bitcoinPrice: num
   };
 };
 
-// Ultra-optimized memoized supply calculator
+// Memoized supply calculator
 const SupplyCalculator = memo<{
   supply: string;
   decimals: number;
@@ -91,27 +100,25 @@ const SupplyCalculator = memo<{
   t: (key: string, fallback?: string) => string;
 }>(({ supply, decimals, bitcoinPrice, t }) => {
   const formattedData = useMemo(() => {
-    return measurePerformance(() => {
-      try {
-        const result = calculateSupplyData(supply, decimals, bitcoinPrice);
-        return {
-          btcAmount: result.btcAmount,
-          usdAmount: result.usdAmount,
-          success: true,
-        };
-      } catch (error) {
-        logger.error("Error calculating BTC values:", error);
-        return {
-          btcAmount: t("btc:error.error_calculating_supply", "Error calculating supply"),
-          usdAmount: null,
-          success: false,
-          error:
-            error instanceof BTCFormattingError
-              ? error.message
-              : t("btc:error.unknown_error", "Unknown error"),
-        };
-      }
-    }, "SupplyCalculator calculation");
+    try {
+      const result = calculateSupplyData(supply, decimals, bitcoinPrice);
+      return {
+        btcAmount: result.btcAmount,
+        usdAmount: result.usdAmount,
+        success: true,
+      };
+    } catch (error) {
+      logger.error("Error calculating BTC values:", error);
+      return {
+        btcAmount: t("btc:error.error_calculating_supply", "Error calculating supply"),
+        usdAmount: null,
+        success: false,
+        error:
+          error instanceof BTCFormattingError
+            ? error.message
+            : t("btc:error.unknown_error", "Unknown error"),
+      };
+    }
   }, [supply, decimals, bitcoinPrice, t]);
 
   if (!formattedData.success) {
@@ -144,104 +151,14 @@ SupplyCalculator.displayName = "SupplyCalculator";
 
 // TokenIcon is now provided by shared components
 
-// Ultra-optimized token dialog with shared components
+// Token dialog component
 const TokenDialog = memo<BtcTokenDialogProps>(
   ({ isOpen, onClose, metadata, supply, bitcoinPrice = 0 }) => {
     const { t } = usePageTranslation("btc");
     const copyHandler = createCopyHandler();
 
-    // Validation with early returns
-    const isValidData = useMemo(() => {
-      return !!(
-        metadata?.name &&
-        metadata?.symbol &&
-        metadata?.address &&
-        metadata?.logoUrl &&
-        supply &&
-        (metadata.decimals === 0 ||
-          metadata.decimals ||
-          metadata.decimals === null ||
-          metadata.decimals === undefined)
-      );
-    }, [metadata, supply]);
-
-    // Formatted supply component
-    const formattedSupply = useMemo(() => {
-      if (!isValidData || !metadata) {
-        return (
-          <div className="flex items-center gap-2">
-            <Bitcoin className="h-5 w-5 text-amber-500" />
-            <span className="text-destructive">{t("btc:error.invalid_data", "Invalid data")}</span>
-          </div>
-        );
-      }
-
-      return (
-        <SupplyCalculator
-          supply={supply}
-          decimals={metadata.decimals}
-          bitcoinPrice={bitcoinPrice}
-          t={t}
-        />
-      );
-    }, [isValidData, metadata, supply, bitcoinPrice, t]);
-
-    // Address display component
-    const addressDisplay = useMemo(() => {
-      if (!isValidData || !metadata) {
-        return (
-          <div className="text-destructive">
-            {t("btc:error.invalid_metadata", "Invalid metadata")}
-          </div>
-        );
-      }
-
-      return <AddressDisplay addresses={metadata.address} onCopy={copyHandler} />;
-    }, [isValidData, metadata, copyHandler]);
-
-    // Dialog header content using shared TokenHeader
-    const headerContent = useMemo(() => {
-      if (!metadata) return null;
-
-      return (
-        <TokenHeader
-          symbol={metadata.symbol}
-          name={metadata.name}
-          logoUrl={metadata.logoUrl}
-          description={metadata.description}
-        />
-      );
-    }, [metadata]);
-
-    // Bitcoin-specific content using shared DialogSection
-    const bitcoinSpecificContent = useMemo(() => {
-      if (!metadata) return null;
-
-      return (
-        <DialogSection title={t("btc:sections.bitcoin_info", "Bitcoin Information")}>
-          <div className="flex items-center gap-2 p-3 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 rounded-lg border border-orange-200 dark:border-orange-800">
-            <Bitcoin className="h-4 w-4 text-orange-500" />
-            <span className="text-sm font-medium text-foreground">
-              {t("btc:info.bitcoin_backed_asset", "Bitcoin-backed Asset")}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <DialogInfoRow
-              label={t("btc:stats.decimals", "Decimals")}
-              value={<span className="font-mono">{metadata.decimals ?? 8}</span>}
-            />
-            <DialogInfoRow
-              label={t("btc:stats.network", "Network")}
-              value={t("btc:stats.aptos_mainnet", "Aptos Mainnet")}
-            />
-          </div>
-        </DialogSection>
-      );
-    }, [metadata, t]);
-
     // Early return for invalid data
-    if (!isValidData || !metadata) {
+    if (!metadata?.name || !metadata?.symbol || !supply) {
       return null;
     }
 
@@ -249,7 +166,14 @@ const TokenDialog = memo<BtcTokenDialogProps>(
       <BaseDialog
         isOpen={isOpen}
         onClose={onClose}
-        title={headerContent}
+        title={
+          <TokenHeader
+            symbol={metadata.symbol}
+            name={metadata.name}
+            logoUrl={metadata.logoUrl}
+            description={metadata.description}
+          />
+        }
         size="lg"
         showErrorBoundary={true}
       >
@@ -258,11 +182,18 @@ const TokenDialog = memo<BtcTokenDialogProps>(
             <div className="space-y-4">
               <DialogInfoRow
                 label={`${t("common:labels.total_supply", "Total Supply")}:`}
-                value={formattedSupply}
+                value={
+                  <SupplyCalculator
+                    supply={supply}
+                    decimals={metadata.decimals}
+                    bitcoinPrice={bitcoinPrice}
+                    t={t}
+                  />
+                }
               />
               <DialogInfoRow
                 label={`${t("common:labels.asset_address", "Asset Address")}:`}
-                value={addressDisplay}
+                value={<AddressDisplay addresses={metadata.address} onCopy={copyHandler} />}
               />
               <DialogInfoRow
                 label={`${t("common:labels.type", "Type")}:`}
@@ -271,7 +202,25 @@ const TokenDialog = memo<BtcTokenDialogProps>(
             </div>
           </DialogSection>
 
-          {bitcoinSpecificContent}
+          <DialogSection title={t("btc:sections.bitcoin_info", "Bitcoin Information")}>
+            <div className="flex items-center gap-2 p-3 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 rounded-lg border border-orange-200 dark:border-orange-800">
+              <Bitcoin className="h-4 w-4 text-orange-500" />
+              <span className="text-sm font-medium text-foreground">
+                {t("btc:info.bitcoin_backed_asset", "Bitcoin-backed Asset")}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <DialogInfoRow
+                label={t("btc:stats.decimals", "Decimals")}
+                value={<span className="font-mono">{metadata.decimals ?? 8}</span>}
+              />
+              <DialogInfoRow
+                label={t("btc:stats.network", "Network")}
+                value={t("btc:stats.aptos_mainnet", "Aptos Mainnet")}
+              />
+            </div>
+          </DialogSection>
         </div>
       </BaseDialog>
     );

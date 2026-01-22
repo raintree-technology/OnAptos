@@ -1,7 +1,7 @@
 "use client";
 
 import { Copy, ExternalLink } from "lucide-react";
-import React, { memo, useCallback } from "react";
+import { memo, useCallback } from "react";
 
 import { Button } from "@/components/ui/button";
 import { createCopyHandler, getExplorerUrl, truncateAddress } from "./utils";

@@ -2,7 +2,7 @@
 
 import { ChevronDown, ChevronUp, ImageIcon } from "lucide-react";
 import type React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SimpleNFTGridSkeleton } from "@/components/shared/pages";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

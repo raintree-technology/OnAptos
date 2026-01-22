@@ -11,7 +11,6 @@ export * from "./aptos/core";
 export * from "./aptos/known-addresses";
 export * from "./aptos/platforms";
 export * from "./aptos/utils";
-export * from "./aptos/validation";
 // Consolidated Endpoints
 export * from "./endpoints";
 // Error Messages (consolidated)

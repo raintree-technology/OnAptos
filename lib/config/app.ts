@@ -4,12 +4,13 @@
  */
 
 import { env, isDevelopment, isProduction } from "./validate-env";
+import { siteConfig, developerConfig } from "./site";
 
 export const APP_CONFIG = {
   // Site configuration
   siteUrl: env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-  appName: process.env.NEXT_PUBLIC_APP_NAME || "On Aptos",
-  siteDescription: process.env.NEXT_PUBLIC_SITE_DESCRIPTION || "Aptos DeFi ecosystem tracker",
+  appName: siteConfig.name,
+  siteDescription: siteConfig.description,
 
   // CORS configuration
   corsOrigins: process.env.NEXT_PUBLIC_CORS_ORIGINS?.split(",") || ["http://localhost:3000"],
@@ -22,15 +23,19 @@ export const APP_CONFIG = {
   isProduction: isProduction,
 } as const;
 
+// Re-export developer config with flattened structure for backward compatibility
 export const DEVELOPER_CONFIG = {
-  name: process.env.DEVELOPER_NAME || "Your Team",
-  email: process.env.DEVELOPER_EMAIL || "hello@your-domain.com",
-  website: process.env.DEVELOPER_WEBSITE || "https://your-domain.com",
-  twitter: process.env.DEVELOPER_TWITTER || "https://x.com/yourhandle",
-  twitterHandle: process.env.DEVELOPER_TWITTER_HANDLE || "yourhandle",
-  github: process.env.DEVELOPER_GITHUB || "https://github.com/yourusername/on-aptos",
-  linkedin: process.env.DEVELOPER_LINKEDIN || "",
+  name: developerConfig.name,
+  email: developerConfig.email,
+  website: developerConfig.website,
+  twitter: developerConfig.social.twitter,
+  twitterHandle: developerConfig.social.twitterHandle,
+  github: developerConfig.social.github,
+  linkedin: developerConfig.social.linkedin,
 } as const;
+
+// Re-export site configs for direct access
+export { siteConfig, developerConfig };
 
 export const API_CONFIG = {
   // RWA API

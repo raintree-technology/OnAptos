@@ -2,7 +2,6 @@
  * Protocol Detector - Smart detection and analysis
  */
 
-import { logger } from "@/lib/utils/core/logger";
 import { ProtocolLoader } from "./loader";
 import { protocolRegistry } from "./registry";
 import type { PositionType, ProtocolDefinition, ProtocolPattern } from "./types";

@@ -2,8 +2,6 @@
  * Core validation utilities for the application
  */
 
-import { z } from "zod";
-
 /**
  * Validates an Aptos wallet address
  */
@@ -68,7 +66,7 @@ export function isValidEmail(email: string): boolean {
  */
 export function isPositiveNumber(value: unknown): boolean {
   const num = Number(value);
-  return !isNaN(num) && num > 0;
+  return !Number.isNaN(num) && num > 0;
 }
 
 /**
@@ -76,7 +74,7 @@ export function isPositiveNumber(value: unknown): boolean {
  */
 export function isNonNegativeNumber(value: unknown): boolean {
   const num = Number(value);
-  return !isNaN(num) && num >= 0;
+  return !Number.isNaN(num) && num >= 0;
 }
 
 /**
@@ -84,7 +82,7 @@ export function isNonNegativeNumber(value: unknown): boolean {
  */
 export function isInteger(value: unknown): boolean {
   const num = Number(value);
-  return !isNaN(num) && Number.isInteger(num);
+  return !Number.isNaN(num) && Number.isInteger(num);
 }
 
 /**
@@ -125,7 +123,7 @@ export function validateQueryParam(
   switch (type) {
     case "number": {
       const num = Number(param);
-      return isNaN(num) ? undefined : num;
+      return Number.isNaN(num) ? undefined : num;
     }
     case "boolean": {
       if (typeof param === "boolean") return param;
@@ -133,7 +131,6 @@ export function validateQueryParam(
       if (param === "false") return false;
       return undefined;
     }
-    case "string":
     default:
       return sanitizeString(String(param));
   }

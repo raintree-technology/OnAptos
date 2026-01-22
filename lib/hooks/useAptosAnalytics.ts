@@ -230,7 +230,14 @@ export function useTransactionHistory(
   // Memoize options to prevent unnecessary refetches
   const optionsKey = useMemo(
     () => JSON.stringify(options || {}),
-    [options?.dateStart, options?.dateEnd, options?.assetSymbol, options?.limit, options?.offset]
+    [
+      options?.dateStart,
+      options?.dateEnd,
+      options?.assetSymbol,
+      options?.limit,
+      options?.offset,
+      options,
+    ]
   );
 
   useEffect(() => {

@@ -31,7 +31,7 @@ interface UsePortfolioDataResult {
 
 export function usePortfolioData(
   walletAddress: string | undefined,
-  showOnlyVerified: boolean = true
+  _showOnlyVerified: boolean = true
 ): UsePortfolioDataResult {
   const [assets, setAssets] = useState<FungibleAsset[] | null>(null);
   const [nfts, setNfts] = useState<NFT[] | null>(null);
@@ -478,7 +478,7 @@ export function usePortfolioData(
     };
 
     fetchData();
-  }, [walletAddress, showOnlyVerified]);
+  }, [walletAddress, loadTransactions]);
 
   const loadMoreNFTs = async () => {
     if (!walletAddress || isLoadingMore || !hasMoreNFTs) return;

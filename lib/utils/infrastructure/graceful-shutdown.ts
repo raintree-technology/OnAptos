@@ -1,7 +1,7 @@
 import { logger } from "../core/logger";
 
 // Check if we're in Node.js runtime
-const isNodeRuntime = typeof process !== "undefined" && process.versions?.node;
+const isNodeRuntime = process?.versions?.node;
 
 interface ShutdownHandler {
   name: string;

@@ -14,7 +14,6 @@ import {
 } from "@tanstack/react-table";
 import {
   ArrowUpDown,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
@@ -26,14 +25,12 @@ import {
   Percent,
   Shield,
   TrendingUp,
-  X,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -232,11 +229,7 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
 
   const yieldService = YieldAggregatorService.getInstance();
 
-  useEffect(() => {
-    loadOpportunities();
-  }, [walletAddress]);
-
-  const loadOpportunities = async () => {
+  const loadOpportunities = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -260,7 +253,11 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
     } finally {
       setLoading(false);
     }
-  };
+  }, [walletAddress]);
+
+  useEffect(() => {
+    loadOpportunities();
+  }, [loadOpportunities]);
 
   // Apply filters and pagination
   const { filteredOpportunities, displayOpportunities, totalPages } = React.useMemo(() => {
@@ -441,10 +438,10 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
       .sort((a, b) => b.count - a.count);
 
     return { topAssets, dropdownAssets };
-  }, [assetCounts]);
+  }, [assetCounts, formatAssetSymbol]);
 
   // Get top protocols
-  const topProtocols = React.useMemo(() => {
+  const _topProtocols = React.useMemo(() => {
     const protocolCounts: Record<string, number> = {};
 
     opportunities.forEach((opp) => {
@@ -466,19 +463,19 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
   }, [opportunities]);
 
   // Clear all filters
-  const clearFilters = () => {
+  const _clearFilters = () => {
     setSelectedProtocol("all");
     setSelectedAsset("all");
     setSearchQuery("");
   };
 
-  const hasActiveFilters =
+  const _hasActiveFilters =
     selectedProtocol !== "all" || selectedAsset !== "all" || searchQuery !== "";
 
   // Reset to first page when filters change
   React.useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, selectedAsset, selectedProtocol]);
+  }, []);
 
   // Table columns
   const columns = React.useMemo<ColumnDef<YieldOpportunity>[]>(
@@ -609,7 +606,7 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
         maxSize: 60,
       },
     ],
-    []
+    [formatAssetSymbol]
   );
 
   const table = useReactTable({
@@ -783,17 +780,17 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
       <div className="w-full">
         {/* Asset Filters */}
         <div className="flex flex-wrap items-center gap-1.5">
-          {topAssets.map((option, index) => (
+          {topAssets.map((option, _index) => (
             <React.Fragment key={option.value}>
               <Button
-                variant={selectedAsset === option.value ? "default" : "ghost"}
+                variant={selectedAsset === option.value ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedAsset(option.value)}
                 className={cn(
-                  "text-xs h-8 px-3 font-medium transition-all",
+                  "text-xs h-8 px-3 font-medium transition-all rounded-full",
                   selectedAsset === option.value
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted border-muted-foreground/20"
                 )}
               >
                 {option.label} ({option.count})
@@ -978,10 +975,11 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
               {Math.min(currentPage * itemsPerPage, filteredOpportunities.length)} of{" "}
               {filteredOpportunities.length} opportunities
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <Button
                 variant="outline"
                 size="sm"
+                className="h-9 w-9 p-0"
                 onClick={() => setCurrentPage(1)}
                 disabled={currentPage === 1}
               >
@@ -990,6 +988,7 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
               <Button
                 variant="outline"
                 size="sm"
+                className="h-9 w-9 p-0"
                 onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}
               >
@@ -1001,6 +1000,7 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
               <Button
                 variant="outline"
                 size="sm"
+                className="h-9 w-9 p-0"
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
@@ -1009,6 +1009,7 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
               <Button
                 variant="outline"
                 size="sm"
+                className="h-9 w-9 p-0"
                 onClick={() => setCurrentPage(totalPages)}
                 disabled={currentPage === totalPages}
               >

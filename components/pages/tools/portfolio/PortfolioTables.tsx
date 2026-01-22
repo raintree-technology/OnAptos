@@ -1,7 +1,7 @@
 "use client";
 
 import { GeistMono } from "geist/font/mono";
-import { AlertTriangle, Coins, HelpCircle, TrendingUp } from "lucide-react";
+import { Coins, HelpCircle, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
@@ -17,8 +17,8 @@ import {
 } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { getTokenLogoUrlWithFallbackSync } from "@/lib/utils/blockchain/tokens/token-utils";
 import { formatCurrency, formatTokenAmount } from "@/lib/utils/format/format";
-import { getTokenLogoUrlWithFallbackSync } from "@/lib/utils/token/token-utils";
 
 import { cleanProtocolName, getDetailedProtocolInfo } from "./shared/PortfolioMetrics";
 
@@ -78,7 +78,7 @@ export const AssetsTable = (props: any) => {
   // Reset displayed count when assets change
   React.useEffect(() => {
     setDisplayedCount(50); // Start with 50 items loaded
-  }, [visibleAssets.length]);
+  }, []);
 
   // Handle scroll-based loading
   React.useEffect(() => {

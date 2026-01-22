@@ -21,13 +21,8 @@ import {
 import { RWA_COLORS, RWA_TOKEN_BY_TICKER } from "@/lib/constants";
 import { usePageTranslation } from "@/lib/hooks/useTranslation";
 import { formatCurrency, formatLargeNumber, formatPercentage } from "@/lib/utils";
-import { copyToClipboard } from "@/lib/utils/clipboard";
-import {
-  ChartDataItem,
-  calculateMarketShare,
-  darkenColor,
-  formatAssetValue,
-} from "@/lib/utils/format/chart-utils";
+import { copyToClipboard } from "@/lib/utils/browser/clipboard";
+import { calculateMarketShare, darkenColor } from "@/lib/utils/format/chart-utils";
 import { truncateAddress } from "../../shared/utils";
 
 // Consolidated provider mapping
@@ -126,46 +121,42 @@ const TokenCard = memo(function TokenCard({
   const protocolRank = sortedProtocols.findIndex((p) => p.id === protocol.id);
   const darkenFactor =
     allProtocols.length > 1 ? (protocolRank * 0.15) / (allProtocols.length - 1) : 0;
-  const cardColor = darkenColor(baseColor, darkenFactor);
+  const _cardColor = darkenColor(baseColor, darkenFactor);
 
   const handleImageLoad = useCallback(() => {
     setImageLoaded(true);
   }, []);
 
   return (
-    <>
-      <div className="group">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-5 h-5 relative">
-            {!imageLoaded && (
-              <div className="absolute inset-0 bg-muted animate-pulse rounded-full" />
-            )}
-            <Image
-              src={getLogoUrl(protocol.protocol, protocol.assetTicker)}
-              alt={`${protocol.assetTicker} icon`}
-              width={20}
-              height={20}
-              className={`object-contain rounded-full ${!imageLoaded ? "opacity-0" : ""}`}
-              onLoad={handleImageLoad}
-              onError={(e) => {
-                const img = e.target as HTMLImageElement;
-                img.src = "/placeholder.jpg";
-                handleImageLoad();
-              }}
-            />
-          </div>
-          <h3 className="text-base font-semibold">{protocol.assetTicker}</h3>
+    <div className="group">
+      <div className="flex items-center gap-2 mb-2">
+        <div className="w-5 h-5 relative">
+          {!imageLoaded && <div className="absolute inset-0 bg-muted animate-pulse rounded-full" />}
+          <Image
+            src={getLogoUrl(protocol.protocol, protocol.assetTicker)}
+            alt={`${protocol.assetTicker} icon`}
+            width={20}
+            height={20}
+            className={`object-contain rounded-full ${!imageLoaded ? "opacity-0" : ""}`}
+            onLoad={handleImageLoad}
+            onError={(e) => {
+              const img = e.target as HTMLImageElement;
+              img.src = "/placeholder.jpg";
+              handleImageLoad();
+            }}
+          />
         </div>
-        <p className="text-lg font-bold font-mono mb-0.5">{tokenData.formattedValue}</p>
-        <div className="flex items-baseline justify-between mb-1">
-          <span className="text-xs text-muted-foreground">{t("rwas:stats.market_share")}</span>
-          <span className="text-xs text-muted-foreground font-mono">
-            {tokenData.marketSharePercent}%
-          </span>
-        </div>
-        <Progress className="h-1" value={parseFloat(tokenData.marketSharePercent)} />
+        <h3 className="text-base font-semibold">{protocol.assetTicker}</h3>
       </div>
-    </>
+      <p className="text-lg font-bold font-mono mb-0.5">{tokenData.formattedValue}</p>
+      <div className="flex items-baseline justify-between mb-1">
+        <span className="text-xs text-muted-foreground">{t("rwas:stats.market_share")}</span>
+        <span className="text-xs text-muted-foreground font-mono">
+          {tokenData.marketSharePercent}%
+        </span>
+      </div>
+      <Progress className="h-1" value={parseFloat(tokenData.marketSharePercent)} />
+    </div>
   );
 });
 
@@ -251,7 +242,7 @@ const ErrorState = memo(function ErrorState({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [initialSeconds, error]);
+  }, [initialSeconds]);
 
   return (
     <Card className="border-destructive mb-6">

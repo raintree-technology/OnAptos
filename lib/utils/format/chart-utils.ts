@@ -70,12 +70,6 @@ class LRUCache<T> {
 const formatCache = new LRUCache<string>(2000, 300000); // 5 min TTL
 const marketShareCache = new Map<string, number>();
 
-// Ultra-fast percentage formatting
-export const formatPercentage = (value: number): string => {
-  if (!Number.isFinite(value)) return "0.0";
-  return value >= 0.1 ? value.toFixed(1) : value.toFixed(2);
-};
-
 // Generic value formatting for different asset types
 export const formatAssetValue = (
   value: number,

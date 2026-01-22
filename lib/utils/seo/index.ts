@@ -3,9 +3,9 @@
  * Consolidates header configurations, validation, and error handling
  */
 
-import { readFile } from "fs/promises";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
-import { join } from "path";
 import { DEVELOPER_CONFIG } from "@/lib/config/app";
 import { apiLogger } from "../core/logger";
 
@@ -92,16 +92,16 @@ export function createSEOHeadResponse(contentType: keyof typeof HEAD_HEADERS): N
 }
 
 /**
- * Gets environment configuration for SEO endpoints
+ * Gets configuration for SEO endpoints
  */
 export function getSEOConfig() {
   return {
     siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://onaptos.com",
-    developerName: process.env.DEVELOPER_NAME || DEVELOPER_CONFIG.name,
-    developerEmail: process.env.DEVELOPER_EMAIL || DEVELOPER_CONFIG.email,
-    developerWebsite: process.env.DEVELOPER_WEBSITE || DEVELOPER_CONFIG.website,
-    developerTwitter: process.env.DEVELOPER_TWITTER || DEVELOPER_CONFIG.twitter,
-    githubRepo: process.env.DEVELOPER_GITHUB || DEVELOPER_CONFIG.github,
+    developerName: DEVELOPER_CONFIG.name,
+    developerEmail: DEVELOPER_CONFIG.email,
+    developerWebsite: DEVELOPER_CONFIG.website,
+    developerTwitter: DEVELOPER_CONFIG.twitter,
+    githubRepo: DEVELOPER_CONFIG.github,
   };
 }
 

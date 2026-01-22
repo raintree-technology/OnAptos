@@ -104,7 +104,7 @@ export function usePortfolioHistory(
       } else {
         setAccountNames(null);
       }
-    } catch (error) {
+    } catch (_error) {
       // Silently handle errors - ANS is optional, don't log errors
       setAccountNames(null);
     }

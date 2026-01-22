@@ -5,7 +5,7 @@ import { Layers, Loader2, PieChart as PieChartIcon, Wallet } from "lucide-react"
 import { useTheme } from "next-themes";
 import React, { lazy, Suspense, useCallback, useMemo } from "react";
 import { LoadingSkeleton, NFTTreemapSkeleton } from "@/components/shared/pages";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { logger } from "@/lib/utils/core/logger";
 import { formatCurrency } from "@/lib/utils/format/format";
 import {
@@ -238,9 +238,7 @@ export const WalletSummary: React.FC<WalletSummaryProps> = ({
                 />
               </Suspense>
             ) : (
-              <>
-                <EmptyChart />
-              </>
+              <EmptyChart />
             )}
           </div>
         </div>

@@ -29,7 +29,7 @@ export function buildPositionDetails(position: any): DeFiPosition["position"] {
  */
 export async function buildPositionDetailsWithPrices(
   position: any,
-  walletAddress: string
+  _walletAddress: string
 ): Promise<DeFiPosition["position"]> {
   const positionDetails = buildPositionDetails(position);
 
@@ -120,7 +120,7 @@ export function calculatePositionValue(position: any): number {
  */
 export async function calculatePositionValueWithPrices(
   position: any,
-  walletAddress: string
+  _walletAddress: string
 ): Promise<number> {
   let totalValue = 0;
 

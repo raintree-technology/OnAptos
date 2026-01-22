@@ -26,11 +26,16 @@ async function fetchTokens({ pageParam = 0 }): Promise<TokensResponse> {
 
   const data = await response.json();
 
+  // Support both direct and wrapped response shapes
+  const tokens = data.tokens || data.data?.tokens || [];
+  const totalTokens = data.totalTokens || data.data?.totalTokens || 0;
+  const nextOffset = data.nextOffset ?? data.data?.nextOffset ?? null;
+
   return {
-    tokens: data.data?.tokens || [],
-    totalTokens: data.data?.totalTokens || 0,
-    hasMore: (data.data?.tokens?.length || 0) === PAGE_SIZE,
-    nextCursor: pageParam + PAGE_SIZE,
+    tokens,
+    totalTokens,
+    hasMore: nextOffset !== null && tokens.length > 0,
+    nextCursor: nextOffset ?? pageParam + PAGE_SIZE,
   };
 }
 
@@ -203,7 +208,7 @@ export function VirtualizedTokenList() {
 
   // Load more items
   const loadMoreItems = useCallback(
-    (startIndex: number, stopIndex: number): Promise<void> => {
+    (_startIndex: number, _stopIndex: number): Promise<void> => {
       if (!isFetchingNextPage) {
         return fetchNextPage().then(() => void 0);
       }

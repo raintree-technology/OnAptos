@@ -1,13 +1,11 @@
-import { type NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 import { DeFiService } from "@/lib/services/defi/services/defi-service";
 import { AssetService } from "@/lib/services/portfolio/services/asset-service";
 import { NFTService } from "@/lib/services/portfolio/services/nft-service";
 import { TransactionService } from "@/lib/services/portfolio/services/transaction-service";
-import { UnifiedPanoraService } from "@/lib/services/portfolio/unified-panora-service";
 import type { BatchResponse } from "@/lib/types/consolidated";
 import {
-  CACHE_DURATIONS,
   errorResponse,
   extractParams,
   parseNumericParam,

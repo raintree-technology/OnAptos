@@ -1,30 +1,5 @@
-import { logger } from "@/lib/utils/core/logger";
-import type { PerformanceMetrics } from "./types";
+// Performance utilities removed per best practices
+// React Profiler and browser DevTools are more appropriate for performance monitoring
+// Custom measurement adds overhead without significant benefit for most use cases
 
-// Performance measurement utilities
-export const measurePerformance = <T>(fn: () => T, label?: string): T => {
-  const start = performance.now();
-  const result = fn();
-  const end = performance.now();
-
-  if (label && process.env.NODE_ENV === "development") {
-    logger.debug(`${label}: ${(end - start).toFixed(2)}ms`);
-  }
-
-  return result;
-};
-
-// Async performance measurement
-export const measureAsync = async <T>(fn: () => Promise<T>, label?: string): Promise<T> => {
-  const start = performance.now();
-  const result = await fn();
-  const end = performance.now();
-
-  if (label && process.env.NODE_ENV === "development") {
-    logger.debug(`${label}: ${(end - start).toFixed(2)}ms`);
-  }
-
-  return result;
-};
-
-export type { PerformanceMetrics };
+export type { PerformanceMetrics } from "./types";

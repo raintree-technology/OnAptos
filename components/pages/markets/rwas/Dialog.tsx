@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo, useCallback, useMemo } from "react";
+import { memo, useMemo } from "react";
 
 import {
   AddressDisplay,
@@ -10,11 +10,23 @@ import {
   DialogSection,
   formatDisplayText,
   hasValidData,
-  type RWATokenData,
-  type RwaDialogProps,
   TokenHeader,
 } from "@/components/shared/dialogs";
-import { Badge } from "@/components/ui/badge";
+
+export interface RWATokenData {
+  symbol: string;
+  name: string;
+  address: string;
+  decimals: number;
+  assetTicker: string;
+  assetName: string;
+  assetIssuer?: string;
+  protocol: string;
+  standards?: string;
+  assetRegulatoryFramework?: string;
+  assetGoverningBody?: string;
+  assetIssuerLegalStructureCountry?: string;
+}
 import { useResponsive } from "@/lib/hooks/useResponsive";
 import { useTranslation } from "@/lib/hooks/useTranslation";
 import { formatCurrency } from "@/lib/utils";

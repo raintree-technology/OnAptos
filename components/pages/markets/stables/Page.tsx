@@ -23,13 +23,8 @@ import { STABLECOIN_METADATA } from "@/lib/config/tokens/stablecoins";
 import { STABLECOIN_COLORS } from "@/lib/constants/ui/colors";
 import { usePageTranslation } from "@/lib/hooks/useTranslation";
 import { formatAmount } from "@/lib/utils";
-import { copyToClipboard } from "@/lib/utils/clipboard";
+import { copyToClipboard } from "@/lib/utils/browser/clipboard";
 import { logger } from "@/lib/utils/core/logger";
-import {
-  ChartDataItem,
-  calculateMarketShare,
-  formatAssetValue,
-} from "@/lib/utils/format/chart-utils";
 import { truncateAddress } from "../../shared/utils";
 
 const TOKEN_METADATA = STABLECOIN_METADATA;
@@ -123,64 +118,62 @@ const TokenCard = memo(function TokenCard({
   const metadata = TOKEN_METADATA[symbol];
 
   return (
-    <>
-      <div className="group">
-        <div className="flex items-center gap-2 mb-2">
-          {"isCombined" in token && token.isCombined ? (
-            <div className="flex items-center">
-              {[...token.components]
-                .sort((a, b) => (BigInt(b.supply) > BigInt(a.supply) ? 1 : -1))
-                .map((component, index) => (
-                  <React.Fragment key={component.symbol}>
-                    <div className="flex items-center">
-                      <div className="w-5 h-5 relative flex-shrink-0 mr-1">
-                        <Image
-                          src={
-                            (TOKEN_METADATA[component.symbol]?.thumbnail as string) ||
-                            "/placeholder.jpg"
-                          }
-                          alt={`${component.symbol} icon`}
-                          width={20}
-                          height={20}
-                          className="object-contain rounded-full"
-                          onError={(e) => {
-                            const img = e.target as HTMLImageElement;
-                            img.src = "/placeholder.jpg";
-                          }}
-                        />
-                      </div>
+    <div className="group">
+      <div className="flex items-center gap-2 mb-2">
+        {"isCombined" in token && token.isCombined ? (
+          <div className="flex items-center">
+            {[...token.components]
+              .sort((a, b) => (BigInt(b.supply) > BigInt(a.supply) ? 1 : -1))
+              .map((component, index) => (
+                <React.Fragment key={component.symbol}>
+                  <div className="flex items-center">
+                    <div className="w-5 h-5 relative flex-shrink-0 mr-1">
+                      <Image
+                        src={
+                          (TOKEN_METADATA[component.symbol]?.thumbnail as string) ||
+                          "/placeholder.jpg"
+                        }
+                        alt={`${component.symbol} icon`}
+                        width={20}
+                        height={20}
+                        className="object-contain rounded-full"
+                        onError={(e) => {
+                          const img = e.target as HTMLImageElement;
+                          img.src = "/placeholder.jpg";
+                        }}
+                      />
                     </div>
-                    {index === 0 && <span className="mx-1 text-muted-foreground">/</span>}
-                  </React.Fragment>
-                ))}
-            </div>
-          ) : (
-            <div className="w-5 h-5 relative">
-              <Image
-                src={(metadata?.thumbnail as string) || "/placeholder.jpg"}
-                alt={`${symbol} icon`}
-                width={20}
-                height={20}
-                className="object-contain rounded-full"
-                onError={(e) => {
-                  const img = e.target as HTMLImageElement;
-                  img.src = "/placeholder.jpg";
-                }}
-              />
-            </div>
-          )}
-          <h3 className="text-base font-semibold">{symbol}</h3>
-        </div>
-        <div>
-          <p className="text-lg font-bold font-mono mb-0.5">{formattedDisplaySupply}</p>
-        </div>
-        <div className="flex items-baseline justify-between mb-1">
-          <span className="text-xs text-muted-foreground">{t("stables:stats.market_share")}</span>
-          <span className="text-xs text-muted-foreground font-mono">{marketSharePercent}%</span>
-        </div>
-        <Progress className="h-1" value={Number(marketSharePercent)} />
+                  </div>
+                  {index === 0 && <span className="mx-1 text-muted-foreground">/</span>}
+                </React.Fragment>
+              ))}
+          </div>
+        ) : (
+          <div className="w-5 h-5 relative">
+            <Image
+              src={(metadata?.thumbnail as string) || "/placeholder.jpg"}
+              alt={`${symbol} icon`}
+              width={20}
+              height={20}
+              className="object-contain rounded-full"
+              onError={(e) => {
+                const img = e.target as HTMLImageElement;
+                img.src = "/placeholder.jpg";
+              }}
+            />
+          </div>
+        )}
+        <h3 className="text-base font-semibold">{symbol}</h3>
       </div>
-    </>
+      <div>
+        <p className="text-lg font-bold font-mono mb-0.5">{formattedDisplaySupply}</p>
+      </div>
+      <div className="flex items-baseline justify-between mb-1">
+        <span className="text-xs text-muted-foreground">{t("stables:stats.market_share")}</span>
+        <span className="text-xs text-muted-foreground font-mono">{marketSharePercent}%</span>
+      </div>
+      <Progress className="h-1" value={Number(marketSharePercent)} />
+    </div>
   );
 });
 
@@ -259,7 +252,7 @@ const ErrorState = memo(function ErrorState({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [initialSeconds, error]);
+  }, [initialSeconds]);
 
   return (
     <Card className="border-destructive mb-6">
@@ -523,7 +516,7 @@ function StablesPage(): React.ReactElement {
       adjustedTotal: rawSupplyTotal.toString(),
       suppliesDataMap: suppliesMap,
     };
-  }, [data, stablesData]);
+  }, [data]);
 
   return (
     <ErrorBoundary>

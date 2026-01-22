@@ -10,13 +10,7 @@ import {
 import { TETHER_RESERVES } from "@/lib/constants/tokens/addresses";
 import { logger } from "@/lib/utils/core/logger";
 import { formatBigIntWithDecimals } from "@/lib/utils/format/format";
-import type {
-  BridgedCoinConfig,
-  CoinBalanceResponse,
-  StablecoinData,
-  StablecoinGraphQLResponse,
-  StablecoinSupply,
-} from "../shared/types";
+import type { BridgedCoinConfig, StablecoinData, StablecoinSupply } from "../shared/types";
 import { BaseAssetService } from "../shared/utils/base-service";
 
 // Constants
@@ -380,7 +374,7 @@ export class StablecoinService extends BaseAssetService {
     };
 
     if (process.env.APTOS_BUILD_SECRET) {
-      headers["Authorization"] = `Bearer ${process.env.APTOS_BUILD_SECRET}`;
+      headers.Authorization = `Bearer ${process.env.APTOS_BUILD_SECRET}`;
     }
 
     const response = await StablecoinService.withTimeout(
@@ -400,7 +394,7 @@ export class StablecoinService extends BaseAssetService {
 
     if (result.errors) {
       logger.error("GraphQL errors:", result.errors);
-      throw new Error("GraphQL query failed: " + JSON.stringify(result.errors));
+      throw new Error(`GraphQL query failed: ${JSON.stringify(result.errors)}`);
     }
 
     return result.data;

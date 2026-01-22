@@ -1,8 +1,8 @@
-import { MetricCard } from "./MetricCard";
+import { MetricCard, type Metric } from "./MetricCard";
 
 interface MetricsCategoryProps {
   category: string;
-  metrics: any[];
+  metrics: Metric[];
   gridCols: string;
   compact?: boolean;
 }
@@ -25,8 +25,8 @@ export function MetricsCategory({
         </h2>
       )}
       <div className={`grid gap-3 ${gridCols}`}>
-        {metrics.map((metric, idx) => (
-          <MetricCard key={idx} metric={metric} compact={compact} />
+        {metrics.map((metric) => (
+          <MetricCard key={metric.name} metric={metric} compact={compact} />
         ))}
       </div>
     </section>

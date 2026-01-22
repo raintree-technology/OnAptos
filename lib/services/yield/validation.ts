@@ -28,14 +28,14 @@ export function isValidAptosAddress(address: string): boolean {
  * Validates if a number is a valid APY (0-10000%)
  */
 export function isValidAPY(apy: number): boolean {
-  return typeof apy === "number" && !isNaN(apy) && apy >= 0 && apy <= 10000;
+  return typeof apy === "number" && !Number.isNaN(apy) && apy >= 0 && apy <= 10000;
 }
 
 /**
  * Validates if a number is a valid TVL (non-negative)
  */
 export function isValidTVL(tvl: number): boolean {
-  return typeof tvl === "number" && !isNaN(tvl) && tvl >= 0;
+  return typeof tvl === "number" && !Number.isNaN(tvl) && tvl >= 0;
 }
 
 /**

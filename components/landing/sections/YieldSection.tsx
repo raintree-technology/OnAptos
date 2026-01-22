@@ -4,58 +4,46 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
+import { FADE_UP, FADE_UP_DELAYED } from "@/lib/constants/animations";
 import { YieldTable } from "@/components/pages/tools/portfolio/YieldTable";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { rotateScale, slideInLeft } from "../shared/animations";
+import { Section } from "../shared/Section";
 
 export default function YieldSection() {
   return (
-    <section
-      id="yield"
-      className="py-12 md:py-16 lg:py-20 px-4 sm:px-6 relative overflow-hidden bg-muted/30"
-    >
-      <div className="container mx-auto relative z-10">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <motion.div className="flex items-center justify-between mb-8" {...slideInLeft}>
-            <div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
-                Top Yield Opportunities
-              </h2>
-              <p className="text-sm sm:text-base text-foreground/70">
-                Discover the highest APY pools across Aptos DeFi protocols
-              </p>
-            </div>
-            <Link href="/protocols/yields">
-              <Button
-                variant="ghost"
-                className="gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                View All
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
-          </motion.div>
-
-          {/* Yields Component */}
-          <motion.div {...rotateScale}>
-            <Suspense
-              fallback={
-                <Card className="p-4 sm:p-6">
-                  <div className="space-y-4">
-                    {[...Array(10)].map((_, i) => (
-                      <div key={i} className="h-16 bg-muted rounded animate-pulse" />
-                    ))}
-                  </div>
-                </Card>
-              }
-            >
-              <YieldTable limit={10} compact={true} />
-            </Suspense>
-          </motion.div>
+    <Section id="yield" className="bg-muted/30">
+      <motion.div className="flex items-center justify-between mb-8" {...FADE_UP}>
+        <div>
+          <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-1">
+            Top Yield Opportunities
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Highest APY pools across Aptos DeFi protocols
+          </p>
         </div>
-      </div>
-    </section>
+        <Link href="/protocols/yields">
+          <Button variant="ghost" size="sm" className="gap-1">
+            View All
+            <ArrowRight className="w-4 h-4" />
+          </Button>
+        </Link>
+      </motion.div>
+
+      <motion.div {...FADE_UP_DELAYED(0.1)}>
+        <Suspense
+          fallback={
+            <div className="p-4 rounded-lg border border-border bg-card">
+              <div className="space-y-3">
+                {[...Array(10)].map((_, i) => (
+                  <div key={i} className="h-12 bg-muted rounded animate-pulse" />
+                ))}
+              </div>
+            </div>
+          }
+        >
+          <YieldTable limit={10} compact={true} />
+        </Suspense>
+      </motion.div>
+    </Section>
   );
 }

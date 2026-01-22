@@ -1,10 +1,11 @@
 "use client";
 
-import { BarChart, BarChart3, GitBranch, Network, TrendingUp } from "lucide-react";
+import { BarChart, BarChart3, Network, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type React from "react";
+import { useMemo } from "react";
 
 import { defiProtocols } from "@/components/pages/protocols/defi/data/protocols";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +37,14 @@ export function DesktopNavigationMenu({ navigationItems, onMenuClose }: Navigati
   const pathname = usePathname();
   const { t } = useTranslation(["common", "defi"]);
 
+  // Determine which navigation section is active based on current pathname
+  const activeSection = useMemo(() => {
+    if (pathname.startsWith("/markets/")) return "assets";
+    if (pathname.startsWith("/protocols/") || pathname === "/protocols") return "defi";
+    if (pathname === "/performance" || pathname === "/metrics") return "blockchain";
+    return null;
+  }, [pathname]);
+
   return (
     <div className="hidden md:flex items-center gap-4 ml-auto">
       <div className="relative">
@@ -43,7 +52,13 @@ export function DesktopNavigationMenu({ navigationItems, onMenuClose }: Navigati
           <NavigationMenuList>
             {/* Assets Dropdown */}
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="text-sm font-medium">
+              <NavigationMenuTrigger
+                className={cn(
+                  "text-sm font-medium",
+                  activeSection === "assets" &&
+                    "bg-accent/50 text-accent-foreground after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-primary"
+                )}
+              >
                 {t("navigation.assets", "Assets")}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
@@ -71,7 +86,13 @@ export function DesktopNavigationMenu({ navigationItems, onMenuClose }: Navigati
 
             {/* DeFi Dropdown */}
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="text-sm font-medium">
+              <NavigationMenuTrigger
+                className={cn(
+                  "text-sm font-medium",
+                  activeSection === "defi" &&
+                    "bg-accent/50 text-accent-foreground after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-primary"
+                )}
+              >
                 {t("navigation.defi", "DeFi")}
               </NavigationMenuTrigger>
               <NavigationMenuContent className="md:-ml-[230px]">
@@ -191,7 +212,13 @@ export function DesktopNavigationMenu({ navigationItems, onMenuClose }: Navigati
 
             {/* Blockchain Dropdown */}
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="text-sm font-medium">
+              <NavigationMenuTrigger
+                className={cn(
+                  "text-sm font-medium",
+                  activeSection === "blockchain" &&
+                    "bg-accent/50 text-accent-foreground after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-primary"
+                )}
+              >
                 {t("navigation.blockchain", "Blockchain")}
               </NavigationMenuTrigger>
               <NavigationMenuContent>

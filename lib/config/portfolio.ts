@@ -70,7 +70,7 @@ export const PORTFOLIO_INDEXER = {
 export const UI_CONSTANTS = {
   // Virtualized list settings
   ITEM_HEIGHT: 80,
-  PAGE_SIZE: 5000,
+  PAGE_SIZE: 250,
 
   // Default list heights
   MIN_LIST_HEIGHT: 600,

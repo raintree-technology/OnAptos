@@ -11,37 +11,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { GeistMono } from "geist/font/mono";
-import {
-  ArrowDownRight,
-  ArrowLeftRight,
-  ArrowUpDown,
-  ArrowUpRight,
-  Clock,
-  Coins,
-  ExternalLink,
-  Gift,
-  History,
-  Layers,
-  Search,
-  Shield,
-  TrendingUp,
-  Wallet,
-  X,
-  Zap,
-} from "lucide-react";
+import { Clock, ExternalLink, History } from "lucide-react";
 import React from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -51,204 +26,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CATEGORY_COLORS } from "@/lib/constants/ui/colors";
 import { useTranslation } from "@/lib/hooks/useTranslation";
-import { cn, getCachedData, setCachedData } from "@/lib/utils";
-import { logger } from "@/lib/utils/core/logger";
-import { safeWindowOpen } from "@/lib/utils/core/security";
-import { convertRawTokenAmount } from "@/lib/utils/format/format";
+import type { Transaction, TransactionHistoryTableProps } from "@/lib/types/transactions";
+import { cn } from "@/lib/utils";
 import {
   ActivityType,
   OptimizedTransactionAnalyzer as EnhancedTransactionAnalyzer,
-  type OptimizedTransactionInfo as EnhancedTransactionInfo,
   TransactionCategory,
-} from "@/lib/utils/token/transaction-analysis";
-
-interface Transaction {
-  transaction_version: string;
-  transaction_timestamp: string;
-  type: string;
-  amount: string;
-  asset_type: string;
-  success: boolean;
-  function?: string;
-  gas_fee?: string;
-}
-
-interface TransactionHistoryTableProps {
-  walletAddress: string | undefined;
-  className?: string;
-  limit?: number;
-  initialLimit?: number;
-  preloadedTransactions?: Transaction[] | null;
-  preloadedTransactionsLoading?: boolean;
-  transactions?: any[] | null;
-  isLoading?: boolean;
-  hasMoreTransactions?: boolean;
-  loadMoreTransactions?: () => void;
-}
-
-function SortableHeader({ title, onClick }: { title: string; onClick: () => void }) {
-  return (
-    <Button variant="ghost" onClick={onClick} className="-ml-4">
-      {title}
-      <ArrowUpDown className="ml-2 h-4 w-4" />
-    </Button>
-  );
-}
-
-const getTransactionTypeIcon = (transaction: Transaction) => {
-  const analysis = getTransactionAnalysis(transaction);
-
-  // Use enhanced analysis for better icon selection
-  switch (analysis.category) {
-    case TransactionCategory.DEFI:
-      switch (analysis.activityType) {
-        case ActivityType.SWAP:
-          return ArrowLeftRight;
-        case ActivityType.LIQUIDITY_ADD:
-        case ActivityType.LIQUIDITY_REMOVE:
-          return Layers;
-        case ActivityType.LENDING_SUPPLY:
-        case ActivityType.LENDING_WITHDRAW:
-        case ActivityType.LENDING_BORROW:
-        case ActivityType.LENDING_REPAY:
-          return TrendingUp;
-        case ActivityType.FARMING_STAKE:
-        case ActivityType.FARMING_UNSTAKE:
-          return Shield;
-        case ActivityType.FARMING_HARVEST:
-          return Gift;
-        default:
-          return Coins;
-      }
-
-    case TransactionCategory.STAKING:
-      if (analysis.activityType === ActivityType.CLAIM_REWARDS) {
-        return Gift;
-      }
-      return Shield;
-
-    case TransactionCategory.TRANSFER:
-      return analysis.direction === "incoming" ? ArrowDownRight : ArrowUpRight;
-
-    case TransactionCategory.CEX:
-    case TransactionCategory.BRIDGE:
-      return ArrowLeftRight;
-
-    case TransactionCategory.NFT:
-      return Wallet;
-
-    case TransactionCategory.RWA:
-      return TrendingUp;
-
-    case TransactionCategory.SYSTEM:
-      return Zap;
-
-    default: {
-      // Fallback to original logic
-      const lowerType = transaction.type.toLowerCase();
-      if (lowerType.includes("transfer") || lowerType.includes("send")) {
-        return ArrowUpRight;
-      }
-      if (lowerType.includes("deposit") || lowerType.includes("receive")) {
-        return ArrowDownRight;
-      }
-      return History;
-    }
-  }
-};
-
-// Enhanced transaction analysis function
-const getTransactionAnalysis = (tx: Transaction): EnhancedTransactionInfo => {
-  return EnhancedTransactionAnalyzer.analyzeTransactionSync(tx);
-};
-
-// Map protocol names to local icon paths
-const getProtocolLogoPath = (protocolName: string): string | null => {
-  const protocolIcons: Record<string, string> = {
-    panora: "/icons/protocols/panora.webp",
-    pancakeswap: "/icons/protocols/pancake.webp",
-    thala: "/icons/protocols/thala.avif",
-    liquidswap: "/icons/protocols/liquidswap.webp",
-    cellana: "/icons/protocols/cellana.webp",
-    aries: "/icons/protocols/aries.avif",
-    merkle: "/icons/protocols/merkle.webp",
-    echelon: "/icons/protocols/echelon.avif",
-    superposition: "/icons/protocols/superposition.webp",
-    amnis: "/icons/protocols/amnis.avif",
-    sushi: "/icons/protocols/sushi.webp",
-    wormhole: "/icons/protocols/wormhole.png",
-    layerzero: "/icons/protocols/lz.png",
-    celer: "/icons/protocols/celer.jpg",
-    kana: "/icons/protocols/kana.webp",
-    echo: "/icons/protocols/echo.webp",
-    joule: "/icons/protocols/joule.webp",
-    thetis: "/icons/protocols/thetis.webp",
-    tradeport: "/icons/protocols/tradeport.jpg",
-    hyperion: "/icons/protocols/hyperion.webp",
-    metamove: "/icons/protocols/metamove.png",
-  };
-
-  const normalizedName = protocolName.toLowerCase().replace(/\s+/g, "");
-  return protocolIcons[normalizedName] || null;
-};
-
-// Legacy category function for backwards compatibility
-const getTransactionCategory = (tx: Transaction) => {
-  const analysis = getTransactionAnalysis(tx);
-
-  // Map enhanced categories back to simple ones for existing UI
-  switch (analysis.category) {
-    case TransactionCategory.DEFI:
-      if (analysis.activityType === ActivityType.SWAP) return "swap";
-      if (
-        analysis.activityType === ActivityType.LIQUIDITY_ADD ||
-        analysis.activityType === ActivityType.LIQUIDITY_REMOVE
-      )
-        return "liquidity";
-      if (
-        analysis.activityType === ActivityType.LENDING_SUPPLY ||
-        analysis.activityType === ActivityType.LENDING_WITHDRAW ||
-        analysis.activityType === ActivityType.LENDING_BORROW ||
-        analysis.activityType === ActivityType.LENDING_REPAY
-      )
-        return "liquidity";
-      if (
-        analysis.activityType === ActivityType.FARMING_STAKE ||
-        analysis.activityType === ActivityType.FARMING_UNSTAKE
-      )
-        return "staking";
-      if (analysis.activityType === ActivityType.FARMING_HARVEST) return "rewards";
-      return "other";
-
-    case TransactionCategory.STAKING:
-      if (analysis.activityType === ActivityType.CLAIM_REWARDS) return "rewards";
-      return "staking";
-
-    case TransactionCategory.TRANSFER:
-      return analysis.direction === "incoming" ? "received" : "sent";
-
-    case TransactionCategory.CEX:
-      return "cex";
-    case TransactionCategory.BRIDGE:
-      return "bridge";
-    case TransactionCategory.NFT:
-      return "nft";
-    case TransactionCategory.RWA:
-      return "rwa";
-    case TransactionCategory.SYSTEM:
-      return "system";
-
-    default:
-      return "other";
-  }
-};
-
-// Helper function to get category colors
-const getCategoryColors = (category: string): string => {
-  return CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] || CATEGORY_COLORS.default;
-};
+} from "@/lib/utils/blockchain/transactions/analysis";
+import { logger } from "@/lib/utils/core/logger";
+import { safeWindowOpen } from "@/lib/utils/core/security";
+import { convertRawTokenAmount } from "@/lib/utils/format/format";
+import { SortableHeader } from "./components/SortableHeader";
+import {
+  getCategoryColors,
+  getProtocolLogoPath,
+  getTransactionAnalysis,
+  getTransactionCategory,
+  getTransactionTypeIcon,
+} from "./utils/transaction-utils";
 
 export const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = React.memo(
   ({
@@ -264,8 +60,8 @@ export const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = R
     const [isLoading, setIsLoading] = React.useState(
       preloadedTransactions === null && walletAddress !== undefined
     );
-    const [isLoadingMore, setIsLoadingMore] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
+    const [isLoadingMore, _setIsLoadingMore] = React.useState(false);
+    const [error, _setError] = React.useState<string | null>(null);
     // Start with 100 to show all preloaded transactions
     const [displayedCount, setDisplayedCount] = React.useState(100);
     const [totalCount, setTotalCount] = React.useState(0);
@@ -279,7 +75,7 @@ export const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = R
     const [searchQuery, setSearchQuery] = React.useState("");
     // Removed category and protocol state for simplicity
 
-    const tableRef = React.useRef<HTMLDivElement>(null);
+    const _tableRef = React.useRef<HTMLDivElement>(null);
 
     // Removed category and protocol filtering
     /*
@@ -462,13 +258,15 @@ export const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = R
       isLoadingMore,
       allTransactions.length,
       totalCount,
+      hasMoreTransactions, // Fetch more data from API - only if we haven't loaded all transactions yet
+      loadMoreTransactions,
     ]);
 
     // Reset displayed count when search or filters change
     React.useEffect(() => {
       // Reset to initial amount when filters change
       setDisplayedCount(100);
-    }, [searchQuery]);
+    }, []);
 
     // Initialize with preloaded transactions if available
     React.useEffect(() => {
@@ -494,16 +292,22 @@ export const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = R
         // Only load if we don't have any transactions yet
         loadMoreTransactions?.();
       }
-    }, [walletAddress, preloadedTransactions, preloadedTransactionsLoading]);
+    }, [
+      walletAddress,
+      preloadedTransactions,
+      preloadedTransactionsLoading,
+      allTransactions.length, // Only load if we don't have any transactions yet
+      loadMoreTransactions,
+    ]);
 
     // Clear filters function
-    const clearFilters = () => {
+    const _clearFilters = () => {
       setSearchQuery("");
       // Filters removed
     };
 
     // Check if any filters are active
-    const hasActiveFilters = searchQuery !== "";
+    const _hasActiveFilters = searchQuery !== "";
 
     // Memoize columns
     const columns = React.useMemo<ColumnDef<Transaction>[]>(
@@ -652,7 +456,6 @@ export const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = R
                   return { label: "RWA", colors };
                 case TransactionCategory.SYSTEM:
                   return { label: "System", colors };
-                case TransactionCategory.TRANSFER:
                 default:
                   return {
                     label: analysis.direction === "incoming" ? "Received" : "Sent",
@@ -1031,7 +834,6 @@ export const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = R
                       return { label: "RWA", colors };
                     case TransactionCategory.SYSTEM:
                       return { label: "System", colors };
-                    case TransactionCategory.TRANSFER:
                     default:
                       return {
                         label: analysis.direction === "incoming" ? "Received" : "Sent",

@@ -3,7 +3,7 @@ import { memo, useCallback, useMemo } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, type TooltipProps } from "recharts";
 
 import { useResponsive } from "@/lib/hooks/useResponsive";
-import { errorLogger, logger } from "@/lib/utils/core/logger";
+import { errorLogger } from "@/lib/utils/core/logger";
 import {
   CHART_DIMENSIONS,
   type ChartDataItem,

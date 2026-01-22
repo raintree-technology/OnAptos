@@ -1,7 +1,7 @@
 "use client";
 
 import { GeistMono } from "geist/font/mono";
-import { AlertTriangle, Copy, RefreshCw } from "lucide-react";
+import { AlertTriangle, RefreshCw } from "lucide-react";
 import Image from "next/image";
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
@@ -22,10 +22,8 @@ import { getProtocolLogo } from "@/lib/constants/protocols/protocol-logos";
 import { LST_COLORS } from "@/lib/constants/ui/colors";
 import { useAptPrice } from "@/lib/hooks/portfolio/useAptPrice";
 import { usePageTranslation } from "@/lib/hooks/useTranslation";
-import { copyToClipboard } from "@/lib/utils/clipboard";
 import { logger } from "@/lib/utils/core/logger";
 import { formatAmount, formatAmountFull, formatCurrency } from "@/lib/utils/format/format";
-import { truncateAddress } from "../../shared/utils";
 import type { LSTTokenSupply } from "./types";
 
 // LST Token metadata with individual token-specific icons
@@ -123,48 +121,46 @@ const TokenCard = memo(function TokenCard({
   }, []);
 
   return (
-    <>
-      <div className="group">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 relative">
-              {!imageLoaded && (
-                <div className="absolute inset-0 bg-muted animate-pulse rounded-full" />
-              )}
-              <Image
-                src={getProtocolLogo(token.protocol)}
-                alt={`${token.protocol} icon`}
-                width={20}
-                height={20}
-                className={`object-contain rounded-full ${!imageLoaded ? "opacity-0" : ""}`}
-                onLoad={handleImageLoad}
-                onError={(e) => {
-                  const img = e.target as HTMLImageElement;
-                  img.src = "/icons/apt.png";
-                  handleImageLoad();
-                }}
-              />
-            </div>
-            <h3 className="text-base font-semibold">{token.symbol}</h3>
+    <div className="group">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 relative">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-muted animate-pulse rounded-full" />
+            )}
+            <Image
+              src={getProtocolLogo(token.protocol)}
+              alt={`${token.protocol} icon`}
+              width={20}
+              height={20}
+              className={`object-contain rounded-full ${!imageLoaded ? "opacity-0" : ""}`}
+              onLoad={handleImageLoad}
+              onError={(e) => {
+                const img = e.target as HTMLImageElement;
+                img.src = "/icons/apt.png";
+                handleImageLoad();
+              }}
+            />
           </div>
+          <h3 className="text-base font-semibold">{token.symbol}</h3>
         </div>
-        <p className="text-lg font-bold font-mono mb-0.5">
-          {tokenData.breakdownDisplay}
-          {aptPrice && (
-            <span className="text-xs font-normal text-muted-foreground ml-2">
-              ≈ {formatCurrency(tokenData.usdValue, "USD", { decimals: 0 })}
-            </span>
-          )}
-        </p>
-        <div className="flex items-baseline justify-between mb-1">
-          <span className="text-xs text-muted-foreground">Market Share</span>
-          <span className="text-xs text-muted-foreground font-mono">
-            {tokenData.marketSharePercent}%
-          </span>
-        </div>
-        <Progress className="h-1" value={parseFloat(tokenData.marketSharePercent)} />
       </div>
-    </>
+      <p className="text-lg font-bold font-mono mb-0.5">
+        {tokenData.breakdownDisplay}
+        {aptPrice && (
+          <span className="text-xs font-normal text-muted-foreground ml-2">
+            ≈ {formatCurrency(tokenData.usdValue, "USD", { decimals: 0 })}
+          </span>
+        )}
+      </p>
+      <div className="flex items-baseline justify-between mb-1">
+        <span className="text-xs text-muted-foreground">Market Share</span>
+        <span className="text-xs text-muted-foreground font-mono">
+          {tokenData.marketSharePercent}%
+        </span>
+      </div>
+      <Progress className="h-1" value={parseFloat(tokenData.marketSharePercent)} />
+    </div>
   );
 });
 
@@ -213,7 +209,7 @@ const LoadingState = memo(function LoadingState(): React.ReactElement {
 });
 
 // Error state component
-const CardErrorState = memo(function CardErrorState({
+const _CardErrorState = memo(function CardErrorState({
   error,
   onRetry,
 }: {
@@ -243,7 +239,7 @@ const CardErrorState = memo(function CardErrorState({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [initialSeconds, error]);
+  }, [initialSeconds]);
 
   return (
     <Card className="border-destructive mb-6">

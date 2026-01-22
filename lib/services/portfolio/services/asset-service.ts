@@ -15,7 +15,7 @@ export class AssetService {
       // Add auth if available
       const apiKey = process.env.APTOS_BUILD_SECRET;
       if (apiKey) {
-        headers["Authorization"] = `Bearer ${apiKey}`;
+        headers.Authorization = `Bearer ${apiKey}`;
       }
 
       // Use parameterized GraphQL query for better performance and safety

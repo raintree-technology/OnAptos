@@ -1,5 +1,5 @@
 import { PANORA_TOKENS } from "@/lib/config/data";
-import { COMMON_TOKENS, NATIVE_TOKENS, STABLECOINS, TOKEN_REGISTRY } from "@/lib/constants";
+import { COMMON_TOKENS, STABLECOINS, TOKEN_REGISTRY } from "@/lib/constants";
 import { cacheFirst } from "@/lib/utils";
 import { logger } from "@/lib/utils/core/logger";
 

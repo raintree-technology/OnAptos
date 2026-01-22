@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { DataProvider, DefiProtocol } from "@/components/pages/protocols/defi/data";
+import type { DefiProtocol } from "@/components/pages/protocols/defi/data";
 import { defiLlamaService } from "@/lib/services/external/defi-llama";
 import { serviceLogger } from "@/lib/utils/core/logger";
 
@@ -23,7 +23,7 @@ export function useProtocolMetrics(
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // Memoize protocols to prevent unnecessary re-renders
-  const protocolsKey = useMemo(() => protocols.map((p) => p.title).join(","), [protocols]);
+  const _protocolsKey = useMemo(() => protocols.map((p) => p.title).join(","), [protocols]);
 
   useEffect(() => {
     async function fetchMetrics() {
@@ -225,7 +225,7 @@ export function useProtocolMetrics(
         abortControllerRef.current.abort();
       }
     };
-  }, [protocolsKey, options?.skipFetch]);
+  }, [options?.skipFetch, protocols.length, protocols.slice]);
 
   return { enrichedProtocols, loading, error };
 }

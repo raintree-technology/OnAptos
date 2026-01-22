@@ -39,7 +39,7 @@ export function useMarketPrice(symbol: string): UseMarketPriceResult {
 
         const result = await response.json();
 
-        if (result.prices && result.prices[xBTCAddress]) {
+        if (result.prices?.[xBTCAddress]) {
           setData({
             symbol: "BTC",
             name: "Bitcoin",

@@ -1,13 +1,15 @@
-import { shortenMetricName } from "@/lib/utils/metrics";
-import { TrendingUp, ExternalLink } from "lucide-react";
+import { ExternalLink, TrendingUp } from "lucide-react";
+import { shortenMetricName } from "@/lib/utils/monitoring/metrics";
+
+export interface Metric {
+  name: string;
+  value: string;
+  secondaryValue?: string;
+  queryUrl?: string;
+}
 
 interface MetricCardProps {
-  metric: {
-    name: string;
-    value: string;
-    secondaryValue?: string;
-    queryUrl?: string;
-  };
+  metric: Metric;
   compact?: boolean;
 }
 

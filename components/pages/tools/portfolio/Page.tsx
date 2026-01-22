@@ -2,7 +2,7 @@
 
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useSearchParams } from "next/navigation";
-import React, { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 
 import { AddressBar } from "./components/AddressBar";
 import { PortfolioLoadingSkeleton } from "./components/PortfolioLoadingSkeleton";

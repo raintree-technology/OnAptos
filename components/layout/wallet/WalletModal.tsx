@@ -3,7 +3,6 @@
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -22,10 +21,10 @@ export function WalletModal({ open, onOpenChange }: WalletModalProps) {
 
   const handleWalletSelect = async (walletName: string) => {
     try {
-      await connect(walletName as any);
+      await connect(walletName);
       onOpenChange(false);
       router.push("/tools/portfolio");
-    } catch (error: any) {
+    } catch (error) {
       logger.warn(
         `Failed to connect to ${walletName}: ${error instanceof Error ? error.message : String(error)}`
       );

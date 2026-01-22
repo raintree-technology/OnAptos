@@ -93,7 +93,7 @@ export class NFTService {
 
       const apiKey = process.env.APTOS_BUILD_SECRET;
       if (apiKey) {
-        headers["Authorization"] = `Bearer ${apiKey}`;
+        headers.Authorization = `Bearer ${apiKey}`;
       }
 
       // Use direct fetch with retry logic
@@ -152,7 +152,7 @@ export class NFTService {
             token_uri: tokenData?.token_uri || "",
             description: tokenData?.description,
             property_version_v1: ownership.property_version_v1,
-            amount: parseInt(ownership.amount),
+            amount: parseInt(ownership.amount, 10),
             cdn_image_uri: cdnImageUri,
             cdn_animation_uri: tokenData?.cdn_asset_uris?.cdn_animation_uri,
             collection_description: collection?.description,
@@ -194,7 +194,7 @@ export class NFTService {
 
       const apiKey = process.env.APTOS_BUILD_SECRET;
       if (apiKey) {
-        headers["Authorization"] = `Bearer ${apiKey}`;
+        headers.Authorization = `Bearer ${apiKey}`;
       }
 
       // Use direct fetch with retry logic
@@ -282,7 +282,7 @@ export class NFTService {
 
       const apiKey = process.env.APTOS_BUILD_SECRET;
       if (apiKey) {
-        headers["Authorization"] = `Bearer ${apiKey}`;
+        headers.Authorization = `Bearer ${apiKey}`;
       }
 
       const query = `

@@ -417,7 +417,7 @@ export class AptosAnalyticsService {
   /**
    * Clear cache for specific patterns or all analytics data
    */
-  static clearCache(pattern?: string): void {
+  static clearCache(_pattern?: string): void {
     // UnifiedCache supports clearing all entries
     AptosAnalyticsService.cache.clear();
   }

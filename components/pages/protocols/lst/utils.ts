@@ -1,11 +1,5 @@
 // Use unified formatters - import only what we need
-import {
-  type Currency,
-  convertRawTokenAmount,
-  formatAmount,
-  formatCurrency,
-  formatNumber,
-} from "@/lib/utils/format/format";
+import { convertRawTokenAmount, formatCurrency, formatNumber } from "@/lib/utils/format/format";
 
 // APT-specific amount formatters
 export function formatAPTAmount(amount: number): string {
@@ -32,12 +26,6 @@ export function formatAPY(apy: number): string {
   if (!Number.isFinite(apy)) return "0.0%";
   return `${apy.toFixed(2)}%`;
 }
-
-// LST-specific utilities
-export const formatPercentage = (value: number): string => {
-  if (!Number.isFinite(value)) return "0.0";
-  return value >= 0.1 ? value.toFixed(1) : value.toFixed(2);
-};
 
 export const formatLSTSupply = (supply: string, decimals: number = 8): string => {
   if (!supply || typeof supply !== "string") return "0";

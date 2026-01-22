@@ -17,7 +17,7 @@ export {
 export { DeFiBalanceService } from "./defi/services/defi-balance-service";
 export { DeFiPositionConverter } from "./defi/shared/defi-position-converter";
 // External API Services
-export * from "./external";
+export * from "./external/defi-llama";
 export * from "./portfolio/portfolio-service";
 export * from "./portfolio/services";
 export { UnifiedPanoraService } from "./portfolio/unified-panora-service";

@@ -83,7 +83,7 @@ export const usePortfolio = (nfts?: NFT[], metricsProps?: UsePortfolioMetricsPro
     }
 
     return shuffled;
-  }, [nfts, nftShuffle]);
+  }, [nfts]);
 
   // Portfolio metrics calculations
   const portfolioMetrics = useMemo(() => {

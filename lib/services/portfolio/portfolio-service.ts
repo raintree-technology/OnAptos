@@ -2,7 +2,6 @@
 
 import type { LegacyDeFiPosition } from "@/lib/types/defi";
 import { logger } from "@/lib/utils/core/logger";
-import { DeFiPositionConverter } from "../defi/shared/defi-position-converter";
 import {
   AssetService,
   DeFiService,

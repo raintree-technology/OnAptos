@@ -1,16 +1,16 @@
 "use client";
 
 import { GeistMono } from "geist/font/mono";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { MetricsCategory } from "@/components/metrics/MetricsCategory";
 import { MetricsCharts } from "@/components/metrics/MetricsCharts";
 import { QueryExplorer } from "@/components/metrics/QueryExplorer";
-import { MetricsCategory } from "@/components/metrics/MetricsCategory";
 import { RefreshButton } from "@/components/metrics/RefreshButton";
-import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { useMetricsData } from "@/lib/hooks/useMetricsData";
-import { categorizeMetrics } from "@/lib/utils/metrics";
+import { categorizeMetrics } from "@/lib/utils/monitoring/metrics";
 
 export default function MetricsPage() {
   const [isRotated, setIsRotated] = useState(false);
@@ -22,14 +22,12 @@ export default function MetricsPage() {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       const threshold = 150; // pixels from corner
-      const isNearCorner =
-        e.clientX < threshold &&
-        e.clientY > window.innerHeight - threshold;
+      const isNearCorner = e.clientX < threshold && e.clientY > window.innerHeight - threshold;
       setShowButton(isNearCorner);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   // Show loading state
@@ -60,21 +58,25 @@ export default function MetricsPage() {
     <ErrorBoundary>
       <div
         className={GeistMono.className}
-        style={isRotated ? {
-          transform: "rotate(90deg)",
-          transformOrigin: "center",
-          width: "100vh",
-          height: "100vw",
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          marginTop: "-50vw",
-          marginLeft: "-50vh",
-        } : {
-          width: "100vw",
-          height: "100vh",
-          position: "relative",
-        }}
+        style={
+          isRotated
+            ? {
+                transform: "rotate(90deg)",
+                transformOrigin: "center",
+                width: "100vh",
+                height: "100vw",
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                marginTop: "-50vw",
+                marginLeft: "-50vh",
+              }
+            : {
+                width: "100vw",
+                height: "100vh",
+                position: "relative",
+              }
+        }
       >
         {/* Mobile/Tablet Layout (< lg) */}
         <div className="block lg:hidden">
@@ -192,7 +194,9 @@ export default function MetricsPage() {
         <Button
           onClick={() => setIsRotated(!isRotated)}
           className={`fixed bottom-6 left-6 z-50 shadow-lg transition-all duration-300 ${
-            showButton ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-20 pointer-events-none'
+            showButton
+              ? "opacity-100 translate-x-0"
+              : "opacity-0 -translate-x-20 pointer-events-none"
           }`}
           size="lg"
           variant="default"

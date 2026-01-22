@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 import { GitHubStarCount } from "@/components/ui/github-star-count";
 import { useTranslation } from "@/lib/hooks/useTranslation";

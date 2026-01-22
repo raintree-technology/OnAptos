@@ -26,7 +26,7 @@ export const MerkleProtocol: ProtocolDefinition = {
         pattern: /::house_lp::MKLP</,
         positionType: PositionType.LP,
         priority: 110,
-        extractAssets: (data) => {
+        extractAssets: (_data) => {
           // MKLP tokens are fungible assets, need separate query
           return [];
         },
@@ -82,7 +82,7 @@ export const MerkleProtocol: ProtocolDefinition = {
         pattern: /::protocol_reward::UserRewardInfo/,
         positionType: PositionType.FARMING,
         priority: 100,
-        extractAssets: (data) => {
+        extractAssets: (_data) => {
           // Protocol rewards need additional queries to get claimable amounts
           return [];
         },
@@ -143,7 +143,7 @@ export const MerkleProtocol: ProtocolDefinition = {
 // Helper function for withdrawal time calculation
 function calculateTimeUntilWithdraw(lastResetTimestamp?: string) {
   if (!lastResetTimestamp) return null;
-  const resetTime = parseInt(lastResetTimestamp) * 1000;
+  const resetTime = parseInt(lastResetTimestamp, 10) * 1000;
   const now = Date.now();
   const cooldownPeriod = 24 * 60 * 60 * 1000; // 24 hours
   const timeRemaining = resetTime + cooldownPeriod - now;

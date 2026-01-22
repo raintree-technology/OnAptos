@@ -48,7 +48,7 @@ export const ProtocolUtils = {
   /**
    * Get protocol label for UI display
    */
-  getProtocolLabel: (assetType: string): string | null => {
+  getProtocolLabel: (_assetType: string): string | null => {
     return null; // Use new protocol system
   },
 } as const;

@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, Image as ImageIcon, Layers, Wallet } from "lucide-react";
+import { Image as ImageIcon, Layers, Wallet } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";

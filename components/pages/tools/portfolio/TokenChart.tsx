@@ -2,7 +2,7 @@
 
 import { GeistMono } from "geist/font/mono";
 import { Activity, TrendingDown, TrendingUp } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Area,
   AreaChart,

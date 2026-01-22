@@ -3,8 +3,22 @@ import {
   AptosIntelligentAnalyzer,
   AptosQueryBuilder,
 } from "@/lib/analytics/intelligent-interpreter";
+import {
+  CACHE_DURATIONS,
+  DUNE_QUERY_IDS,
+  ERROR_MESSAGES,
+  getDuneQueryUrl,
+  HTTP_STATUS,
+} from "@/lib/constants/metrics";
 import { getProtocolName } from "@/lib/protocolRegistry";
+import { formatMetricValue } from "@/lib/services/metrics-aggregator";
 import { apiLogger } from "@/lib/utils/core/logger";
+import {
+  safeAverage,
+  safeDivide,
+  safeParseFloat,
+  safeParseInt,
+} from "@/lib/utils/monitoring/metrics";
 
 // Import the Dune client from the aptos-dashboard project
 async function fetchDuneData(queryId: number) {
@@ -20,7 +34,7 @@ async function fetchDuneData(queryId: number) {
         "X-Dune-API-Key": duneApiKey,
         "Content-Type": "application/json",
       },
-      next: { revalidate: 300 }, // Cache for 5 minutes
+      next: { revalidate: CACHE_DURATIONS.DUNE_API_REVALIDATE },
     });
 
     if (!response.ok) {
@@ -35,37 +49,16 @@ async function fetchDuneData(queryId: number) {
     const errorStack = error instanceof Error ? error.stack : undefined;
     apiLogger.error(
       "Error fetching from Dune API:",
-      "QueryID:", queryId,
-      "Message:", errorMessage,
-      "Stack:", errorStack
+      "QueryID:",
+      queryId,
+      "Message:",
+      errorMessage,
+      "Stack:",
+      errorStack
     );
     return [];
   }
 }
-
-// Comprehensive Analytics using ONLY working core queries
-const DUNE_QUERY_IDS = {
-  // ===== CORE NETWORK ANALYTICS (Working Queries Only) =====
-  PROTOCOL_ACTIVITY: 5699127, // Main activity data: total_transactions, unique_senders, success_rate, avg_gas_cost
-  USER_ANALYTICS: 4045225, // Gas fee data: gas_fee_apt, gas_fee_usd, net_gas_apt
-  DEX_COMPARISON: 3431742, // Daily metrics: daily_active_addresses, daily_transactions
-  STAKING_ANALYTICS: 5091227, // Staking data (may be empty)
-  DEX_METRICS: 3442811, // Rich gas analytics: avg_gas_fee, gas_unit_price, transaction_count
-  USER_BEHAVIOR: 4045138, // User behavior analytics
-  TRANSACTION_ANALYSIS: 4045024, // Transaction analysis
-  NETWORK_STATS: 3468810, // Network statistics
-  PROTOCOL_METRICS: 3468830, // Protocol metrics
-  TOKEN_BALANCES: 5699610, // Token balances from CoinStore (holder, token_type, balance)
-  DEX_TRADING_VOLUME: 5699630, // DEX swap events and trading volume (7.5M+ events)
-  ACTIVITY_PATTERNS: 5699668, // Hourly activity patterns (transactions, users, gas, failed txns)
-  NETWORK_OVERVIEW: 5699670, // Comprehensive network overview metrics
-  // ===== ADDITIONAL REQUESTED METRICS =====
-  ALL_TIME_TRANSACTIONS: 5699671, // All-time total transaction count
-  BLOCK_TIMES: 5699672, // Block times and finality metrics
-};
-
-// Helper to get Dune query URL
-const getDuneQueryUrl = (queryId: number) => `https://dune.com/queries/${queryId}`;
 
 export async function GET() {
   try {
@@ -75,12 +68,12 @@ export async function GET() {
       apiLogger.warn("DUNE_API_KEY_TOKEN not configured - returning configuration error");
       return NextResponse.json(
         {
-          error: "Configuration Error",
-          message: "DUNE_API_KEY_TOKEN environment variable is not configured",
+          error: ERROR_MESSAGES.CONFIGURATION_ERROR,
+          message: ERROR_MESSAGES.DUNE_API_KEY_MISSING,
           configurationRequired: true,
-          instructions: "Please add DUNE_API_KEY_TOKEN to your environment variables",
+          instructions: ERROR_MESSAGES.DUNE_API_KEY_REQUIRED,
         },
-        { status: 503 }
+        { status: HTTP_STATUS.SERVICE_UNAVAILABLE }
       );
     }
 
@@ -144,7 +137,7 @@ export async function GET() {
     const tokenBalancesData = extractResult(tokenBalances);
     const dexTradingData = extractResult(dexTradingVolume);
     const activityPatternsData = extractResult(activityPatterns);
-    const networkOverviewData = extractResult(networkOverview);
+    const _networkOverviewData = extractResult(networkOverview);
     // Additional requested metrics
     const allTimeTransactionsData = extractResult(allTimeTransactions);
     const blockTimesData = extractResult(blockTimes);
@@ -153,57 +146,57 @@ export async function GET() {
 
     // From PROTOCOL_ACTIVITY (5699127): total_transactions, unique_senders, success_rate, avg_gas_cost
     const mainMetrics = protocolData[0] || {};
-    const totalTransactions = parseInt(mainMetrics.total_transactions || 0);
-    const uniqueUsers = parseInt(mainMetrics.unique_senders || 0);
-    const avgSuccessRate = parseFloat(mainMetrics.success_rate || 0);
-    const avgGasPrice = parseFloat(mainMetrics.avg_gas_cost || 0);
+    const totalTransactions = safeParseInt(mainMetrics.total_transactions, 0);
+    const uniqueUsers = safeParseInt(mainMetrics.unique_senders, 0);
+    const avgSuccessRate = safeParseFloat(mainMetrics.success_rate, 0);
+    const avgGasPrice = safeParseFloat(mainMetrics.avg_gas_cost, 0);
 
     // NEW: All-time transactions and block time metrics - NO FALLBACKS, REAL DATA ONLY
     const allTimeMetrics = allTimeTransactionsData[0] || {};
     const allTimeTransactionCount = allTimeMetrics.total_all_time_transactions
-      ? parseInt(allTimeMetrics.total_all_time_transactions)
+      ? safeParseInt(allTimeMetrics.total_all_time_transactions, 0)
       : null;
     const networkLifetimeDays = allTimeMetrics.network_age_days
-      ? parseInt(allTimeMetrics.network_age_days)
+      ? safeParseInt(allTimeMetrics.network_age_days, 0)
       : null;
 
     const blockMetrics = blockTimesData[0] || {};
     const avgBlockTime = blockMetrics.avg_block_time_seconds
-      ? parseFloat(blockMetrics.avg_block_time_seconds)
+      ? safeParseFloat(blockMetrics.avg_block_time_seconds, 0)
       : null;
     const avgFinalityTime = blockMetrics.avg_finality_time_seconds
-      ? parseFloat(blockMetrics.avg_finality_time_seconds)
+      ? safeParseFloat(blockMetrics.avg_finality_time_seconds, 0)
       : null;
     const networkReliabilityScore = blockMetrics.network_reliability_pct
-      ? parseFloat(blockMetrics.network_reliability_pct)
+      ? safeParseFloat(blockMetrics.network_reliability_pct, 0)
       : null;
 
     // From DEX_COMPARISON (3431742): daily_active_addresses, daily_transactions
     const dailyMetrics = dexData[0] || {};
-    const dailyActiveAddresses = parseInt(dailyMetrics.daily_active_addresses || 0);
-    const dailyTransactions = parseInt(dailyMetrics.daily_transactions || 0);
+    const dailyActiveAddresses = safeParseInt(dailyMetrics.daily_active_addresses, 0);
+    const dailyTransactions = safeParseInt(dailyMetrics.daily_transactions, 0);
 
     // From USER_ANALYTICS (4045225): gas_fee_apt, gas_fee_usd, net_gas_apt
     const gasMetrics = userData[0] || {};
-    const dailyGasFeesAPT = parseFloat(gasMetrics.gas_fee_apt || 0);
-    const dailyGasFeesUSD = parseFloat(gasMetrics.gas_fee_usd || 0);
-    const netGasAPT = parseFloat(gasMetrics.net_gas_apt || 0);
+    const dailyGasFeesAPT = safeParseFloat(gasMetrics.gas_fee_apt, 0);
+    const dailyGasFeesUSD = safeParseFloat(gasMetrics.gas_fee_usd, 0);
+    const netGasAPT = safeParseFloat(gasMetrics.net_gas_apt, 0);
 
     // From DEX_METRICS (3442811): transaction_count, sum_gas_fees_apt, avg_gas_fee_per_transaction_octa
     const dexAnalytics = dexMetricsData[0] || {};
-    const recentTransactionCount = parseInt(dexAnalytics.transaction_count || 0);
-    const recentGasFeesAPT = parseFloat(dexAnalytics.sum_gas_fees_apt || 0);
-    const avgGasFeePerTx = parseFloat(dexAnalytics.avg_gas_fee_per_transaction_octa || 0);
+    const recentTransactionCount = safeParseInt(dexAnalytics.transaction_count, 0);
+    const recentGasFeesAPT = safeParseFloat(dexAnalytics.sum_gas_fees_apt, 0);
+    const _avgGasFeePerTx = safeParseFloat(dexAnalytics.avg_gas_fee_per_transaction_octa, 0);
 
     // NEW: From USER_BEHAVIOR (4045138): daily_active_user, n_sig, n_txn
     const behaviorMetrics = userBehaviorData[0] || {};
-    const behaviorDailyActiveUsers = parseInt(behaviorMetrics.daily_active_user || 0);
-    const totalSignatures = parseInt(behaviorMetrics.n_sig || 0);
-    const behaviorTransactions = parseInt(behaviorMetrics.n_txn || 0);
+    const behaviorDailyActiveUsers = safeParseInt(behaviorMetrics.daily_active_user, 0);
+    const totalSignatures = safeParseInt(behaviorMetrics.n_sig, 0);
+    const behaviorTransactions = safeParseInt(behaviorMetrics.n_txn, 0);
 
     // NEW: From TRANSACTION_ANALYSIS (4045024): max_tps_15_blocks
     const transactionPerformance = transactionData[0] || {};
-    const maxTPS = parseInt(transactionPerformance.max_tps_15_blocks || 0);
+    const maxTPS = safeParseInt(transactionPerformance.max_tps_15_blocks, 0);
 
     // NEW: From NETWORK_STATS (3468810): Protocol breakdown by module address
     const protocolBreakdown = networkData.slice(0, 5).map((item: any) => {
@@ -213,7 +206,7 @@ export async function GET() {
       // Log for debugging
       if (address) {
         apiLogger.info("Protocol address mapping:", {
-          address: address.slice(0, 10) + "...",
+          address: `${address.slice(0, 10)}...`,
           protocolName,
           fullAddress: address,
         });
@@ -222,10 +215,10 @@ export async function GET() {
       return {
         moduleAddress: address,
         protocolName: protocolName,
-        senderCount: parseInt(item.count_sender_addresses || 0),
-        signerCount: parseInt(item.count_signer_addresses || 0),
-        transactionCount: parseInt(item.count_transactions || 0),
-        gasTotal: parseInt(item.sum_gas_octa || 0) / 1e8, // Convert to APT
+        senderCount: safeParseInt(item.count_sender_addresses, 0),
+        signerCount: safeParseInt(item.count_signer_addresses, 0),
+        transactionCount: safeParseInt(item.count_transactions, 0),
+        gasTotal: safeParseInt(item.sum_gas_octa, 0) / 1e8, // Convert to APT
       };
     });
 
@@ -233,22 +226,22 @@ export async function GET() {
     const extendedProtocolData = protocolMetricsData.slice(0, 5).map((item: any) => ({
       moduleAddress: item.entry_function_module_address,
       protocolName: getProtocolName(item.entry_function_module_address),
-      senderCount: parseInt(item.count_sender_addresses || 0),
-      signerCount: parseInt(item.count_signer_addresses || 0),
-      transactionCount: parseInt(item.count_transactions || 0),
-      gasTotal: parseInt(item.sum_gas_octa || 0) / 1e8, // Convert to APT
+      senderCount: safeParseInt(item.count_sender_addresses, 0),
+      signerCount: safeParseInt(item.count_signer_addresses, 0),
+      transactionCount: safeParseInt(item.count_transactions, 0),
+      gasTotal: safeParseInt(item.sum_gas_octa, 0) / 1e8, // Convert to APT
     }));
 
     // NEW: From TOKEN_BALANCES (5699610): holder, token_type, balance
     const topTokenHoldings = tokenBalancesData.slice(0, 10).map((item: any) => ({
       holder: item.holder || "",
       tokenType: item.token_type || "",
-      balance: parseFloat(item.balance || 0),
-      formattedBalance: formatMetricValue(parseFloat(item.balance || 0)),
+      balance: safeParseFloat(item.balance, 0),
+      formattedBalance: formatMetricValue(safeParseFloat(item.balance, 0)),
     }));
     const totalTokenHolders = tokenBalancesData.length;
     const totalTokenValue = tokenBalancesData.reduce(
-      (sum: number, item: any) => sum + parseFloat(item.balance || 0),
+      (sum: number, item: any) => sum + safeParseFloat(item.balance, 0),
       0
     );
 
@@ -264,24 +257,23 @@ export async function GET() {
 
     // NEW: From ACTIVITY_PATTERNS (5699668): hour, transactions, users, gas, failed_transactions
     const latestActivityPattern = activityPatternsData[0] || {};
-    const hourlyTransactions = parseInt(latestActivityPattern.transactions || 0);
-    const hourlyUsers = parseInt(latestActivityPattern.users || 0);
-    const hourlyGas = parseFloat(latestActivityPattern.gas || 0);
-    const hourlyFailedTxns = parseInt(latestActivityPattern.failed_transactions || 0);
+    const hourlyTransactions = safeParseInt(latestActivityPattern.transactions, 0);
+    const hourlyUsers = safeParseInt(latestActivityPattern.users, 0);
+    const hourlyGas = safeParseFloat(latestActivityPattern.gas, 0);
+    const hourlyFailedTxns = safeParseInt(latestActivityPattern.failed_transactions, 0);
 
     // Calculate peak activity metrics and averages
     const peakHour = activityPatternsData.reduce((peak: any, current: any) => {
-      const currentTxns = parseInt(current.transactions || 0);
-      const peakTxns = parseInt(peak.transactions || 0);
+      const currentTxns = safeParseInt(current.transactions, 0);
+      const peakTxns = safeParseInt(peak.transactions, 0);
       return currentTxns > peakTxns ? current : peak;
     }, activityPatternsData[0] || {});
-    const peakHourlyTransactions = parseInt(peakHour.transactions || 0);
-    const peakHourlyUsers = parseInt(peakHour.users || 0);
-    const averageHourlyTransactions =
-      activityPatternsData.length > 0
-        ? activityPatternsData.reduce((sum, p) => sum + (p.transactions || 0), 0) /
-          activityPatternsData.length
-        : 0;
+    const peakHourlyTransactions = safeParseInt(peakHour.transactions, 0);
+    const peakHourlyUsers = safeParseInt(peakHour.users, 0);
+    const averageHourlyTransactions = safeAverage(
+      activityPatternsData.map((p: any) => safeParseInt(p.transactions, 0)),
+      0
+    );
 
     // Calculate comprehensive derived metrics
     // Note: These are subsets of total transactions, not additional
@@ -308,7 +300,7 @@ export async function GET() {
 
     const totalTVL = stakingData.reduce(
       (sum: number, item: any) =>
-        sum + parseFloat(item.tvl || item.total_value || item.balance || 0),
+        sum + safeParseFloat(item.tvl || item.total_value || item.balance, 0),
       0
     );
 
@@ -387,19 +379,27 @@ export async function GET() {
     // Advanced Token Economics from Working Data
     const enhancedTokenEconomics = {
       tokenDistribution: {
-        totalTokenValue: tokenBalancesData.reduce((sum, t) => sum + parseFloat(t.balance || 0), 0),
-        avgHoldingSize:
-          tokenBalancesData.reduce((sum, t) => sum + parseFloat(t.balance || 0), 0) /
+        totalTokenValue: tokenBalancesData.reduce(
+          (sum, t) => sum + safeParseFloat(t.balance, 0),
+          0
+        ),
+        avgHoldingSize: safeDivide(
+          tokenBalancesData.reduce((sum, t) => sum + safeParseFloat(t.balance, 0), 0),
           tokenBalancesData.length,
+          0
+        ),
         concentrationIndex: tokenBalancesData[0]
-          ? (parseFloat(tokenBalancesData[0].balance || 0) /
-              tokenBalancesData.reduce((sum, t) => sum + parseFloat(t.balance || 0), 0)) *
-            100
+          ? safeDivide(
+              safeParseFloat(tokenBalancesData[0].balance, 0),
+              tokenBalancesData.reduce((sum, t) => sum + safeParseFloat(t.balance, 0), 0),
+              0
+            ) * 100
           : 0,
-        largeHolders: tokenBalancesData.filter((t) => parseFloat(t.balance || 0) > 1000000).length, // >1M tokens
+        largeHolders: tokenBalancesData.filter((t) => safeParseFloat(t.balance, 0) > 1000000)
+          .length, // >1M tokens
         whaleHoldings: tokenBalancesData
-          .filter((t) => parseFloat(t.balance || 0) > 1000000)
-          .reduce((sum, t) => sum + parseFloat(t.balance || 0), 0),
+          .filter((t) => safeParseFloat(t.balance, 0) > 1000000)
+          .reduce((sum, t) => sum + safeParseFloat(t.balance, 0), 0),
       },
 
       liquidityAnalysis: {
@@ -495,15 +495,15 @@ export async function GET() {
         ? {
             estimatedTVL: totalTVL,
             liquidStakingTVL: stakingData.reduce(
-              (sum, s) => sum + parseFloat(s.balance || s.amount || 0),
+              (sum, s) => sum + safeParseFloat(s.balance || s.amount, 0),
               0
             ),
             stakingParticipation: stakingData.length,
-            avgStakeSize: totalTVL / Math.max(stakingData.length, 1),
+            avgStakeSize: safeDivide(totalTVL, stakingData.length, 0),
             stakingDistribution: stakingData.slice(0, 10).map((s) => ({
               validator: s.validator || s.pool_address || "Unknown",
-              amount: parseFloat(s.balance || s.amount || 0),
-              share: (parseFloat(s.balance || s.amount || 0) / totalTVL) * 100,
+              amount: safeParseFloat(s.balance || s.amount, 0),
+              share: safeDivide(safeParseFloat(s.balance || s.amount, 0), totalTVL, 0) * 100,
             })),
           }
         : {
@@ -831,22 +831,24 @@ export async function GET() {
         tokenBalancesData.length > 0
           ? {
               totalLargeHolders: tokenBalancesData.filter(
-                (t) => parseFloat(t.balance || 0) > 1000000
+                (t) => safeParseFloat(t.balance, 0) > 1000000
               ).length,
               whaleConcentration:
-                (tokenBalancesData
-                  .slice(0, 10)
-                  .reduce((sum, t) => sum + parseFloat(t.balance || 0), 0) /
-                  tokenBalancesData.reduce((sum, t) => sum + parseFloat(t.balance || 0), 0)) *
-                100,
+                safeDivide(
+                  tokenBalancesData
+                    .slice(0, 10)
+                    .reduce((sum, t) => sum + safeParseFloat(t.balance, 0), 0),
+                  tokenBalancesData.reduce((sum, t) => sum + safeParseFloat(t.balance, 0), 0),
+                  0
+                ) * 100,
               topHolders: tokenBalancesData.slice(0, 5).map((t) => ({
                 holder: t.holder,
-                balance: parseFloat(t.balance || 0),
+                balance: safeParseFloat(t.balance, 0),
                 tokenType: t.token_type,
               })),
               distributionAnalysis: {
                 giniCoefficient: calculateGiniCoefficient(
-                  tokenBalancesData.map((t) => parseFloat(t.balance || 0)).sort((a, b) => a - b)
+                  tokenBalancesData.map((t) => safeParseFloat(t.balance, 0))
                 ),
                 top1Percent: Math.ceil(tokenBalancesData.length * 0.01),
                 top10Percent: Math.ceil(tokenBalancesData.length * 0.1),
@@ -1128,7 +1130,7 @@ export async function GET() {
       },
       {
         headers: {
-          "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
+          "Cache-Control": `public, s-maxage=${CACHE_DURATIONS.API_RESPONSE_MAX_AGE}, stale-while-revalidate=${CACHE_DURATIONS.API_RESPONSE_STALE_WHILE_REVALIDATE}`,
         },
       }
     );
@@ -1136,28 +1138,20 @@ export async function GET() {
     apiLogger.error("Error fetching comprehensive metrics:", error);
     return NextResponse.json(
       {
-        error: "Failed to fetch metrics data",
-        message: error instanceof Error ? error.message : "Unknown error",
+        error: ERROR_MESSAGES.FETCH_METRICS_ERROR,
+        message: error instanceof Error ? error.message : ERROR_MESSAGES.UNKNOWN_ERROR,
       },
-      { status: 500 }
+      { status: HTTP_STATUS.INTERNAL_SERVER_ERROR }
     );
   }
-}
-
-// Helper functions
-function formatMetricValue(value: number | string): string {
-  const num = typeof value === "string" ? parseFloat(value) : value;
-  if (num >= 1e9) return `${(num / 1e9).toFixed(1)}B`;
-  if (num >= 1e6) return `${(num / 1e6).toFixed(1)}M`;
-  if (num >= 1e3) return `${(num / 1e3).toFixed(1)}K`;
-  return num.toFixed(0);
 }
 
 // Calculate Gini coefficient for wealth distribution analysis
 function calculateGiniCoefficient(values: number[]): number {
   if (values.length === 0) return 0;
 
-  const sortedValues = values.sort((a, b) => a - b);
+  // Create a copy to avoid mutating the input array
+  const sortedValues = [...values].sort((a, b) => a - b);
   const n = sortedValues.length;
   const totalSum = sortedValues.reduce((sum, val) => sum + val, 0);
 
@@ -1169,33 +1163,4 @@ function calculateGiniCoefficient(values: number[]): number {
   }
 
   return Math.abs(giniSum / (n * totalSum));
-}
-
-function calculateChange(current: any, previous: any): string {
-  if (!current || !previous) return "—";
-
-  const curr = typeof current === "string" ? parseFloat(current) : current;
-  const prev = typeof previous === "string" ? parseFloat(previous) : previous;
-
-  if (prev === 0) return "+100%";
-
-  const change = ((curr - prev) / prev) * 100;
-  const sign = change > 0 ? "+" : "";
-  return `${sign}${change.toFixed(1)}%`;
-}
-
-function calculatePercentageChange(current: number, previous: number): number {
-  if (previous === 0) return 100;
-  return ((current - previous) / previous) * 100;
-}
-
-function calculatePercentageFromValue(current: any, previous: any): string {
-  const curr = typeof current === "string" ? parseFloat(current) : current;
-  const prev = typeof previous === "string" ? parseFloat(previous) : previous;
-
-  if (!curr || !prev || prev === 0) return "+0.0%";
-
-  const change = ((curr - prev) / prev) * 100;
-  const sign = change > 0 ? "+" : "";
-  return `${sign}${change.toFixed(1)}%`;
 }

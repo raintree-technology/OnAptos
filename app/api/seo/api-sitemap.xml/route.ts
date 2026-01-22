@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     return new NextResponse(sitemap, {
       headers: SEO_HEADERS.XML,
     });
-  } catch (error) {
+  } catch (_error) {
     // Fallback sitemap for error cases
     const config = getSEOConfig();
     const fallbackSitemap = `<?xml version="1.0" encoding="UTF-8"?>

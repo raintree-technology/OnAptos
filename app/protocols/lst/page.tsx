@@ -1,5 +1,5 @@
 import LSTPage from "@/components/pages/protocols/lst/Page";
-import { createPage } from "@/lib/utils/page-factory";
+import { createPage } from "@/lib/utils/ui/pages/factory";
 
 const pageConfig = createPage({
   title: "Liquid Staking Analytics",

@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { ChevronDown, ChevronRight, Code, Database, ExternalLink } from "lucide-react";
+import { useState } from "react";
 
-const DUNE_QUERIES = {
+interface DuneQuery {
+  id: number;
+  description: string;
+  sql: string;
+}
+
+const DUNE_QUERIES: Record<string, DuneQuery> = {
   "Max TPS Analysis": {
     id: 4045024,
     description: "Calculates maximum transactions per second over 15-block windows",

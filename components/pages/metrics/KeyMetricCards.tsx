@@ -9,7 +9,7 @@ import { useMetricsData } from "@/lib/hooks/useMetricsData";
 // Helper function to safely format numbers
 const safeToFixed = (value: any, decimals: number = 0): string => {
   const num = typeof value === "string" ? parseFloat(value) : Number(value);
-  return !isNaN(num) && isFinite(num) ? num.toFixed(decimals) : "0";
+  return !Number.isNaN(num) && Number.isFinite(num) ? num.toFixed(decimals) : "0";
 };
 
 const formatLargeNumber = (value: number): string => {

@@ -50,7 +50,7 @@ export class UnifiedDecimalUtils {
 
     // Convert to number efficiently
     const value = typeof amount === "string" ? +amount : amount;
-    if (isNaN(value)) return 0;
+    if (Number.isNaN(value)) return 0;
 
     // Use bit shifting for power of 2 decimals when possible
     const result = decimals === 8 ? value / 100000000 : value / 10 ** decimals;
@@ -328,7 +328,7 @@ export class UnifiedDecimalUtils {
 
       const value = parseFloat(cleaned);
 
-      if (isNaN(value) || value < 0) {
+      if (Number.isNaN(value) || value < 0) {
         return {
           isValid: false,
           value: 0,

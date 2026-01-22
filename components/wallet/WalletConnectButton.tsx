@@ -81,28 +81,13 @@ export function WalletConnectButton({ size = "sm", className }: WalletConnectBut
     setIsClient(true);
   }, []);
 
-  // Categorize wallets and check device type
-  const { extensionWallets } = useMemo(() => {
-    if (!isClient)
-      return {
-        extensionWallets: [],
-        aptosConnectAvailable: false,
-        isMobile: false,
-      };
-
-    // Filter wallets appropriately
-    const extensionWallets =
-      wallets?.filter((wallet) => {
-        // Don't show Aptos Connect in the extension wallets list
-        if (wallet.name === "Aptos Connect") return false;
-
-        // Filter based on actual availability
-        return wallet.readyState === "Installed";
-      }) || [];
-
-    return {
-      extensionWallets,
-    };
+  const extensionWallets = useMemo(() => {
+    if (!isClient) return [];
+    return (
+      wallets?.filter(
+        (wallet) => wallet.name !== "Aptos Connect" && wallet.readyState === "Installed"
+      ) || []
+    );
   }, [wallets, isClient]);
 
   const truncateAddress = (address: string) => {
@@ -123,20 +108,6 @@ export function WalletConnectButton({ size = "sm", className }: WalletConnectBut
     setTimeout(() => setCopiedAddress(false), 2000);
   };
 
-  // Handle Aptos Connect (Google/Apple login) - currently disabled
-  // const handleAptosConnect = async () => {
-  //   setConnectingWallet("Aptos Connect");
-  //   try {
-  //     // Try to connect with Aptos Connect
-  //     await connect("Aptos Connect" as any);
-  //     setShowWalletModal(false);
-  //   } catch (error) {
-  //     logger.warn(`Failed to connect with Aptos Connect: ${error instanceof Error ? error.message : String(error)}`);
-  //   } finally {
-  //     setTimeout(() => setConnectingWallet(null), 500);
-  //   }
-  // };
-
   const handleWalletSelect = async (walletName: string) => {
     // Debounce clicks - prevent spam clicking
     const now = Date.now();
@@ -151,20 +122,14 @@ export function WalletConnectButton({ size = "sm", className }: WalletConnectBut
     try {
       await connect(walletName as any);
       setShowWalletModal(false);
-
-      // Navigate to portfolio after successful connection if on home page
       if (pathname === "/") {
         router.push("/tools/portfolio");
       }
     } catch (error: any) {
-      const errorMessage = error?.message || error?.toString() || "Unknown connection error";
-
-      // Only log if there's actually an error message to avoid empty error logs
-      if (errorMessage && errorMessage.trim() && errorMessage !== "Unknown connection error") {
-        logger.warn(`Failed to connect to ${walletName}: ${errorMessage}`);
+      if (error?.message) {
+        logger.warn(`Failed to connect to ${walletName}: ${error.message}`);
       }
     } finally {
-      // Clear loading state after a short delay
       setTimeout(() => setConnectingWallet(null), 500);
     }
   };
@@ -218,13 +183,7 @@ export function WalletConnectButton({ size = "sm", className }: WalletConnectBut
                     )}
                     <div className="flex-1 text-left">
                       <span className="font-medium">
-                        {connectingWallet === wallet.name
-                          ? "Connecting..."
-                          : wallet.name.includes("Continue with Google")
-                            ? "Google"
-                            : wallet.name.includes("Continue with Apple")
-                              ? "Apple"
-                              : wallet.name}
+                        {connectingWallet === wallet.name ? "Connecting..." : wallet.name}
                       </span>
                     </div>
                   </Button>

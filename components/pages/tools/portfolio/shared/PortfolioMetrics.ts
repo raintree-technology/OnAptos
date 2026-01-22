@@ -167,11 +167,11 @@ export const formatTimestamp = (timestamp: string | undefined) => {
     } else {
       // Unix timestamp (in microseconds for Aptos)
       const numTimestamp = Number(timestamp);
-      if (isNaN(numTimestamp)) return "Invalid date";
+      if (Number.isNaN(numTimestamp)) return "Invalid date";
       date = new Date(numTimestamp / 1000);
     }
 
-    if (isNaN(date.getTime())) return "Invalid date";
+    if (Number.isNaN(date.getTime())) return "Invalid date";
     return date.toLocaleString();
   } catch {
     return "Invalid date";
@@ -179,12 +179,12 @@ export const formatTimestamp = (timestamp: string | undefined) => {
 };
 
 // Use the centralized protocol registry for phantom asset detection and DeFi TVL filtering
-export const isPhantomAsset = (assetType: string, metadata?: any): boolean => {
+export const isPhantomAsset = (_assetType: string, _metadata?: any): boolean => {
   return false; // Phantom asset detection removed - use new protocol system
 };
 
 // Export copyToClipboard from centralized utility
-export { copyToClipboard } from "@/lib/utils/clipboard";
+export { copyToClipboard } from "@/lib/utils/browser/clipboard";
 
 // Helper function to get detailed protocol information
 export const getDetailedProtocolInfo = (protocolName: string) => {

@@ -318,7 +318,7 @@ export class UnifiedGraphQLClient {
     if (includeAuth) {
       const apiKey = getEnvVar("APTOS_BUILD_SECRET");
       if (apiKey) {
-        headers["Authorization"] = `Bearer ${apiKey}`;
+        headers.Authorization = `Bearer ${apiKey}`;
         logger.info(`[GraphQL] Using API key: ${apiKey.substring(0, 10)}...`);
       } else {
         logger.warn("[GraphQL] No API key found - making unauthenticated request");

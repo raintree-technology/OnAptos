@@ -166,11 +166,11 @@ export async function GET(request: Request) {
         const blockData = data.rawData.BLOCK_TIMES?.[0] || {};
 
         data.metrics = {
-          totalTransactions: parseInt(protocolData.total_transactions || 0),
-          uniqueUsers: parseInt(protocolData.unique_senders || 0),
+          totalTransactions: parseInt(protocolData.total_transactions || 0, 10),
+          uniqueUsers: parseInt(protocolData.unique_senders || 0, 10),
           successRate: parseFloat(protocolData.success_rate || 0),
           avgGasPrice: parseFloat(protocolData.avg_gas_cost || 0),
-          maxTPS: parseInt(transactionData.max_tps_15_blocks || 0),
+          maxTPS: parseInt(transactionData.max_tps_15_blocks || 0, 10),
           avgBlockTime: parseFloat(blockData.avg_block_time_seconds || 0),
           avgFinalityTime: parseFloat(blockData.avg_finality_time_seconds || 0),
           networkReliability: parseFloat(blockData.network_reliability_pct || 0),
@@ -184,11 +184,11 @@ export async function GET(request: Request) {
         const activityPatterns = data.rawData.ACTIVITY_PATTERNS || [];
 
         data.metrics = {
-          dailyActiveAddresses: parseInt(dexComparison.daily_active_addresses || 0),
-          dailyTransactions: parseInt(dexComparison.daily_transactions || 0),
+          dailyActiveAddresses: parseInt(dexComparison.daily_active_addresses || 0, 10),
+          dailyTransactions: parseInt(dexComparison.daily_transactions || 0, 10),
           dailyGasFeesUSD: parseFloat(userAnalytics.gas_fee_usd || 0),
           dailyGasFeesAPT: parseFloat(userAnalytics.gas_fee_apt || 0),
-          totalSignatures: parseInt(userBehavior.n_sig || 0),
+          totalSignatures: parseInt(userBehavior.n_sig || 0, 10),
           peakHourlyActivity: Math.max(...activityPatterns.map((p: any) => p.transactions || 0)),
           activityPatterns: activityPatterns.slice(0, 24),
         };
@@ -200,7 +200,7 @@ export async function GET(request: Request) {
         const tokenBalances = data.rawData.TOKEN_BALANCES || [];
 
         data.metrics = {
-          transactionCount: parseInt(dexMetrics.transaction_count || 0),
+          transactionCount: parseInt(dexMetrics.transaction_count || 0, 10),
           totalGasFeesAPT: parseFloat(dexMetrics.sum_gas_fees_apt || 0),
           avgGasPerTx: parseFloat(dexMetrics.avg_gas_fee_per_transaction_octa || 0),
           totalSwapEvents: tradingVolume.length,
@@ -212,17 +212,17 @@ export async function GET(request: Request) {
 
       if (themeName === "PROTOCOL_ANALYTICS") {
         const networkStats = data.rawData.NETWORK_STATS || [];
-        const protocolMetrics = data.rawData.PROTOCOL_METRICS || [];
+        const _protocolMetrics = data.rawData.PROTOCOL_METRICS || [];
         const allTimeData = data.rawData.ALL_TIME_TRANSACTIONS?.[0] || {};
 
         data.metrics = {
-          allTimeTransactions: parseInt(allTimeData.total_all_time_transactions || 0),
-          networkAgeDays: parseInt(allTimeData.network_age_days || 0),
+          allTimeTransactions: parseInt(allTimeData.total_all_time_transactions || 0, 10),
+          networkAgeDays: parseInt(allTimeData.network_age_days || 0, 10),
           topProtocols: networkStats.slice(0, 5).map((p: any) => ({
             address: p.entry_function_module_address,
-            transactions: parseInt(p.count_transactions || 0),
+            transactions: parseInt(p.count_transactions || 0, 10),
             gasTotal: parseFloat(p.sum_gas_octa || 0) / 1e8,
-            senders: parseInt(p.count_sender_addresses || 0),
+            senders: parseInt(p.count_sender_addresses || 0, 10),
           })),
           protocolCount: networkStats.length,
         };

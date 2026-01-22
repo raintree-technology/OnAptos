@@ -14,7 +14,6 @@ export { Header } from "./Header";
 export { HeaderLogo } from "./header/HeaderLogo";
 export { MobileMenu } from "./header/MobileMenu";
 export { DesktopNavigationMenu } from "./header/NavigationMenu";
-export { ThemeProvider } from "./theme-provider";
 export { ThemeToggle } from "./theme-toggle";
 
 // Wallet components

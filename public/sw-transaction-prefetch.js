@@ -16,13 +16,11 @@ const PREFETCH_DISTANCE = 3; // How many windows ahead to prefetch
 // Network quality detection
 let connectionQuality = "good"; // good, slow, offline
 
-self.addEventListener("install", (event) => {
-  console.log("Transaction prefetch service worker installed");
+self.addEventListener("install", (_event) => {
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
-  console.log("Transaction prefetch service worker activated");
   event.waitUntil(self.clients.claim());
 });
 
@@ -69,7 +67,6 @@ async function handleTransactionRequest(request) {
     // Check cache first
     const cached = await getCachedResponse(cacheKey);
     if (cached && !isExpired(cached.timestamp)) {
-      console.log("SW: Cache hit for", cacheKey);
       return new Response(cached.data, {
         headers: {
           "Content-Type": "application/json",
@@ -97,8 +94,6 @@ async function handleTransactionRequest(request) {
 
     return response;
   } catch (error) {
-    console.error("SW: Error handling transaction request:", error);
-
     // Try to serve stale cache on network error
     const stale = await getCachedResponse(cacheKey);
     if (stale) {
@@ -122,14 +117,11 @@ async function handlePrefetchRequest(data) {
 
   // Don't prefetch on slow connections
   if (connectionQuality === "slow" || connectionQuality === "offline") {
-    console.log("SW: Skipping prefetch due to connection quality:", connectionQuality);
     return;
   }
 
   // Determine prefetch strategy based on scroll direction
   const windowsToPreload = calculatePrefetchWindows(currentWindow, scrollDirection);
-
-  console.log("SW: Prefetching windows:", windowsToPreload, "for wallet:", walletAddress);
 
   // Prefetch in background with minimal impact
   for (const windowIndex of windowsToPreload) {
@@ -138,9 +130,7 @@ async function handlePrefetchRequest(data) {
 
       // Small delay between requests to avoid overwhelming the server
       await sleep(100);
-    } catch (error) {
-      console.warn("SW: Failed to prefetch window", windowIndex, error);
-    }
+    } catch (_error) {}
   }
 }
 
@@ -193,11 +183,8 @@ async function prefetchWindow(walletAddress, windowIndex) {
     if (response.ok) {
       const data = await response.text();
       await cacheResponse(cacheKey, data);
-      console.log("SW: Prefetched window", windowIndex, "for wallet", walletAddress);
     }
-  } catch (error) {
-    console.warn("SW: Prefetch failed for window", windowIndex, error);
-  }
+  } catch (_error) {}
 }
 
 /**
@@ -224,9 +211,7 @@ async function cacheResponse(key, data) {
 
     // Cleanup old entries if cache is too large
     await maintainCacheSize();
-  } catch (error) {
-    console.warn("SW: Failed to cache response:", error);
-  }
+  } catch (_error) {}
 }
 
 /**
@@ -243,8 +228,7 @@ async function getCachedResponse(key) {
     }
 
     return null;
-  } catch (error) {
-    console.warn("SW: Failed to get cached response:", error);
+  } catch (_error) {
     return null;
   }
 }
@@ -279,12 +263,8 @@ async function maintainCacheSize() {
       const toDelete = entries.slice(0, keys.length - MAX_CACHE_SIZE);
 
       await Promise.all(toDelete.map((entry) => cache.delete(entry.key)));
-
-      console.log("SW: Cleaned up", toDelete.length, "old cache entries");
     }
-  } catch (error) {
-    console.warn("SW: Cache maintenance failed:", error);
-  }
+  } catch (_error) {}
 }
 
 /**
@@ -295,7 +275,7 @@ async function cleanupCache() {
     const cache = await caches.open(CACHE_NAME);
     const keys = await cache.keys();
 
-    let cleaned = 0;
+    let _cleaned = 0;
 
     for (const key of keys) {
       try {
@@ -304,19 +284,15 @@ async function cleanupCache() {
 
         if (isExpired(data.timestamp)) {
           await cache.delete(key);
-          cleaned++;
+          _cleaned++;
         }
       } catch {
         // Remove corrupted entries
         await cache.delete(key);
-        cleaned++;
+        _cleaned++;
       }
     }
-
-    console.log("SW: Manual cleanup removed", cleaned, "entries");
-  } catch (error) {
-    console.warn("SW: Manual cleanup failed:", error);
-  }
+  } catch (_error) {}
 }
 
 /**
@@ -351,8 +327,7 @@ async function getCacheStats() {
       totalSizeBytes: totalSize,
       cacheEfficiency: keys.length > 0 ? (keys.length - expiredCount) / keys.length : 0,
     };
-  } catch (error) {
-    console.warn("SW: Failed to get cache stats:", error);
+  } catch (_error) {
     return null;
   }
 }

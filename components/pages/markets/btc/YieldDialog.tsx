@@ -4,15 +4,8 @@ import { ExternalLink } from "lucide-react";
 import type React from "react";
 
 import type { Market } from "@/components/pages/markets/btc/types";
-import {
-  BaseDialog,
-  DialogInfoRow,
-  DialogSection,
-  formatPercentage,
-  type MarketData,
-  type YieldDialogProps as SharedYieldDialogProps,
-  TokenIcon,
-} from "@/components/shared/dialogs";
+import { BaseDialog, DialogInfoRow, DialogSection, TokenIcon } from "@/components/shared/dialogs";
+import { formatPercentage } from "@/lib/utils/format/format";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PROTOCOL_ICONS } from "@/lib/config/protocols/echo";
@@ -113,7 +106,7 @@ export const YieldDialog: React.FC<YieldDialogProps> = ({ isOpen, onClose, marke
                     color: YIELD_COLORS.rewardAPR,
                   }}
                 >
-                  {formatPercentage((market.apyReward || 0) * 100)} APY
+                  {formatPercentage(market.apyReward || 0)} APY
                 </span>
               </div>
             </div>
@@ -124,7 +117,7 @@ export const YieldDialog: React.FC<YieldDialogProps> = ({ isOpen, onClose, marke
                   label="Supply APY"
                   value={
                     <span className="font-medium" style={{ color: YIELD_COLORS.supplyAPR }}>
-                      {formatPercentage((market.apyBase || 0) * 100)}
+                      {formatPercentage(market.apyBase || 0)}
                     </span>
                   }
                 />
@@ -134,7 +127,7 @@ export const YieldDialog: React.FC<YieldDialogProps> = ({ isOpen, onClose, marke
                   label="Reward APY"
                   value={
                     <span className="font-medium" style={{ color: YIELD_COLORS.rewardAPR }}>
-                      {formatPercentage((market.apyReward || 0) * 100)}
+                      {formatPercentage(market.apyReward || 0)}
                     </span>
                   }
                 />
@@ -144,7 +137,7 @@ export const YieldDialog: React.FC<YieldDialogProps> = ({ isOpen, onClose, marke
                   label="Borrow APY"
                   value={
                     <span className="font-medium" style={{ color: YIELD_COLORS.borrowAPR }}>
-                      {formatPercentage((market.apyBaseBorrow || 0) * 100)}
+                      {formatPercentage(market.apyBaseBorrow || 0)}
                     </span>
                   }
                 />
@@ -154,7 +147,7 @@ export const YieldDialog: React.FC<YieldDialogProps> = ({ isOpen, onClose, marke
                   label="Total APY"
                   value={
                     <span className="font-medium" style={{ color: YIELD_COLORS.totalAPR }}>
-                      {formatPercentage(((market.apyBase || 0) + (market.apyReward || 0)) * 100)}
+                      {formatPercentage((market.apyBase || 0) + (market.apyReward || 0))}
                     </span>
                   }
                 />
