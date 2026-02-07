@@ -15,3 +15,6 @@ export type {
   StableTokenSupply,
 } from "./stables/types";
 export { default as TokensPage } from "./tokens/Page";
+
+// Shared components
+export { MarketPageHeader } from "./shared";

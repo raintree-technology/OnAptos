@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { TrendingUp, Wallet } from "lucide-react";
+import { BarChart3, Coins, Gauge, TrendingUp, Wallet } from "lucide-react";
 import { FADE_UP } from "@/lib/constants/animations";
 import CTACard from "../shared/CTACard";
 import { Section } from "../shared/Section";
@@ -9,28 +9,55 @@ import { Section } from "../shared/Section";
 export default function CTASection() {
   return (
     <Section id="cta">
-      <motion.div className="max-w-4xl mx-auto" {...FADE_UP}>
+      <motion.div className="max-w-5xl mx-auto" {...FADE_UP}>
         <div className="text-center mb-8">
           <h2 className="text-2xl sm:text-3xl font-semibold text-foreground mb-2">
             Ready to Explore?
           </h2>
           <p className="text-muted-foreground">
-            Track your portfolio or discover yield opportunities
+            Track your portfolio, explore protocols, and analyze the Aptos
+            ecosystem
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        {/* Primary CTAs */}
+        <div className="grid md:grid-cols-2 gap-4 mb-4">
           <CTACard
             icon={Wallet}
             title="Track Your Portfolio"
-            description="Monitor holdings, track performance, discover opportunities"
-            href="/portfolio"
+            description="Monitor holdings, track performance, and discover opportunities"
+            href="/tools/portfolio"
+          />
+          <CTACard
+            icon={BarChart3}
+            title="Explore DeFi Protocols"
+            description="Browse all DeFi protocols with TVL, categories, and analytics"
+            href="/protocols/defi"
+          />
+        </div>
+
+        {/* Secondary CTAs */}
+        <div className="grid sm:grid-cols-3 gap-4">
+          <CTACard
+            icon={Coins}
+            title="Market Analytics"
+            description="Stablecoins, RWAs, Bitcoin, and token data"
+            href="/markets/stables"
+            variant="secondary"
           />
           <CTACard
             icon={TrendingUp}
-            title="Explore Yield Opportunities"
-            description="Find highest APY pools across DeFi protocols"
+            title="Yield Opportunities"
+            description="Find the best APY across protocols"
             href="/protocols/yields"
+            variant="secondary"
+          />
+          <CTACard
+            icon={Gauge}
+            title="Chain Performance"
+            description="Compare Aptos vs other blockchains"
+            href="/performance"
+            variant="secondary"
           />
         </div>
       </motion.div>

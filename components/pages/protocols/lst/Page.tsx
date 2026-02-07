@@ -5,6 +5,7 @@ import { AlertTriangle, RefreshCw } from "lucide-react";
 import Image from "next/image";
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
+import { ProtocolPageHeader } from "@/components/pages/protocols/shared";
 import { MarketShareChart } from "@/components/shared/MarketShareChart";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,7 +24,11 @@ import { LST_COLORS } from "@/lib/constants/ui/colors";
 import { useAptPrice } from "@/lib/hooks/portfolio/useAptPrice";
 import { usePageTranslation } from "@/lib/hooks/useTranslation";
 import { logger } from "@/lib/utils/core/logger";
-import { formatAmount, formatAmountFull, formatCurrency } from "@/lib/utils/format/format";
+import {
+  formatAmount,
+  formatAmountFull,
+  formatCurrency,
+} from "@/lib/utils/format/format";
 import type { LSTTokenSupply } from "./types";
 
 // LST Token metadata with individual token-specific icons
@@ -102,7 +107,7 @@ const TokenCard = memo(function TokenCard({
             .map((t: any) =>
               formatAmount(parseFloat(t.formatted_supply), "APT", {
                 decimals: 0,
-              })
+              }),
             )
             .join(" / ")
         : formatAmount(aptValue, "APT", { decimals: 0 });
@@ -159,7 +164,10 @@ const TokenCard = memo(function TokenCard({
           {tokenData.marketSharePercent}%
         </span>
       </div>
-      <Progress className="h-1" value={parseFloat(tokenData.marketSharePercent)} />
+      <Progress
+        className="h-1"
+        value={parseFloat(tokenData.marketSharePercent)}
+      />
     </div>
   );
 });
@@ -246,9 +254,13 @@ const _CardErrorState = memo(function CardErrorState({
       <CardContent className="p-6 flex items-center">
         <AlertTriangle className="h-10 w-10 mr-4 flex-shrink-0 text-destructive" />
         <div>
-          <h3 className="font-bold text-lg mb-1 text-card-foreground">Failed to load LST data</h3>
+          <h3 className="font-bold text-lg mb-1 text-card-foreground">
+            Failed to load LST data
+          </h3>
           {status && (
-            <p className="text-muted-foreground text-sm mb-1">HTTP error! Status: {status}</p>
+            <p className="text-muted-foreground text-sm mb-1">
+              HTTP error! Status: {status}
+            </p>
           )}
 
           {isCustomMessage ? (
@@ -257,7 +269,9 @@ const _CardErrorState = memo(function CardErrorState({
                 API rate limit reached. Data will refresh automatically.
               </span>
               {countdown > 0 && (
-                <span className="text-muted-foreground">Try again in {countdown}s</span>
+                <span className="text-muted-foreground">
+                  Try again in {countdown}s
+                </span>
               )}
               <Button
                 onClick={onRetry}
@@ -272,7 +286,12 @@ const _CardErrorState = memo(function CardErrorState({
           ) : (
             <p className="text-muted-foreground">
               Request failed. Please try again.
-              <Button onClick={onRetry} variant="outline" className="ml-3" size="sm">
+              <Button
+                onClick={onRetry}
+                variant="outline"
+                className="ml-3"
+                size="sm"
+              >
                 Try Again
               </Button>
             </p>
@@ -328,7 +347,9 @@ function LSTPage(): React.ReactElement {
       setLstSupplyData(data);
     } catch (error) {
       logger.error("Failed to fetch LST supply data:", error);
-      setLstSupplyError(error instanceof Error ? error : new Error(String(error)));
+      setLstSupplyError(
+        error instanceof Error ? error : new Error(String(error)),
+      );
     } finally {
       setLstSupplyLoading(false);
       setLstSupplyFetching(false);
@@ -339,13 +360,18 @@ function LSTPage(): React.ReactElement {
     fetchLstSupplyData();
   }, [fetchLstSupplyData]);
 
-  const { aptPrice, error: aptPriceError, isLoading: aptPriceLoading } = useAptPrice();
+  const {
+    aptPrice,
+    error: aptPriceError,
+    isLoading: aptPriceLoading,
+  } = useAptPrice();
 
   const data: any = lstSupplyData || null;
 
   const loading = lstSupplyLoading || aptPriceLoading;
   const isRateLimited =
-    lstSupplyError?.message?.includes("Rate limited") || lstSupplyError?.message?.includes("429");
+    lstSupplyError?.message?.includes("Rate limited") ||
+    lstSupplyError?.message?.includes("429");
   const error = isRateLimited
     ? "API rate limit reached. Data will refresh automatically."
     : lstSupplyError?.message || (!aptPrice && aptPriceError) || null;
@@ -362,7 +388,10 @@ function LSTPage(): React.ReactElement {
     const supplies = data.supplies.map((token: LSTTokenSupply) => ({
       ...token,
       // Calculate percentage based on supply
-      percentage: totalSupply > 0 ? (parseFloat(token.supply || "0") / totalSupply) * 100 : 0,
+      percentage:
+        totalSupply > 0
+          ? (parseFloat(token.supply || "0") / totalSupply) * 100
+          : 0,
     }));
 
     return {
@@ -375,7 +404,7 @@ function LSTPage(): React.ReactElement {
     if (!processedData) return { totalAPT: 0, totalUSD: 0 };
 
     const totalAPTValue = parseFloat(
-      processedData.total_supply_formatted || processedData.total || "0"
+      processedData.total_supply_formatted || processedData.total || "0",
     );
     const totalUSDValue = aptPrice ? totalAPTValue * aptPrice : 0;
 
@@ -405,7 +434,9 @@ function LSTPage(): React.ReactElement {
 
   return (
     <ErrorBoundary>
-      <div className={`min-h-screen flex flex-col relative ${GeistMono.className}`}>
+      <div
+        className={`min-h-screen flex flex-col relative ${GeistMono.className}`}
+      >
         {/* Background gradient removed - using global textured background */}
 
         <div className="fixed top-0 left-0 right-0 h-1 z-30">
@@ -413,6 +444,12 @@ function LSTPage(): React.ReactElement {
         </div>
 
         <main className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 py-8 flex-1 relative">
+          {/* Protocol Page Header with breadcrumbs and tabs */}
+          <ProtocolPageHeader
+            title="Liquid Staking"
+            description="Explore liquid staking tokens on Aptos. Stake APT while maintaining liquidity for DeFi."
+          />
+
           {loading ? (
             <LoadingState />
           ) : error ? (
@@ -422,7 +459,9 @@ function LSTPage(): React.ReactElement {
               {/* Mobile: Show total supply at top */}
               <div className="md:hidden mb-6">
                 <div className="flex items-center justify-between mb-1">
-                  <h2 className="text-sm text-muted-foreground">Total Supply</h2>
+                  <h2 className="text-sm text-muted-foreground">
+                    Total Supply
+                  </h2>
                   {aptPrice && (
                     <div className="flex items-center gap-1.5">
                       <Image
@@ -483,25 +522,33 @@ function LSTPage(): React.ReactElement {
                     }
                   >
                     <MarketShareChart
-                      data={processedData.supplies.map((token: LSTTokenSupply) => {
-                        const aptValue = parseFloat(token.formatted_supply || "0");
-                        const marketSharePercent = totalAPT > 0 ? (aptValue / totalAPT) * 100 : 0;
+                      data={processedData.supplies.map(
+                        (token: LSTTokenSupply) => {
+                          const aptValue = parseFloat(
+                            token.formatted_supply || "0",
+                          );
+                          const marketSharePercent =
+                            totalAPT > 0 ? (aptValue / totalAPT) * 100 : 0;
 
-                        const color = LST_COLORS[token.symbol] || LST_COLORS.default;
+                          const color =
+                            LST_COLORS[token.symbol] || LST_COLORS.default;
 
-                        return {
-                          name: token.symbol,
-                          value: marketSharePercent,
-                          formattedSupply: formatAmount(aptValue, "APT"),
-                          color,
-                        };
-                      })}
+                          return {
+                            name: token.symbol,
+                            value: marketSharePercent,
+                            formattedSupply: formatAmount(aptValue, "APT"),
+                            color,
+                          };
+                        },
+                      )}
                       totalValue={totalUSD || 0}
                       colors={LST_COLORS}
                       topRightContent={
                         <div className="text-right">
                           <div className="flex items-center justify-end gap-3 mb-1">
-                            <h2 className="text-sm text-muted-foreground">Total Supply</h2>
+                            <h2 className="text-sm text-muted-foreground">
+                              Total Supply
+                            </h2>
                             {aptPrice && (
                               <div className="flex items-center gap-1.5">
                                 <Image
@@ -544,22 +591,32 @@ function LSTPage(): React.ReactElement {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="min-w-[120px] sm:min-w-[150px]">Token</TableHead>
+                        <TableHead className="min-w-[120px] sm:min-w-[150px]">
+                          Token
+                        </TableHead>
                         <TableHead className="min-w-[100px] sm:min-w-[180px] hidden sm:table-cell">
                           Protocol
                         </TableHead>
                         <TableHead className="min-w-[140px] sm:min-w-[160px] hidden sm:table-cell">
                           Type
                         </TableHead>
-                        <TableHead className="min-w-[100px] sm:min-w-[120px]">Supply</TableHead>
-                        <TableHead className="min-w-[60px] sm:min-w-[80px] text-right">%</TableHead>
+                        <TableHead className="min-w-[100px] sm:min-w-[120px]">
+                          Supply
+                        </TableHead>
+                        <TableHead className="min-w-[60px] sm:min-w-[80px] text-right">
+                          %
+                        </TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {processedData?.supplies?.map((token: LSTTokenSupply) => {
-                        const aptAmount = parseFloat(token.formatted_supply || "0");
+                        const aptAmount = parseFloat(
+                          token.formatted_supply || "0",
+                        );
                         const marketSharePercent =
-                          totalAPT > 0 ? ((aptAmount / totalAPT) * 100).toFixed(2) : "0.00";
+                          totalAPT > 0
+                            ? ((aptAmount / totalAPT) * 100).toFixed(2)
+                            : "0.00";
 
                         // Format breakdown display for table
                         const breakdown = (token as any).tokenBreakdown || [];
@@ -567,9 +624,13 @@ function LSTPage(): React.ReactElement {
                           breakdown.length > 1
                             ? breakdown
                                 .map((t: any) =>
-                                  formatAmount(parseFloat(t.formatted_supply), "APT", {
-                                    decimals: 0,
-                                  })
+                                  formatAmount(
+                                    parseFloat(t.formatted_supply),
+                                    "APT",
+                                    {
+                                      decimals: 0,
+                                    },
+                                  ),
                                 )
                                 .join(" / ")
                             : formatAmount(aptAmount, "APT", { decimals: 0 });
@@ -589,7 +650,9 @@ function LSTPage(): React.ReactElement {
                                     img.src = "/icons/apt.png";
                                   }}
                                 />
-                                <span className="font-medium">{token.symbol}</span>
+                                <span className="font-medium">
+                                  {token.symbol}
+                                </span>
                               </div>
                             </TableCell>
                             <TableCell className="whitespace-nowrap hidden sm:table-cell">
