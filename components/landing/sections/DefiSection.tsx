@@ -2,9 +2,9 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { FADE_UP } from "@/lib/constants/animations";
 import { defiProtocols } from "@/components/pages/protocols/defi/data/protocols";
 import { ProtocolStats } from "@/components/protocols/ProtocolStats";
+import { FADE_UP } from "@/lib/constants/animations";
 import { ExpandToggle } from "../shared/ExpandToggle";
 import ProtocolCard from "../shared/ProtocolCard";
 import { Section } from "../shared/Section";
@@ -16,6 +16,7 @@ export default function DefiSection() {
   const [showAllYield, setShowAllYield] = useState(false);
 
   return (
+    // biome-ignore lint/correctness/useUniqueElementIds: stable anchor ID for scroll navigation
     <Section id="defi">
       <SectionHeader
         title="Explore DeFi Protocols"

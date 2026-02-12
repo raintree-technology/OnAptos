@@ -140,13 +140,17 @@
 
 /* Clean inverted background - light mode style in dark mode and vice versa */
 .textured-bg-inverted {
-    background-color: oklch(0.145 0 0); /* Dark background in light mode */
-    color: oklch(0.985 0 0); /* Light text in light mode */
+    background-color: oklch(0.145 0 0);
+    /* Dark background in light mode */
+    color: oklch(0.985 0 0);
+    /* Light text in light mode */
 }
 
 .dark .textured-bg-inverted {
-    background-color: oklch(1 0 0); /* Light background in dark mode */
-    color: oklch(0.145 0 0); /* Dark text in dark mode */
+    background-color: oklch(1 0 0);
+    /* Light background in dark mode */
+    color: oklch(0.145 0 0);
+    /* Dark text in dark mode */
 }
 
 /* === Light Theme === */
@@ -190,24 +194,40 @@
     /* Chart colors - 12-color palette for data visualization
        Primary palette (chart-1 to chart-5): Use for main data series
        Extended palette (chart-6 to chart-12): Use for additional series */
-    --chart-1: oklch(0.585 0.233 264); /* Indigo - primary data */
-    --chart-2: oklch(0.606 0.25 292); /* Violet - secondary data */
-    --chart-3: oklch(0.656 0.241 354); /* Pink - tertiary data */
-    --chart-4: oklch(0.715 0.143 211); /* Cyan - quaternary data */
-    --chart-5: oklch(0.696 0.17 162); /* Emerald - positive/success */
-    --chart-6: oklch(0.769 0.188 70); /* Amber - warning/caution */
-    --chart-7: oklch(0.645 0.246 16); /* Red - danger/negative */
-    --chart-8: oklch(0.623 0.214 255); /* Blue - info */
-    --chart-9: oklch(0.627 0.265 303); /* Purple - special */
-    --chart-10: oklch(0.704 0.14 181); /* Teal - alternative */
-    --chart-11: oklch(0.705 0.213 47); /* Orange - alt warning */
-    --chart-12: oklch(0.768 0.233 130); /* Lime - alt success */
+    --chart-1: oklch(0.585 0.233 264);
+    /* Indigo - primary data */
+    --chart-2: oklch(0.606 0.25 292);
+    /* Violet - secondary data */
+    --chart-3: oklch(0.656 0.241 354);
+    /* Pink - tertiary data */
+    --chart-4: oklch(0.715 0.143 211);
+    /* Cyan - quaternary data */
+    --chart-5: oklch(0.696 0.17 162);
+    /* Emerald - positive/success */
+    --chart-6: oklch(0.769 0.188 70);
+    /* Amber - warning/caution */
+    --chart-7: oklch(0.645 0.246 16);
+    /* Red - danger/negative */
+    --chart-8: oklch(0.623 0.214 255);
+    /* Blue - info */
+    --chart-9: oklch(0.627 0.265 303);
+    /* Purple - special */
+    --chart-10: oklch(0.704 0.14 181);
+    /* Teal - alternative */
+    --chart-11: oklch(0.705 0.213 47);
+    /* Orange - alt warning */
+    --chart-12: oklch(0.768 0.233 130);
+    /* Lime - alt success */
 
     /* Semantic colors for UI components */
-    --color-success: oklch(0.7 0.15 142); /* green */
-    --color-warning: oklch(0.8 0.15 85); /* yellow */
-    --color-error: oklch(0.6 0.21 29); /* red */
-    --color-info: oklch(0.6 0.118 245); /* blue */
+    --color-success: oklch(0.7 0.15 142);
+    /* green */
+    --color-warning: oklch(0.8 0.15 85);
+    /* yellow */
+    --color-error: oklch(0.6 0.21 29);
+    /* red */
+    --color-info: oklch(0.6 0.118 245);
+    /* blue */
 
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
@@ -256,24 +276,40 @@
 
     /* Chart colors - 12-color palette for data visualization (dark mode)
        Brighter/more saturated for dark backgrounds */
-    --chart-1: oklch(0.65 0.25 264); /* Indigo - primary data */
-    --chart-2: oklch(0.68 0.27 292); /* Violet - secondary data */
-    --chart-3: oklch(0.72 0.26 354); /* Pink - tertiary data */
-    --chart-4: oklch(0.78 0.16 211); /* Cyan - quaternary data */
-    --chart-5: oklch(0.76 0.19 162); /* Emerald - positive/success */
-    --chart-6: oklch(0.82 0.2 70); /* Amber - warning/caution */
-    --chart-7: oklch(0.7 0.27 16); /* Red - danger/negative */
-    --chart-8: oklch(0.68 0.23 255); /* Blue - info */
-    --chart-9: oklch(0.7 0.29 303); /* Purple - special */
-    --chart-10: oklch(0.77 0.16 181); /* Teal - alternative */
-    --chart-11: oklch(0.77 0.23 47); /* Orange - alt warning */
-    --chart-12: oklch(0.82 0.25 130); /* Lime - alt success */
+    --chart-1: oklch(0.65 0.25 264);
+    /* Indigo - primary data */
+    --chart-2: oklch(0.68 0.27 292);
+    /* Violet - secondary data */
+    --chart-3: oklch(0.72 0.26 354);
+    /* Pink - tertiary data */
+    --chart-4: oklch(0.78 0.16 211);
+    /* Cyan - quaternary data */
+    --chart-5: oklch(0.76 0.19 162);
+    /* Emerald - positive/success */
+    --chart-6: oklch(0.82 0.2 70);
+    /* Amber - warning/caution */
+    --chart-7: oklch(0.7 0.27 16);
+    /* Red - danger/negative */
+    --chart-8: oklch(0.68 0.23 255);
+    /* Blue - info */
+    --chart-9: oklch(0.7 0.29 303);
+    /* Purple - special */
+    --chart-10: oklch(0.77 0.16 181);
+    /* Teal - alternative */
+    --chart-11: oklch(0.77 0.23 47);
+    /* Orange - alt warning */
+    --chart-12: oklch(0.82 0.25 130);
+    /* Lime - alt success */
 
     /* Semantic colors for UI components */
-    --color-success: oklch(0.696 0.17 162); /* green */
-    --color-warning: oklch(0.769 0.188 70); /* yellow */
-    --color-error: oklch(0.645 0.246 16); /* red */
-    --color-info: oklch(0.488 0.243 264); /* blue */
+    --color-success: oklch(0.696 0.17 162);
+    /* green */
+    --color-warning: oklch(0.769 0.188 70);
+    /* yellow */
+    --color-error: oklch(0.645 0.246 16);
+    /* red */
+    --color-info: oklch(0.488 0.243 264);
+    /* blue */
 
     --sidebar: oklch(0.24 0 0);
     --sidebar-foreground: oklch(0.985 0 0);
@@ -308,7 +344,8 @@
     body {
         @apply bg-background text-foreground;
         min-height: 100vh;
-        min-height: 100svh; /* Use small viewport height for mobile */
+        min-height: 100svh;
+        /* Use small viewport height for mobile */
         width: 100vw;
         overflow-x: hidden;
 
@@ -319,46 +356,35 @@
 
         /* Improve mobile performance */
         -webkit-overflow-scrolling: touch;
-        transform: translateZ(0); /* Force hardware acceleration */
+        transform: translateZ(0);
+        /* Force hardware acceleration */
 
         /* Soft pastel gradient background with muted tones */
         background:
-            radial-gradient(
-                ellipse at top left,
+            radial-gradient(ellipse at top left,
                 hsl(220 15% 96% / 0.4) 0%,
-                transparent 50%
-            ),
-            radial-gradient(
-                ellipse at bottom right,
+                transparent 50%),
+            radial-gradient(ellipse at bottom right,
                 hsl(200 20% 94% / 0.3) 0%,
-                transparent 50%
-            ),
-            radial-gradient(
-                ellipse at center bottom,
+                transparent 50%),
+            radial-gradient(ellipse at center bottom,
                 hsl(240 10% 98% / 0.2) 0%,
-                transparent 60%
-            ),
+                transparent 60%),
             hsl(var(--background));
     }
 
     .dark body {
         /* Lighter dark mode background with subtle gradients */
         background:
-            radial-gradient(
-                ellipse at top left,
+            radial-gradient(ellipse at top left,
                 hsl(240 8% 22% / 0.6) 0%,
-                transparent 50%
-            ),
-            radial-gradient(
-                ellipse at bottom right,
+                transparent 50%),
+            radial-gradient(ellipse at bottom right,
                 hsl(220 6% 24% / 0.4) 0%,
-                transparent 50%
-            ),
-            radial-gradient(
-                ellipse at center bottom,
+                transparent 50%),
+            radial-gradient(ellipse at center bottom,
                 hsl(200 4% 20% / 0.3) 0%,
-                transparent 60%
-            ),
+                transparent 60%),
             hsl(var(--background));
     }
 
@@ -395,6 +421,32 @@
 
 /* === Custom Animations === */
 @layer components {
+
+    /* Sticky first column for tables on mobile horizontal scroll */
+    .table-sticky-first td:first-child,
+    .table-sticky-first th:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 10;
+        background-color: hsl(var(--background));
+    }
+
+    .dark .table-sticky-first td:first-child,
+    .dark .table-sticky-first th:first-child {
+        background-color: hsl(var(--card));
+    }
+
+    .table-sticky-first td:first-child::after,
+    .table-sticky-first th:first-child::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(to right, hsl(var(--border) / 0.3), transparent);
+    }
+
     /* Fade in up animation */
     .animate-fade-in-up {
         animation: fadeInUp 0.6s ease-out forwards;
@@ -412,40 +464,30 @@
     /* Muted pastel background utilities */
     .bg-sophisticated {
         background:
-            radial-gradient(
-                ellipse at top,
+            radial-gradient(ellipse at top,
                 hsl(210 25% 95% / 0.3) 0%,
-                transparent 60%
-            ),
+                transparent 60%),
             hsl(var(--background));
     }
 
     .bg-elegant-card {
         background:
-            linear-gradient(
-                135deg,
+            linear-gradient(135deg,
                 hsl(var(--card)) 0%,
-                hsl(230 12% 97% / 0.8) 100%
-            ),
-            radial-gradient(
-                ellipse at bottom right,
+                hsl(230 12% 97% / 0.8) 100%),
+            radial-gradient(ellipse at bottom right,
                 hsl(190 15% 92% / 0.2) 0%,
-                transparent 50%
-            );
+                transparent 50%);
     }
 
     .bg-premium-surface {
         background:
-            linear-gradient(
-                180deg,
+            linear-gradient(180deg,
                 hsl(var(--background)) 0%,
-                hsl(250 8% 96% / 0.4) 100%
-            ),
-            radial-gradient(
-                ellipse at center,
+                hsl(250 8% 96% / 0.4) 100%),
+            radial-gradient(ellipse at center,
                 hsl(180 12% 94% / 0.15) 0%,
-                transparent 70%
-            );
+                transparent 70%);
     }
 
     /* Enhanced focus styles for accessibility */
@@ -511,11 +553,9 @@
 
     /* Clean subtle vignette */
     .bg-vignette-subtle {
-        background: radial-gradient(
-            ellipse at center,
-            hsl(var(--background)) 0%,
-            hsl(var(--background) / 0.98) 100%
-        );
+        background: radial-gradient(ellipse at center,
+                hsl(var(--background)) 0%,
+                hsl(var(--background) / 0.98) 100%);
     }
 
     /* === Clean Background Alternatives === */
@@ -543,7 +583,8 @@
     /* Enhanced mobile button styles */
     .mobile-button {
         @apply touch-manipulation min-h-[44px] rounded-xl transition-all duration-200 active:scale-95;
-        transform: translateZ(0); /* Force hardware acceleration */
+        transform: translateZ(0);
+        /* Force hardware acceleration */
     }
 
     /* Mobile-first spacing utilities */
@@ -564,7 +605,8 @@
     /* Mobile viewport utilities */
     .h-screen-mobile {
         height: 100vh;
-        height: 100svh; /* Small viewport height for mobile */
+        height: 100svh;
+        /* Small viewport height for mobile */
     }
 
     .min-h-screen-mobile {
@@ -697,48 +739,60 @@
 
     /* Floating animations for dashboard buttons */
     @keyframes float-slow {
+
         0%,
         100% {
             transform: translateY(0px) translateX(0px);
         }
+
         33% {
             transform: translateY(-10px) translateX(5px);
         }
+
         66% {
             transform: translateY(5px) translateX(-5px);
         }
     }
 
     @keyframes float-medium {
+
         0%,
         100% {
             transform: translateY(0px) translateX(0px);
         }
+
         25% {
             transform: translateY(-8px) translateX(-6px);
         }
+
         50% {
             transform: translateY(6px) translateX(4px);
         }
+
         75% {
             transform: translateY(-4px) translateX(-3px);
         }
     }
 
     @keyframes float-fast {
+
         0%,
         100% {
             transform: translateY(0px) translateX(0px);
         }
+
         20% {
             transform: translateY(8px) translateX(-4px);
         }
+
         40% {
             transform: translateY(-6px) translateX(6px);
         }
+
         60% {
             transform: translateY(4px) translateX(-8px);
         }
+
         80% {
             transform: translateY(-8px) translateX(4px);
         }
@@ -761,6 +815,7 @@
         from {
             transform: rotate(0deg);
         }
+
         to {
             transform: rotate(360deg);
         }
@@ -775,6 +830,7 @@
         0% {
             transform: translateX(0);
         }
+
         100% {
             transform: translateX(-50%);
         }
@@ -793,7 +849,7 @@
     }
 
     /* Prevent layout shift and enable hardware acceleration */
-    .animate-scroll > * {
+    .animate-scroll>* {
         backface-visibility: hidden;
         transform: translateZ(0);
         /* Force compositing layer for smooth animation */

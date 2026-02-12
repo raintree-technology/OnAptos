@@ -103,26 +103,10 @@ export const getTransactionTypeIcon = (transaction: Transaction): LucideIcon => 
 export const getProtocolLogoPath = (protocolName: string): string | null => {
   const protocolIcons: Record<string, string> = {
     panora: "/icons/protocols/panora.webp",
-    pancakeswap: "/icons/protocols/pancake.webp",
     thala: "/icons/protocols/thala.avif",
-    liquidswap: "/icons/protocols/liquidswap.webp",
-    cellana: "/icons/protocols/cellana.webp",
-    aries: "/icons/protocols/aries.avif",
-    merkle: "/icons/protocols/merkle.webp",
     echelon: "/icons/protocols/echelon.avif",
-    superposition: "/icons/protocols/superposition.webp",
     amnis: "/icons/protocols/amnis.avif",
-    sushi: "/icons/protocols/sushi.webp",
-    wormhole: "/icons/protocols/wormhole.png",
-    layerzero: "/icons/protocols/lz.png",
-    celer: "/icons/protocols/celer.jpg",
-    kana: "/icons/protocols/kana.webp",
     echo: "/icons/protocols/echo.webp",
-    joule: "/icons/protocols/joule.webp",
-    thetis: "/icons/protocols/thetis.webp",
-    tradeport: "/icons/protocols/tradeport.jpg",
-    hyperion: "/icons/protocols/hyperion.webp",
-    metamove: "/icons/protocols/metamove.png",
   };
 
   const normalizedName = protocolName.toLowerCase().replace(/\s+/g, "");

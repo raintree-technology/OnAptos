@@ -201,11 +201,6 @@ export function getAptosBenchmarkData(): AptosBenchmarkData {
           category: "Liquid Staking",
           description: "Liquid staking protocol",
         },
-        {
-          name: "Hyperion",
-          category: "DEX",
-          description: "Fast-growing DEX, top 10 by TVL",
-        },
       ],
       foundationFunding: 200, // $200M committed
       projectsFunded: 165,
@@ -256,15 +251,11 @@ export function getAptosBenchmarkData(): AptosBenchmarkData {
           name: "KGeN",
           category: "Gaming",
         },
-        {
-          name: "Merkle Trade",
-          category: "Trading Game",
-        },
       ],
     },
     nftProjects: {
       majorCollections: ["Aptos Monkeys", "GUI Gang"],
-      marketplaces: ["Rarible", "TradePort", "Wapal", "BlueMove"],
+      marketplaces: ["Rarible", "TradePort", "BlueMove"],
       metaverseProjects: ["Aptos Art Museum"],
     },
     partnerships: {

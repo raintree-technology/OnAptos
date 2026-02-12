@@ -42,7 +42,7 @@ export function useComprehensiveData(): UseComprehensiveDataReturn {
         setError(null);
 
         // Try to fetch the actual generated data first
-        let response;
+        let response: Response;
         try {
           response = await fetch("/comprehensive_aptos_data.json");
           if (!response.ok) {
@@ -95,14 +95,7 @@ export function useComprehensiveData(): UseComprehensiveDataReturn {
                   "liquidity_operations",
                   "estimated_volume",
                 ],
-                protocols_tracked: [
-                  "PancakeSwap",
-                  "LiquidSwap",
-                  "Cetus",
-                  "AUX",
-                  "Thala",
-                  "AptoSwap",
-                ],
+                protocols_tracked: ["Thala"],
               },
               liquid_staking: {
                 query:

@@ -371,19 +371,6 @@ const LST_CONFIGS: Record<string, BaseTokenConfig> = {
     tags: ["liquid-staking", "delegated"],
     isAccount: true,
   },
-  truAPT: {
-    name: "TruFin truAPT",
-    symbol: "truAPT",
-    thumbnail: "/icons/lst/TruAPT.png",
-    type: "Liquid Staking Token",
-    issuer: "TruFin",
-    assetAddress: "0xaef6a8c3182e076db72d64324617114cacf9a52f28325edc10b483f7f05da0e7",
-    decimals: 8,
-    website: "https://www.trufin.io",
-    auditLink: "https://www.trufin.io",
-    tags: ["liquid-staking", "delegated"],
-    isAccount: true,
-  },
 };
 
 // ==========================================================================
@@ -553,13 +540,6 @@ export const LST_TOKENS = [
     name: LST_CONFIGS.stkAPT.name,
     decimals: LST_CONFIGS.stkAPT.decimals,
     asset_type: "0x42556039b88593e768c97ab1a3ab0c6a17230825769304482dff8fdebe4c002b",
-  },
-  // TruFin - truAPT (FA only)
-  {
-    symbol: "truAPT",
-    name: "TruFin truAPT",
-    decimals: 8,
-    asset_type: "0xaef6a8c3182e076db72d64324617114cacf9a52f28325edc10b483f7f05da0e7",
   },
 ];
 

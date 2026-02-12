@@ -35,7 +35,7 @@ export class AutoCompoundService {
       const positions: CompoundablePosition[] = [];
 
       // Example: Check Thala farming positions
-      // Example: Check PancakeSwap MasterChef positions
+      // Example: Check DeFi protocol positions
       // Example: Check lending protocol rewards
 
       // Validate all positions before filtering

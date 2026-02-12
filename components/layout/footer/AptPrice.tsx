@@ -43,7 +43,7 @@ export const AptPrice = memo(function AptPrice() {
 
   if (loading || currentPrice === null) {
     return (
-      <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
+      <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] xs:text-xs sm:text-sm text-muted-foreground">
         <Image
           src="/icons/apt.png"
           alt="APT token"
@@ -62,7 +62,7 @@ export const AptPrice = memo(function AptPrice() {
   }
 
   return (
-    <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] xs:text-xs sm:text-sm">
+    <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] xs:text-xs sm:text-sm">
       <Image
         src="/icons/apt.png"
         alt="APT token"

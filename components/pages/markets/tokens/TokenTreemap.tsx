@@ -169,6 +169,7 @@ export function TokenTreemap({ tokens }: TokenTreemapProps) {
               </div>
             </div>
             <button
+              type="button"
               onClick={() => setSelectedToken(null)}
               className="p-1 hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded"
             >
@@ -309,6 +310,8 @@ const TreemapContent = ({ onCellClick, ...props }: any) => {
   // Early return for small rectangles
   if (width < 40 || height < 25) {
     return (
+      // biome-ignore lint/a11y/noStaticElementInteractions: SVG element in treemap visualization
+      // biome-ignore lint/a11y/useKeyWithClickEvents: SVG rect does not support keyboard interaction
       <rect
         x={x}
         y={y}
@@ -334,6 +337,8 @@ const TreemapContent = ({ onCellClick, ...props }: any) => {
       : name;
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: SVG element in treemap visualization
+    // biome-ignore lint/a11y/useKeyWithClickEvents: SVG g element does not support keyboard interaction
     <g
       onClick={handleClick}
       style={{ cursor: "pointer" }}

@@ -34,9 +34,6 @@ export const knownAptosRelatedAddresses: Record<string, string> = {
   "0xd47ead75b923422f7967257259e7a298f029da9e5484dc7aa1a9efbd4c3ae648": "Native FA Redemption",
   // NFT marketplaces are defined in platforms.ts
   // Additional NFT-related addresses
-  "0x80d0084f99070c5cdb4b01b695f2a8b44017e41abf4a78c2487d3b52b5a4ae37": "Wapal Auction",
-  "0xc777f5f82a2773d6e6f9c2e91306fc9c099a57747f64d86c59cf0acab706fd44": "Wapal Launchpad V2",
-  "0x6547d9f1d481fdc21cd38c730c07974f2f61adb7063e76f9d9522ab91f090dac": "Wapal Launchpad",
   "0x86a32dcdd605152e58b984ac2538168214bb57ab4661c591a095563b3d2d6a37": "Tradeport Launchpad",
   "0x039e8ef8576a8eaf8ebcea5841cc7110bc7b5125aacd25086d510350a90a182e": "Rarible V2",
   // CEX addresses are defined in platforms.ts

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
+import { CACHE_DURATIONS, getCacheHeaders } from "@/lib/utils/api/common";
 import { apiLogger } from "@/lib/utils/core/logger";
 import { serverCached } from "@/lib/utils/server/cache";
-import { CACHE_DURATIONS, getCacheHeaders } from "@/lib/utils/api/common";
 
 export async function GET() {
   try {

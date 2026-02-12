@@ -35,28 +35,4 @@ export const multipleProtocols: DefiProtocol[] = [
       smartContractLinks: ["https://github.com/ThalaLabs"],
     },
   },
-  {
-    title: "Thetis",
-    href: "https://thetis.market",
-    description: "defi:protocol_descriptions.Thetis",
-    category: "Multiple",
-    subcategory: "DEX Aggregator, Perps",
-    categoryBreakdown: "defi:protocol_category_breakdown.Thetis",
-    implementation: MultipleImplementation.PROTOCOL_SUITE,
-    status: "Active",
-    color: DEFI_PROTOCOL_COLORS.multiple,
-    logo: "/icons/protocols/thetis.webp",
-    networks: ["mainnet"],
-    security: {
-      auditStatus: "Unaudited",
-    },
-    tvl: {
-      current: "N/A",
-    },
-    external: {
-      socials: {
-        twitter: "https://twitter.com/ThetisMarket",
-      },
-    },
-  },
 ];

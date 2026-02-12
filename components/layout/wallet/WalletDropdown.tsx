@@ -59,7 +59,7 @@ export function WalletDropdown({ className }: WalletDropdownProps) {
   if (!normalizedAddress) {
     return (
       <>
-        <button onClick={handlePortfolioClick} className={className}>
+        <button type="button" onClick={handlePortfolioClick} className={className}>
           {pathname === "/" ? "Launch App" : "Portfolio"}
         </button>
         <WalletModal open={showWalletModal} onOpenChange={setShowWalletModal} />
@@ -105,6 +105,7 @@ export function WalletDropdown({ className }: WalletDropdownProps) {
                     {t("wallet.wallet_address", "Wallet Address")}
                   </p>
                   <button
+                    type="button"
                     onClick={handleCopyAddress}
                     className="group flex items-center gap-2 w-full text-left hover:bg-muted/50 rounded px-1 py-1 transition-colors"
                     title="Click to copy address"

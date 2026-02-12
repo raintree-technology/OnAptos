@@ -28,17 +28,12 @@ const PROTOCOL_SLUG_MAP: Record<string, string> = {
   Thala: "thala",
   Panora: "panora-exchange",
   Echelon: "echelon-market",
-  "Merkle Trade": "merkle-trade",
   Amnis: "amnis-finance",
-  "Aries Markets": "aries-markets",
   // Add more mappings as needed
 };
 
 // Protocols that are known to have DEX volume data on DefiLlama
 const PROTOCOLS_WITH_DEX_DATA = new Set([
-  "liquidswap",
-  "pancakeswap",
-  "sushiswap",
   "panora-exchange",
   "thala",
   // Add more as you discover them
@@ -52,8 +47,7 @@ export function useDefiLlamaData(protocolName: string) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Exclude certain protocols from showing data
-        const excludedProtocols = ["PancakeSwap", "SushiSwap"];
+        const excludedProtocols: string[] = [];
         if (excludedProtocols.includes(protocolName)) {
           setData(null);
           setLoading(false);

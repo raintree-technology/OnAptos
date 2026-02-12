@@ -2,13 +2,11 @@ import { Analytics } from "@vercel/analytics/react";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { ThemeProvider } from "next-themes";
 import type React from "react";
 import type { ReactNode } from "react";
-
 import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
-
 import { LayoutContent } from "@/components/layout/LayoutContent";
-import { ThemeProvider } from "next-themes";
 import { I18nProvider } from "@/components/providers/I18nProvider";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { Toaster } from "@/components/ui/sonner";
@@ -219,10 +217,12 @@ export default function RootLayout({ children }: RootLayoutProps): React.ReactEl
         <link rel="alternate" type="text/plain" href="/api/seo/llm-readme" />
         <link rel="alternate" type="application/ld+json" href="/api/seo/llm-metadata" />
         <meta name="author" content={DEVELOPER_CONFIG.name} />
+        {/* biome-ignore lint/correctness/useUniqueElementIds: required by Next.js Script component */}
         <Script
           id="structured-data"
           type="application/ld+json"
           nonce={nonce || undefined}
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: structured data injection is intentional
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(structuredData),
           }}

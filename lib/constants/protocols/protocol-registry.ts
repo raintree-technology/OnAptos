@@ -11,7 +11,7 @@ export { ProtocolType };
 
 export interface ProtocolInfo {
   name: string;
-  label: string; // Short label for UI display (e.g., "MKLP", "amAPT")
+  label: string; // Short label for UI display (e.g., "amAPT")
   type: ProtocolType;
   description?: string;
   addresses: string[];
@@ -21,28 +21,6 @@ export interface ProtocolInfo {
  * Master protocol registry - the source of truth for all protocol information
  */
 export const PROTOCOLS: Record<string, ProtocolInfo> = {
-  // Core Aptos
-  APTOS_FRAMEWORK: {
-    name: "Aptos Framework",
-    label: "0x1",
-    type: ProtocolType.UNKNOWN,
-    description: "Core Aptos framework",
-    addresses: ["0x0000000000000000000000000000000000000000000000000000000000000001"],
-  },
-  APTOS_TOKEN_V2: {
-    name: "Digital Assets",
-    label: "0x4",
-    type: ProtocolType.UNKNOWN,
-    description: "Aptos token v2 standard",
-    addresses: ["0x0000000000000000000000000000000000000000000000000000000000000004"],
-  },
-  MERKLE_TRADE: {
-    name: "Merkle",
-    label: "MKLP",
-    type: ProtocolType.DERIVATIVES,
-    description: "Derivatives trading protocol",
-    addresses: ["0x5ae6789dd2fec1a9ec9cccfb3acaf12e93d432f0a3a42c92fe1a9d490b7bbc06"],
-  },
   AMNIS_FINANCE: {
     name: "Amnis",
     label: "Amnis",
@@ -77,13 +55,6 @@ export const PROTOCOLS: Record<string, ProtocolInfo> = {
   //     '0xc20ea5a196c81d8d7aff814aa37f8a5823acffbc4193efd3b2aafc9ef2803255',
   //   ],
   // },
-  ARIES_MARKETS: {
-    name: "Aries",
-    label: "Aries",
-    type: ProtocolType.LENDING,
-    description: "Lending and borrowing protocol",
-    addresses: ["0x9770fa9c725cbd97eb50b2be5f7416efdfd1f1554beb0750d4dae4c64e860da3"],
-  },
   THALA_FARM: {
     name: "Thala Farm",
     label: "Thala Farm",
@@ -95,25 +66,7 @@ export const PROTOCOLS: Record<string, ProtocolInfo> = {
       "0xb4a8b8462b4423780d6ee256f3a9a3b9ece5d9440d614f7ab2bfa4556aa4f69d",
     ],
   },
-  PANCAKESWAP: {
-    name: "PancakeSwap",
-    label: "CAKE",
-    type: ProtocolType.DEX,
-    description: "Decentralized exchange and farming",
-    addresses: [
-      "0x7968a225eba6c99f5f1070aeec1b405757dee939eabcfda43ba91588bf5fccf3",
-      "0xfd1d8a523f1be89277ac0787ae3469312667e3d0b3f75a5f01bfc95530a2dc91",
-      "0x9936836587ca33240d3d3f91844651b16cb07802faf5e34514ed6f78580deb0a",
-      "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa",
-    ],
-  },
-  VIBRANTX: {
-    name: "VibrantX",
-    label: "VibrantX",
-    type: ProtocolType.DEX,
-    description: "DeFi protocol",
-    addresses: ["0x17f1e926a81639e9557f4e4934df93452945ec30bc962e11351db59eb0d78c33"],
-  },
+
   THALA_INFRA: {
     name: "Thala Infrastructure",
     label: "Thala",
@@ -141,7 +94,6 @@ export const PROTOCOLS: Record<string, ProtocolInfo> = {
     description: "Thala collateralized debt positions",
     addresses: ["0x6f986d146e4a90b828d8c12c14b6f4e003fdff11a8eecceceb63744363eaac01"],
   },
-  // Additional lending protocols
   ECHELON: {
     name: "Echelon",
     label: "Echelon",
@@ -162,30 +114,7 @@ export const PROTOCOLS: Record<string, ProtocolInfo> = {
       "0x4e1854f6d332c9525e258fb6e66f84b6af8aba687bbcb832a24768c4e175feec",
     ],
   },
-  MESO_FINANCE: {
-    name: "Meso",
-    label: "Meso",
-    type: ProtocolType.LENDING,
-    description: "Meso lending protocol",
-    addresses: ["0x68476f9d437e3f32fd262ba898b5e3ee0a23a1d586a6cf29a28add35f253f6f7"],
-  },
-  JOULE_FINANCE: {
-    name: "Joule",
-    label: "Joule",
-    type: ProtocolType.LENDING,
-    description: "Joule lending protocol",
-    addresses: [
-      "0x2fe576faa841347a9b1b32c869685deb75a15e3f62dfe37cbd6d52cc403a16f6",
-      "0x3b90501eae5cdc53c507d53b4ddc5a37e620743ef0b53a6aa4f711118890d1e5",
-    ],
-  },
-  SUPERPOSITION: {
-    name: "Superposition",
-    label: "Superposition",
-    type: ProtocolType.LENDING,
-    description: "Superposition lending protocol",
-    addresses: ["0xccd1a84ccea93531d7f165b90134aa0415feb30e8757ab1632dac68c0055f5c2"],
-  },
+
   AAVE: {
     name: "Aave",
     label: "AAVE",
@@ -201,140 +130,12 @@ export const PROTOCOLS: Record<string, ProtocolInfo> = {
       "0x39ddcd9e1a39fa14f25e3f9ec8a86074d05cc0881cbf667df8a6ee70942016fb",
     ],
   },
-  // Additional DEXs
-  LIQUIDSWAP: {
-    name: "LiquidSwap",
-    label: "LiquidSwap",
-    type: ProtocolType.DEX,
-    description: "LiquidSwap decentralized exchange",
-    addresses: [
-      "0x190d44266241744264b964a37b8f09863167a12d3e70cda39376cfb4e3561e12", // v0
-      "0x0163df34fccbf003ce219d3f1d9e70d140b60622cb9dd47599c25fb2f797ba6e", // v0.5
-      "0x54cb0bb2c18564b86e34539b9f89cfe1186e39d89fce54e1cd007b8e61673a85", // v1
-      "0xb247ddeee87e848315caf9a33b8e4c71ac53db888cb88143d62d2370cca0ead2", // v1 Farms
-      "0x80273859084bc47f92a6c2d3e9257ebb2349668a1b0fb3db1d759a04c7628855", // router
-      "0x61d2c22a6cb7831bee0f48363b0eec92369357aece0d1142062f7d5d85c7bef8", // pool account v0.5
-      "0x05a97986a9d031c4567e15b797be516910cfcb4156312482efc6a19c0a30c948", // pool deployer v0
-    ],
-  },
-  CELLANA_FINANCE: {
-    name: "Cellana",
-    label: "CELL",
-    type: ProtocolType.DEX,
-    description: "Cellana decentralized exchange",
-    addresses: [
-      "0x4bf51972879e3b95c4781a5cdcb9e1ee24ef483e7d22f2d903626f126df62bd1",
-      "0xea098f1fa9245447c792d18c069433f5da2904358e1e340c55bdc68a8f5fe037",
-    ],
-  },
   PANORA_EXCHANGE: {
     name: "Panora Exchange",
     label: "Panora",
     type: ProtocolType.DEX,
     description: "Panora decentralized exchange",
     addresses: ["0x1c3206329806286fd2223647c9f9b130e66baeb6d7224a18c1f642ffe48f3b4c"],
-  },
-  KANA_LABS: {
-    name: "KanaLabs",
-    label: "KANA",
-    type: ProtocolType.DEX,
-    description: "KanaLabs DEX and perps",
-    addresses: [
-      "0x9538c839fe490ccfaf32ad9f7491b5e84e610ff6edc110ff883f06ebde82463d",
-      "0x7a38039fffd016adcac2c53795ee49325e5ec6fddf3bf02651c09f9a583655a6",
-    ],
-  },
-  HYPERION: {
-    name: "Hyperion",
-    label: "Hyperion",
-    type: ProtocolType.DEX,
-    description: "Hyperion DEX",
-    addresses: ["0x8b4a2c4bb53857c718a04c020b98f8c2e1f99a68b0f57389a8bf5434cd22e05c"],
-  },
-  // Bridges
-  WORMHOLE: {
-    name: "Wormhole",
-    label: "Wormhole",
-    type: ProtocolType.BRIDGE,
-    description: "Wormhole cross-chain bridge",
-    addresses: [
-      "0x5bc11445584a763c1fa7ed39081f1b920954da14e04b32440cba863d03e19625",
-      "0x576410486a2da45eee6c949c995670112ddf2fbeedab20350d506328eefc9d4f",
-    ],
-  },
-  CELER: {
-    name: "Celer Bridge",
-    label: "Celer",
-    type: ProtocolType.BRIDGE,
-    description: "Celer cross-chain bridge",
-    addresses: ["0x8d87a65ba30e09357fa2edea2c80dbac296e5dec2b18287113500b902942929d"],
-  },
-  // Other DeFi protocols
-  TRUFIN: {
-    name: "TruFin",
-    label: "TruFin",
-    type: ProtocolType.LIQUID_STAKING,
-    description: "TruFin liquid staking",
-    addresses: ["0x6f8ca77dd0a4c65362f475adb1c26ae921b1d75aa6b70e53d0e340efd7d8bc80"],
-  },
-  UPTOS_PUMP: {
-    name: "Uptos Pump",
-    label: "UPTOS",
-    type: ProtocolType.DEX,
-    description: "Uptos meme coin launcher",
-    addresses: ["0x4e5e85fd647c7e19560590831616a3c021080265576af3182535a1d19e8bc2b3"],
-  },
-  DEFY: {
-    name: "Defy",
-    label: "DEFY",
-    type: ProtocolType.DEX,
-    description: "Defy protocol",
-    addresses: ["0xcd7b88c2181881bf8e7ef741cae867aee038e75df94224496a4a81627edf7f65"],
-  },
-  LUCID_FINANCE: {
-    name: "Lucid",
-    label: "Lucid",
-    type: ProtocolType.DEX,
-    description: "Lucid protocol",
-    addresses: ["0xa3111961a31597ca770c60be02fc9f72bdee663f563e45223e79793557eef0d9"],
-  },
-  PACT_LABS: {
-    name: "Pact Labs",
-    label: "PACT",
-    type: ProtocolType.DEX,
-    description: "Pact Labs protocol",
-    addresses: ["0xddb92cba8f18ae94c40c49ca27a2ba31eca85ce37a436e25d36c8e1f516d9c62"],
-  },
-  THETIS_MARKET: {
-    name: "Thetis",
-    label: "Thetis",
-    type: ProtocolType.DEX,
-    description: "Thetis Market protocol",
-    addresses: ["0x0c727553dd5019c4887581f0a89dca9c8ea400116d70e9da7164897812c6646e"],
-  },
-  MIRAGE_PROTOCOL: {
-    name: "Mirage Protocol",
-    label: "Mirage",
-    type: ProtocolType.DERIVATIVES,
-    description: "Composable liquidity layer with perpetuals trading",
-    addresses: [
-      // Add actual contract addresses when available
-      "0x0000000000000000000000000000000000000000000000000000000000000000",
-    ],
-  },
-  SUSHISWAP: {
-    name: "SushiSwap",
-    label: "SUSHI",
-    type: ProtocolType.DEX,
-    description: "SushiSwap decentralized exchange",
-    addresses: ["0x31a6675cbe84365bf2b0cbce617ece6c47023ef70826533bde5203d32171dc3c"],
-  },
-  WAPAL: {
-    name: "Wapal",
-    label: "Wapal",
-    type: ProtocolType.NFT,
-    description: "Wapal NFT marketplace",
-    addresses: ["0x584b50b999c78ade62f8359c91b5165ff390338d45f8e55969a04e65d76258c9"],
   },
   MERCATO: {
     name: "Mercato",

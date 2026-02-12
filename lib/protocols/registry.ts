@@ -54,7 +54,9 @@ export class ProtocolRegistry {
    * Register multiple protocols
    */
   registerBulk(protocols: ProtocolDefinition[]): void {
-    protocols.forEach((p) => this.register(p));
+    for (const p of protocols) {
+      this.register(p);
+    }
   }
 
   /**

@@ -3,8 +3,8 @@
  * Centralizes all environment-dependent settings
  */
 
+import { developerConfig, siteConfig } from "./site";
 import { env, isDevelopment, isProduction } from "./validate-env";
-import { siteConfig, developerConfig } from "./site";
 
 export const APP_CONFIG = {
   // Site configuration

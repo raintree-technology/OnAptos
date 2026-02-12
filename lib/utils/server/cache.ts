@@ -1,4 +1,4 @@
-import { unstable_cache as unstableCache, revalidateTag } from "next/cache";
+import { revalidateTag, unstable_cache as unstableCache } from "next/cache";
 
 export interface ServerCacheOptions {
   revalidate?: number;

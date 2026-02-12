@@ -235,7 +235,7 @@
       "title": "ポートフォリオ追跡",
       "auto_discovery": "自動検出",
       "auto_discovery_desc": "すべてのポジションを瞬時に検出。",
-      "auto_discovery_tooltip": "Thala、Amnis、PancakeSwap、その他20以上のプロトコルをカバー",
+      "auto_discovery_tooltip": "Thala、Amnis、その他20以上のプロトコルをカバー",
       "live_pricing": "ライブ価格",
       "live_pricing_desc": "リアルタイムUSD価値。",
       "live_pricing_tooltip": "正確な市場データで数秒ごとに更新",

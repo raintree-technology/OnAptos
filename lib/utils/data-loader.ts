@@ -151,7 +151,9 @@ export async function batchLoad<T extends Record<string, any>>(
  * Clear all cached data
  */
 export function clearCache(): void {
-  Object.keys(cache).forEach((key) => delete cache[key]);
+  for (const key of Object.keys(cache)) {
+    delete cache[key];
+  }
   logger.info("Data loader cache cleared");
 }
 

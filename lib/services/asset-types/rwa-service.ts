@@ -284,7 +284,9 @@ export class RWAService extends BaseAssetService {
   private static processRWAData(tokens: RWAXyzToken[], assets: RWAXyzAsset[]): RWAProtocol[] {
     // Create asset metadata map
     const assetMap = new Map<number, RWAXyzAsset>();
-    assets.forEach((asset) => assetMap.set(asset.id, asset));
+    for (const asset of assets) {
+      assetMap.set(asset.id, asset);
+    }
 
     const protocols: RWAProtocol[] = [];
 

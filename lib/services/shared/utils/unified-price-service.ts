@@ -31,19 +31,6 @@ export class UnifiedPriceService {
    * Hardcoded prices for special tokens that don't have market prices
    */
   private static readonly HARDCODED_PRICES: Record<string, Omit<UnifiedPriceData, "source">> = {
-    // MKLP tokens
-    "::house_lp::MKLP": {
-      price: 1.05,
-      change24h: 0,
-      symbol: "MKLP",
-      decimals: 8,
-    },
-    "::mklp::MKLP": {
-      price: 1.05,
-      change24h: 0,
-      symbol: "MKLP",
-      decimals: 8,
-    },
     // Thala LP token
     "0xb4a8b8462b4423780d6ee256f3a9a3b9ece5d9440d614f7ab2bfa4556aa4f69d": {
       price: 1.5,

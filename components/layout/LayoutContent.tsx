@@ -2,6 +2,8 @@
 
 import { usePathname } from "next/navigation";
 
+import { MinimalNav } from "@/components/shared/MinimalNav";
+
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 
@@ -14,7 +16,8 @@ export function LayoutContent({ children }: LayoutContentProps) {
 
   const isPortfolioPage = pathname === "/tools/portfolio";
   const isMetricsPage = pathname === "/metrics";
-  const showHeaderAndFooter = !isMetricsPage;
+  const showFullHeader = !isMetricsPage && !isPortfolioPage;
+  const showMinimalNav = isMetricsPage || isPortfolioPage;
 
   // Use h-screen for portfolio to enforce single viewport
   const containerClass = isPortfolioPage
@@ -23,9 +26,16 @@ export function LayoutContent({ children }: LayoutContentProps) {
 
   return (
     <div className={containerClass}>
-      {showHeaderAndFooter && <Header />}
+      {showFullHeader && <Header />}
+      {showMinimalNav && (
+        <MinimalNav
+          currentPage={isMetricsPage ? "Network Metrics" : "Portfolio"}
+          parentHref={isMetricsPage ? undefined : "/tools/portfolio"}
+          parentLabel={isMetricsPage ? undefined : undefined}
+        />
+      )}
       <main className={isPortfolioPage ? "flex-1 overflow-hidden" : "flex-1"}>{children}</main>
-      {showHeaderAndFooter && <Footer />}
+      {showFullHeader && <Footer />}
     </div>
   );
 }

@@ -74,6 +74,7 @@ function TableHead({
         {sortable && (
           <div className="flex flex-col">
             <svg
+              aria-hidden="true"
               className={cn(
                 "h-3 w-3",
                 sortDirection === "asc" ? "text-foreground" : "text-muted-foreground/50"
@@ -84,6 +85,7 @@ function TableHead({
               <path d="M0 6l4-4 4 4H0z" />
             </svg>
             <svg
+              aria-hidden="true"
               className={cn(
                 "h-3 w-3 -mt-1",
                 sortDirection === "desc" ? "text-foreground" : "text-muted-foreground/50"

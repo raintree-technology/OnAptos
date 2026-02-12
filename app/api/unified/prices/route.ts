@@ -10,13 +10,13 @@ import {
 } from "@/lib/utils/api/common";
 import { RATE_LIMIT_TIERS, withRateLimit } from "@/lib/utils/api/rate-limiter";
 import { apiLogger } from "@/lib/utils/core/logger";
+import { serverCached } from "@/lib/utils/server/cache";
 import {
   extractTokensFromParams,
   getResponseTimeHeaders,
   OPTIONS,
   PANORA_API_ENDPOINT,
 } from "../shared";
-import { serverCached } from "@/lib/utils/server/cache";
 
 // Cache price data for 5 minutes
 export const revalidate = 300;

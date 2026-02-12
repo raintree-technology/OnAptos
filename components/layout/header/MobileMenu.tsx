@@ -74,6 +74,7 @@ export function MobileMenu({ isOpen, onToggle, onClose, navigationItems }: Mobil
         <Tooltip>
           <TooltipTrigger asChild>
             <button
+              type="button"
               onClick={onToggle}
               className="p-2 -mr-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md transition-colors hover:bg-muted"
               aria-label={t("navigation.toggle_menu", "Toggle navigation menu")}
@@ -104,6 +105,7 @@ export function MobileMenu({ isOpen, onToggle, onClose, navigationItems }: Mobil
           />
 
           {/* Mobile Menu */}
+          {/* biome-ignore lint/correctness/useUniqueElementIds: stable ID for aria-controls reference */}
           <nav
             id="mobile-navigation"
             className="fixed top-0 right-0 h-full w-72 max-w-[85vw] bg-background border-l border-border z-50 md:hidden shadow-xl"
@@ -118,6 +120,7 @@ export function MobileMenu({ isOpen, onToggle, onClose, navigationItems }: Mobil
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
+                      type="button"
                       onClick={onClose}
                       className="p-2 -mr-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md transition-colors hover:bg-muted"
                       aria-label={t("navigation.close_menu", "Close navigation menu")}
@@ -205,6 +208,7 @@ export function MobileMenu({ isOpen, onToggle, onClose, navigationItems }: Mobil
                         </p>
                       </div>
                       <button
+                        type="button"
                         onClick={() => {
                           disconnect();
                           onClose();

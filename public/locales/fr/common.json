@@ -235,7 +235,7 @@
       "title": "Suivi de Portfolio",
       "auto_discovery": "Découverte Automatique",
       "auto_discovery_desc": "Trouvez toutes les positions instantanément.",
-      "auto_discovery_tooltip": "Couvre Thala, Amnis, PancakeSwap et plus de 20 protocoles",
+      "auto_discovery_tooltip": "Couvre Thala, Amnis et plus de 20 protocoles",
       "live_pricing": "Prix en Direct",
       "live_pricing_desc": "Valeurs USD en temps réel.",
       "live_pricing_tooltip": "Mise à jour toutes les quelques secondes avec des données de marché précises",

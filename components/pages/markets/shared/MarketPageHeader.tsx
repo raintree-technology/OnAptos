@@ -3,7 +3,6 @@
 import { Bitcoin, Building2, ChevronRight, Coins, Home } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 
 interface MarketPageHeaderProps {
   title: string;
@@ -51,10 +50,7 @@ export function MarketPageHeader({
     <div className="mb-6">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4">
-        <Link
-          href="/"
-          className="flex items-center gap-1 hover:text-foreground transition-colors"
-        >
+        <Link href="/" className="flex items-center gap-1 hover:text-foreground transition-colors">
           <Home className="h-3.5 w-3.5" />
           <span className="hidden sm:inline">Home</span>
         </Link>
@@ -68,9 +64,7 @@ export function MarketPageHeader({
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold mb-2">{title}</h1>
-          <p className="text-muted-foreground text-sm sm:text-base max-w-2xl">
-            {description}
-          </p>
+          <p className="text-muted-foreground text-sm sm:text-base max-w-2xl">{description}</p>
         </div>
         {totalValue && (
           <div className="text-left sm:text-right">

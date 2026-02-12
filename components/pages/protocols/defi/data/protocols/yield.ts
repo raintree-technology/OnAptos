@@ -10,35 +10,6 @@ import {
 export const yieldProtocols: DefiProtocol[] = [
   // LIQUID STAKING
   {
-    title: "TruFin",
-    href: "https://www.trufin.io",
-    description: "defi:protocol_descriptions.TruFin",
-    category: "Yield",
-    subcategory: "Liquid Staking",
-    implementation: LiquidStakingImplementation.VALIDATOR_DELEGATED,
-    status: "Active",
-    color: DEFI_PROTOCOL_COLORS.yield,
-    logo: "/icons/protocols/trufin.webp",
-    networks: ["mainnet"],
-    security: {
-      auditStatus: "Audited",
-    },
-    tvl: {
-      current: "$72M",
-    },
-    yields: {
-      current: ["7-10%"],
-    },
-    external: {
-      socials: {
-        twitter: "https://twitter.com/TruFinProtocol",
-      },
-    },
-    integration: {
-      smartContractLinks: ["https://github.com/TruFin-io"],
-    },
-  },
-  {
     title: "Amnis",
     href: "https://amnis.finance",
     description: "defi:protocol_descriptions.Amnis",
@@ -95,36 +66,6 @@ export const yieldProtocols: DefiProtocol[] = [
   },
 
   // LIQUIDITY MANAGER
-  {
-    title: "Ichi",
-    href: "https://ichi.org",
-    description: "defi:protocol_descriptions.Ichi",
-    category: "Yield",
-    subcategory: "Liquidity Manager",
-    implementation: LiquidityManagerImplementation.RANGE_ORDERS,
-    status: "Active",
-    color: DEFI_PROTOCOL_COLORS.yield,
-    logo: "/icons/protocols/ichi.webp",
-    networks: ["mainnet"],
-    security: {
-      auditStatus: "Audited",
-    },
-    tvl: {
-      current: "N/A",
-    },
-    token: {
-      governanceToken: "ICHI",
-      governanceTokenSymbol: "ICHI",
-    },
-    external: {
-      socials: {
-        twitter: "https://twitter.com/ICHIFoundation",
-      },
-    },
-    integration: {
-      smartContractLinks: ["https://github.com/ichifarm"],
-    },
-  },
   {
     title: "Goblin",
     href: "https://linktr.ee/goblin_official",

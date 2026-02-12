@@ -53,6 +53,7 @@ export function DesktopNavigationMenu({ navigationItems, onMenuClose }: Navigati
             {/* Assets Dropdown */}
             <NavigationMenuItem>
               <NavigationMenuTrigger
+                aria-label="Assets menu"
                 className={cn(
                   "text-sm font-medium",
                   activeSection === "assets" &&
@@ -87,6 +88,7 @@ export function DesktopNavigationMenu({ navigationItems, onMenuClose }: Navigati
             {/* DeFi Dropdown */}
             <NavigationMenuItem>
               <NavigationMenuTrigger
+                aria-label="DeFi menu"
                 className={cn(
                   "text-sm font-medium",
                   activeSection === "defi" &&
@@ -97,7 +99,7 @@ export function DesktopNavigationMenu({ navigationItems, onMenuClose }: Navigati
               </NavigationMenuTrigger>
               <NavigationMenuContent className="md:-ml-[230px]">
                 <div className="w-[280px]">
-                  <ScrollArea className="h-[450px] rounded-md scroll-smooth">
+                  <ScrollArea className="max-h-[50vh] rounded-md scroll-smooth">
                     <div className="p-4">
                       {/* DeFi Dashboard Link */}
                       <div className="mb-3">
@@ -176,7 +178,7 @@ export function DesktopNavigationMenu({ navigationItems, onMenuClose }: Navigati
                                             <Badge
                                               key={idx}
                                               variant="outline"
-                                              className="h-4 px-1 text-[10px] flex-shrink-0"
+                                              className="h-4 px-1 text-[11px] flex-shrink-0"
                                             >
                                               {t(
                                                 `defi.subcategories.${sub.trim().toLowerCase().replace(/ /g, "_")}`,
@@ -187,7 +189,7 @@ export function DesktopNavigationMenu({ navigationItems, onMenuClose }: Navigati
                                         ) : (
                                           <Badge
                                             variant="outline"
-                                            className="h-4 px-1 text-[10px] flex-shrink-0"
+                                            className="h-4 px-1 text-[11px] flex-shrink-0"
                                           >
                                             {t(
                                               `defi.subcategories.${protocol.subcategory.toLowerCase().replace(/ /g, "_")}`,
@@ -213,6 +215,7 @@ export function DesktopNavigationMenu({ navigationItems, onMenuClose }: Navigati
             {/* Blockchain Dropdown */}
             <NavigationMenuItem>
               <NavigationMenuTrigger
+                aria-label="Blockchain menu"
                 className={cn(
                   "text-sm font-medium",
                   activeSection === "blockchain" &&

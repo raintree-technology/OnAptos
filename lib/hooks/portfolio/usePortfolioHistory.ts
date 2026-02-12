@@ -122,8 +122,8 @@ export function usePortfolioHistory(
 
     try {
       // Use different endpoints based on timeframe for better data granularity
-      let response;
-      let result;
+      let response: Response;
+      let result: { success?: boolean; data?: OptimizedPortfolioData[]; error?: string };
 
       if (timeframe && ["1h", "12h", "24h", "7d", "30d", "90d", "1y", "all"].includes(timeframe)) {
         // Use the performance endpoint for predefined timeframes

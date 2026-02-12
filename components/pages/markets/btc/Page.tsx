@@ -25,11 +25,7 @@ import { useBitcoinPrice } from "@/lib/hooks/useMarketPrice";
 import { usePageTranslation } from "@/lib/hooks/useTranslation";
 import { copyToClipboard } from "@/lib/utils/browser/clipboard";
 import { logger } from "@/lib/utils/core/logger";
-import {
-  formatAmount,
-  formatAmountFull,
-  formatCurrency,
-} from "@/lib/utils/format/format";
+import { formatAmount, formatAmountFull, formatCurrency } from "@/lib/utils/format/format";
 import { getTokenIcon, truncateAddress } from "./shared";
 import type { Token } from "./types";
 
@@ -57,17 +53,14 @@ const TokenCard = memo(function TokenCard({
 
   const btcValue = parseFloat(token.formatted_supply || "0");
   const usdValue = bitcoinPrice ? btcValue * bitcoinPrice : 0;
-  const marketSharePercent =
-    totalBTC > 0 ? ((btcValue / totalBTC) * 100).toFixed(1) : "0.0";
+  const marketSharePercent = totalBTC > 0 ? ((btcValue / totalBTC) * 100).toFixed(1) : "0.0";
   const metadata = TOKEN_METADATA[token.symbol];
 
   return (
     <div className="group">
       <div className="flex items-center gap-2 mb-2">
         <div className="w-5 h-5 relative">
-          {!imageLoaded && (
-            <div className="absolute inset-0 bg-muted animate-pulse rounded-full" />
-          )}
+          {!imageLoaded && <div className="absolute inset-0 bg-muted animate-pulse rounded-full" />}
           <Image
             src={getTokenIcon(token.symbol, metadata)}
             alt={`${token.symbol} icon`}
@@ -93,12 +86,8 @@ const TokenCard = memo(function TokenCard({
         )}
       </p>
       <div className="flex items-baseline justify-between mb-1">
-        <span className="text-xs text-muted-foreground">
-          {t("btc:stats.market_share")}
-        </span>
-        <span className="text-xs text-muted-foreground font-mono">
-          {marketSharePercent}%
-        </span>
+        <span className="text-xs text-muted-foreground">{t("btc:stats.market_share")}</span>
+        <span className="text-xs text-muted-foreground font-mono">{marketSharePercent}%</span>
       </div>
       <Progress className="h-1" value={parseFloat(marketSharePercent)} />
     </div>
@@ -198,20 +187,14 @@ function ErrorState({
             {t("btc:loading.error_title")}
           </h3>
           {status && (
-            <p className="text-muted-foreground text-sm mb-1">
-              HTTP error! Status: {status}
-            </p>
+            <p className="text-muted-foreground text-sm mb-1">HTTP error! Status: {status}</p>
           )}
 
           {isCustomMessage ? (
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-medium">
-                {t("btc:loading.rate_limit_message")}
-              </span>
+              <span className="font-medium">{t("btc:loading.rate_limit_message")}</span>
               {countdown > 0 && (
-                <span className="text-muted-foreground">
-                  {t("btc:loading.try_again_in")}
-                </span>
+                <span className="text-muted-foreground">{t("btc:loading.try_again_in")}</span>
               )}
               <Button
                 onClick={onRetry}
@@ -226,12 +209,7 @@ function ErrorState({
           ) : (
             <p className="text-muted-foreground">
               {t("btc:loading.request_failed")}
-              <Button
-                onClick={onRetry}
-                variant="outline"
-                className="ml-3"
-                size="sm"
-              >
+              <Button onClick={onRetry} variant="outline" className="ml-3" size="sm">
                 {t("btc:loading.try_again")}
               </Button>
             </p>
@@ -279,11 +257,9 @@ function BitcoinPage(): React.ReactElement {
       setBtcSupplyData(data);
     } catch (error) {
       logger.error(
-        `[BTC Page] Error fetching data: ${error instanceof Error ? error.message : String(error)}`,
+        `[BTC Page] Error fetching data: ${error instanceof Error ? error.message : String(error)}`
       );
-      setBtcSupplyError(
-        error instanceof Error ? error : new Error(String(error)),
-      );
+      setBtcSupplyError(error instanceof Error ? error : new Error(String(error)));
     } finally {
       setBtcSupplyLoading(false);
       setBtcSupplyFetching(false);
@@ -310,13 +286,10 @@ function BitcoinPage(): React.ReactElement {
 
   const loading = btcSupplyLoading || bitcoinPriceLoading;
   const isRateLimited =
-    btcSupplyError?.message?.includes("Rate limited") ||
-    btcSupplyError?.message?.includes("429");
+    btcSupplyError?.message?.includes("Rate limited") || btcSupplyError?.message?.includes("429");
   const error = isRateLimited
     ? "API rate limit reached. Data will refresh automatically."
-    : btcSupplyError?.message ||
-      (!bitcoinPriceData && bitcoinPriceError) ||
-      null;
+    : btcSupplyError?.message || (!bitcoinPriceData && bitcoinPriceError) || null;
   const refreshing = btcSupplyFetching && !btcSupplyLoading;
 
   // Manual refresh handler for user-triggered refresh only
@@ -351,11 +324,9 @@ function BitcoinPage(): React.ReactElement {
 
     // Use total_supply_formatted from the API response
     const totalBTCValue = parseFloat(
-      processedData.total_supply_formatted || processedData.total || "0",
+      processedData.total_supply_formatted || processedData.total || "0"
     );
-    const totalUSDValue = bitcoinPriceData?.price
-      ? totalBTCValue * bitcoinPriceData.price
-      : 0;
+    const totalUSDValue = bitcoinPriceData?.price ? totalBTCValue * bitcoinPriceData.price : 0;
 
     return {
       totalBTC: totalBTCValue,
@@ -370,9 +341,7 @@ function BitcoinPage(): React.ReactElement {
 
   return (
     <ErrorBoundary>
-      <div
-        className={`min-h-screen flex flex-col relative ${GeistMono.className}`}
-      >
+      <div className={`min-h-screen flex flex-col relative ${GeistMono.className}`}>
         {/* Background gradient removed - using global textured background */}
 
         <div className="fixed top-0 left-0 right-0 h-1 z-30">
@@ -395,9 +364,7 @@ function BitcoinPage(): React.ReactElement {
               {/* Mobile: Show total supply at top */}
               <div className="md:hidden mb-6">
                 <div className="flex items-center justify-between mb-1">
-                  <h2 className="text-sm text-muted-foreground">
-                    Total Supply
-                  </h2>
+                  <h2 className="text-sm text-muted-foreground">Total Supply</h2>
                   {bitcoinPriceData?.price && (
                     <div className="flex items-center gap-1.5">
                       <Image
@@ -459,11 +426,8 @@ function BitcoinPage(): React.ReactElement {
                   >
                     <MarketShareChart
                       data={processedData.supplies.map((token: Token) => {
-                        const btcValue = parseFloat(
-                          token.formatted_supply || "0",
-                        );
-                        const marketSharePercent =
-                          totalBTC > 0 ? (btcValue / totalBTC) * 100 : 0;
+                        const btcValue = parseFloat(token.formatted_supply || "0");
+                        const marketSharePercent = totalBTC > 0 ? (btcValue / totalBTC) * 100 : 0;
                         return {
                           name: token.symbol,
                           value: marketSharePercent,
@@ -476,9 +440,7 @@ function BitcoinPage(): React.ReactElement {
                       topRightContent={
                         <div className="text-right">
                           <div className="flex items-center justify-end gap-3 mb-1">
-                            <h2 className="text-sm text-muted-foreground">
-                              Total Supply
-                            </h2>
+                            <h2 className="text-sm text-muted-foreground">Total Supply</h2>
                             {bitcoinPriceData?.price && (
                               <div className="flex items-center gap-1.5">
                                 <Image
@@ -489,11 +451,7 @@ function BitcoinPage(): React.ReactElement {
                                   className="object-contain"
                                 />
                                 <span className="text-sm text-muted-foreground font-mono">
-                                  {formatCurrency(
-                                    bitcoinPriceData.price,
-                                    "USD",
-                                    { decimals: 0 },
-                                  )}
+                                  {formatCurrency(bitcoinPriceData.price, "USD", { decimals: 0 })}
                                 </span>
                               </div>
                             )}
@@ -520,36 +478,26 @@ function BitcoinPage(): React.ReactElement {
               <div className="mt-8 w-full overflow-hidden">
                 <hr className="border-t border-border mb-6" />
                 <div className="w-full overflow-x-auto">
-                  <Table>
+                  <Table className="table-sticky-first">
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="min-w-[120px] sm:min-w-[150px]">
-                          Token
-                        </TableHead>
+                        <TableHead className="min-w-[120px] sm:min-w-[150px]">Token</TableHead>
                         <TableHead className="min-w-[100px] sm:min-w-[180px] hidden sm:table-cell">
                           Source
                         </TableHead>
                         <TableHead className="min-w-[140px] sm:min-w-[160px] hidden sm:table-cell">
                           Address
                         </TableHead>
-                        <TableHead className="min-w-[100px] sm:min-w-[120px]">
-                          Supply
-                        </TableHead>
-                        <TableHead className="min-w-[60px] sm:min-w-[80px] text-right">
-                          %
-                        </TableHead>
+                        <TableHead className="min-w-[100px] sm:min-w-[120px]">Supply</TableHead>
+                        <TableHead className="min-w-[60px] sm:min-w-[80px] text-right">%</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {processedData?.supplies?.map((token: any) => {
                         const metadata = TOKEN_METADATA[token.symbol];
-                        const btcAmount = parseFloat(
-                          token.formatted_supply || "0",
-                        );
+                        const btcAmount = parseFloat(token.formatted_supply || "0");
                         const marketSharePercent =
-                          totalBTC > 0
-                            ? ((btcAmount / totalBTC) * 100).toFixed(2)
-                            : "0.00";
+                          totalBTC > 0 ? ((btcAmount / totalBTC) * 100).toFixed(2) : "0.00";
 
                         return (
                           <TableRow key={token.symbol}>
@@ -566,9 +514,7 @@ function BitcoinPage(): React.ReactElement {
                                     img.src = "/placeholder.jpg";
                                   }}
                                 />
-                                <span className="font-medium">
-                                  {token.symbol}
-                                </span>
+                                <span className="font-medium">{token.symbol}</span>
                               </div>
                             </TableCell>
                             <TableCell className="whitespace-nowrap hidden sm:table-cell">
@@ -579,10 +525,11 @@ function BitcoinPage(): React.ReactElement {
                             <TableCell className="whitespace-nowrap hidden sm:table-cell">
                               {metadata?.assetAddress ? (
                                 <button
+                                  type="button"
                                   onClick={() =>
                                     copyToClipboard(
                                       metadata.assetAddress!,
-                                      `${token.symbol} address`,
+                                      `${token.symbol} address`
                                     )
                                   }
                                   className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors group"
@@ -594,9 +541,7 @@ function BitcoinPage(): React.ReactElement {
                                   <Copy className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </button>
                               ) : (
-                                <span className="text-sm text-muted-foreground">
-                                  —
-                                </span>
+                                <span className="text-sm text-muted-foreground">—</span>
                               )}
                             </TableCell>
                             <TableCell className="font-mono whitespace-nowrap">

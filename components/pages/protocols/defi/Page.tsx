@@ -15,30 +15,23 @@ import { defiProtocols } from "./data/protocols";
 
 export default function DefiPage(): React.ReactElement {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedSubcategory, setSelectedSubcategory] = useState<
-    string | undefined
-  >(undefined);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState("");
   const [_mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [refreshing] = useState(false);
   const { t } = usePageTranslation("defi");
 
   // Skip initial fetch - we'll load metrics on demand
-  const { enrichedProtocols, loading: metricsLoading } = useProtocolMetrics(
-    defiProtocols,
-    {
-      skipFetch: true,
-    },
-  );
+  const { enrichedProtocols, loading: metricsLoading } = useProtocolMetrics(defiProtocols, {
+    skipFetch: true,
+  });
 
   // Calculate protocol counts per category
   const protocolCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     categories.forEach((category) => {
       if (category !== "All") {
-        counts[category] = enrichedProtocols.filter(
-          (p) => p.category === category,
-        ).length;
+        counts[category] = enrichedProtocols.filter((p) => p.category === category).length;
       }
     });
     return counts;
@@ -51,14 +44,10 @@ export default function DefiPage(): React.ReactElement {
       if (category !== "All") {
         counts[category] = {};
         // Get all unique subcategories for this category
-        const protocolsInCategory = enrichedProtocols.filter(
-          (p) => p.category === category,
-        );
+        const protocolsInCategory = enrichedProtocols.filter((p) => p.category === category);
         protocolsInCategory.forEach((protocol) => {
           // Handle comma-separated subcategories
-          const subcategories = protocol.subcategory
-            .split(", ")
-            .map((s) => s.trim());
+          const subcategories = protocol.subcategory.split(", ").map((s) => s.trim());
           subcategories.forEach((subcategory) => {
             if (!counts[category][subcategory]) {
               counts[category][subcategory] = 0;
@@ -73,8 +62,7 @@ export default function DefiPage(): React.ReactElement {
 
   // Filter protocols based on category, subcategory, and search
   const filteredProtocols = enrichedProtocols.filter((protocol) => {
-    const matchesCategory =
-      selectedCategory === "All" || protocol.category === selectedCategory;
+    const matchesCategory = selectedCategory === "All" || protocol.category === selectedCategory;
 
     // Handle comma-separated subcategories
     const matchesSubcategory =
@@ -89,9 +77,7 @@ export default function DefiPage(): React.ReactElement {
       protocol.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (() => {
         const desc = t(protocol.description, "");
-        return desc
-          ? desc.toLowerCase().includes(searchQuery.toLowerCase())
-          : false;
+        return desc ? desc.toLowerCase().includes(searchQuery.toLowerCase()) : false;
       })() ||
       protocol.subcategory.toLowerCase().includes(searchQuery.toLowerCase()) ||
       protocol.category.toLowerCase().includes(searchQuery.toLowerCase());
@@ -116,9 +102,7 @@ export default function DefiPage(): React.ReactElement {
 
   return (
     <ErrorBoundary>
-      <div
-        className={`min-h-screen flex flex-col relative ${GeistMono.className}`}
-      >
+      <div className={`min-h-screen flex flex-col relative ${GeistMono.className}`}>
         {/* Background gradient removed - using global textured background */}
 
         <div className="fixed top-0 left-0 right-0 h-1 z-30">
@@ -154,10 +138,7 @@ export default function DefiPage(): React.ReactElement {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder={t(
-                      "defi:search.placeholder",
-                      "Search protocols...",
-                    )}
+                    placeholder={t("defi:search.placeholder", "Search protocols...")}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-9 h-10 text-sm bg-card shadow-sm border-border/50 focus:border-primary/50 w-64"
@@ -175,7 +156,7 @@ export default function DefiPage(): React.ReactElement {
                         {
                           count: filteredProtocols.length,
                           total: defiProtocols.length,
-                        },
+                        }
                       )}
                     </p>
                   </div>
@@ -205,10 +186,7 @@ export default function DefiPage(): React.ReactElement {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder={t(
-                    "defi:search.placeholder",
-                    "Search protocols...",
-                  )}
+                  placeholder={t("defi:search.placeholder", "Search protocols...")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-9 h-12 text-base bg-card shadow-sm border-border/50 focus:border-primary/50 w-full rounded-lg"
@@ -217,9 +195,7 @@ export default function DefiPage(): React.ReactElement {
               </div>
 
               {/* Mobile results count */}
-              {(selectedCategory !== "All" ||
-                selectedSubcategory ||
-                searchQuery) && (
+              {(selectedCategory !== "All" || selectedSubcategory || searchQuery) && (
                 <div className="mt-2 text-center">
                   <p className="text-sm text-muted-foreground">
                     {t(
@@ -228,7 +204,7 @@ export default function DefiPage(): React.ReactElement {
                       {
                         count: filteredProtocols.length,
                         total: defiProtocols.length,
-                      },
+                      }
                     )}
                   </p>
                 </div>

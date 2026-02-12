@@ -8,6 +8,7 @@ import { Section } from "../shared/Section";
 
 export default function CTASection() {
   return (
+    // biome-ignore lint/correctness/useUniqueElementIds: stable anchor ID for scroll navigation
     <Section id="cta">
       <motion.div className="max-w-5xl mx-auto" {...FADE_UP}>
         <div className="text-center mb-8">
@@ -15,8 +16,7 @@ export default function CTASection() {
             Ready to Explore?
           </h2>
           <p className="text-muted-foreground">
-            Track your portfolio, explore protocols, and analyze the Aptos
-            ecosystem
+            Track your portfolio, explore protocols, and analyze the Aptos ecosystem
           </p>
         </div>
 

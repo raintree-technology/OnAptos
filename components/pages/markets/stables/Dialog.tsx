@@ -1,8 +1,8 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
+import type { StaticImageData } from "next/image";
 import { memo, useMemo } from "react";
-
 import {
   AddressDisplay,
   BaseDialog,
@@ -12,7 +12,6 @@ import {
   TokenHeader,
   TokenIcon,
 } from "@/components/shared/dialogs";
-import type { StaticImageData } from "next/image";
 
 interface DialogTokenMetadata {
   symbol: string;
@@ -24,6 +23,7 @@ interface DialogTokenMetadata {
   description?: string;
   type?: string;
 }
+
 import { useTranslation } from "@/lib/hooks/useTranslation";
 import { errorLogger } from "@/lib/utils/core/logger";
 

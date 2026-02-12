@@ -63,78 +63,7 @@ export const PROTOCOL_REGISTRY: Record<string, ProtocolInfo> = {
     description: "Native Aptos DEX by Thala Labs",
   },
 
-  LIQUIDSWAP: {
-    name: "LiquidSwap",
-    label: "LiquidSwap",
-    type: "DEX",
-    addresses: [
-      "0x05a97986a9d031c4567e15b797be516910cfcb4156312482efc6a19c0a30c948",
-      "0x61d2c22a6cb7831bee0f48363b0eec92369357aece0d1142062f7d5d85c7bef8",
-      "0x3851f155e7fc5ec98ce9dbcaf04b2cb0521c562463bd128f9d1331b38c497cf3",
-      "0xeef5ce9727e7faf3b83cb0630e91d45612eac563f670eecaadf1cb22c3bdfdfb",
-      "0x4763c5cfde8517f48e930f7ece14806d75b98ce31b0b4eab99f49a067f5b5ef2",
-    ],
-    description: "Native Aptos DEX with multiple versions",
-  },
-
-  PANCAKESWAP: {
-    name: "PancakeSwap",
-    label: "CAKE",
-    type: "DEX",
-    addresses: [
-      "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa",
-      "0x7968a225eba6c99f5f1070aeec1b405757dee939eabcfda43ba91588bf5fccf3",
-      "0xfd1d8a523f1be89277ac0787ae3469312667e3d0b3f75a5f01bfc95530a2dc91",
-      "0x9936836587ca33240d3d3f91844651b16cb07802faf5e34514ed6f78580deb0a",
-      "0x163df34fccbf003ce219d3f1d9e70d140b60622cb9dd47599c25fb2f797ba6e",
-    ],
-    description: "Decentralized exchange and farming",
-  },
-
-  SUSHISWAP: {
-    name: "SushiSwap",
-    label: "SUSHI",
-    type: "DEX",
-    addresses: ["0x31a6675cbe84365bf2b0cbce617ece6c47023ef70826533bde5203d32171dc3c"],
-    description: "SushiSwap on Aptos",
-  },
-
-  CETUS: {
-    name: "Cetus Protocol",
-    label: "Cetus",
-    type: "DEX",
-    addresses: [
-      "0xec42a352cc65eca17a9fa85d0fc602295897ed6b8b8af6a6c79ef490eb8f9eba",
-      "0xa7f01413d33ba919441888637ca1607ca0ddcbfa3c0a9ddea64743aaa560e498",
-    ],
-    description: "Concentrated liquidity DEX",
-  },
-
-  AUX_EXCHANGE: {
-    name: "AUX Exchange",
-    label: "AUX",
-    type: "DEX",
-    addresses: ["0xbd35135844473187163ca197ca93b2ab014370587bb0ed3befff9e902d6bb541"],
-    description: "AMM DEX on Aptos",
-  },
-
-  APTOSWAP: {
-    name: "AptoSwap",
-    label: "AptoSwap",
-    type: "DEX",
-    addresses: ["0xa5d3ac4d429052674ed38adc62d010e52d7c24ca159194d17ddc196ddb7e480b"],
-    description: "DEX with pool liquidity tracking",
-  },
-
   // Lending Protocols
-  ARIES_MARKETS: {
-    name: "Aries Markets",
-    label: "Aries",
-    type: "LENDING",
-    addresses: ["0x9770fa9c725cbd97eb50b2be5f7416efdfd1f1554beb0750d4dae4c64e860da3"],
-    description: "Lending and borrowing protocol",
-  },
-
   AAVE_APTOS: {
     name: "Aave Aptos",
     label: "Aave",
@@ -184,30 +113,6 @@ export const PROTOCOL_REGISTRY: Record<string, ProtocolInfo> = {
     description: "Thala liquid staking derivatives",
   },
 
-  TORTUGA: {
-    name: "Tortuga Finance",
-    label: "Tortuga",
-    type: "LIQUID_STAKING",
-    addresses: ["0x84d7aeef42d38a5ffc3ccef853e1b82e4958659d16a7de736a29c55fbbeb0114"],
-    description: "Liquid staking protocol for Aptos",
-  },
-
-  DITTO: {
-    name: "Ditto Staking",
-    label: "Ditto",
-    type: "LIQUID_STAKING",
-    addresses: ["0xd11107bdf0d6d7040c6c0bfbdecb6545191fdf13e8d8d259952f53e1713f61b5"],
-    description: "Aptos staking pool protocol",
-  },
-
-  TRUFIN: {
-    name: "TruFin Protocol",
-    label: "TruFin",
-    type: "LIQUID_STAKING",
-    addresses: ["0xfbab9fb68bd2103925317b6a540baa20087b1e7a7a4eb90badee04abb6b5a16f"],
-    description: "Liquid staking solution",
-  },
-
   // Farming/Yield
   THALA_FARM: {
     name: "Thala Farm",
@@ -221,49 +126,7 @@ export const PROTOCOL_REGISTRY: Record<string, ProtocolInfo> = {
     description: "Yield farming and liquidity pools",
   },
 
-  // Derivatives
-  MERKLE_TRADE: {
-    name: "Merkle Trade",
-    label: "MKLP",
-    type: "DERIVATIVES",
-    addresses: ["0x5ae6789dd2fec1a9ec9cccfb3acaf12e93d432f0a3a42c92fe1a9d490b7bbc06"],
-    description: "Derivatives trading protocol",
-  },
-
-  // Bridge Protocols
-  WORMHOLE: {
-    name: "Wormhole Bridge",
-    label: "Wormhole",
-    type: "BRIDGE",
-    addresses: ["0x576410486a2da45eee6c949c995670112ddf2fbeedab20350d506328eefc9d4f"],
-    description: "Cross-chain bridge",
-  },
-
-  CELER_BRIDGE: {
-    name: "Celer Bridge",
-    label: "Celer",
-    type: "BRIDGE",
-    addresses: ["0x8d87a65ba30e09357fa2edea2c80dbac296e5dec2b18287113500b902942929d"],
-    description: "Cross-chain bridge protocol",
-  },
-
-  LAYERZERO: {
-    name: "LayerZero",
-    label: "LayerZero",
-    type: "BRIDGE",
-    addresses: ["0xf22bede237a07e121b56d91a491eb7bcdfd1f5907926a9e58338f964a01b17fa"],
-    description: "Omnichain interoperability protocol",
-  },
-
   // NFT Marketplaces
-  WAPAL: {
-    name: "Wapal",
-    label: "Wapal",
-    type: "NFT",
-    addresses: ["0x80d3b43e38fb0fde5f5c671c8db06e2c5fe92de0947de9e25797e7b690e0a466"],
-    description: "NFT marketplace",
-  },
-
   MERCATO: {
     name: "Mercato",
     label: "Mercato",
@@ -355,44 +218,9 @@ export function getProtocolName(address: string): string {
   // Special handling for common addresses
   const lowerAddr = address.toLowerCase();
 
-  // Check for Aptos framework addresses
-  if (
-    lowerAddr === "0x1" ||
-    lowerAddr === "0x0" ||
-    lowerAddr === "0x0000000000000000000000000000000000000000000000000000000000000001"
-  ) {
-    return "Aptos Framework";
-  }
-
-  // Check for high activity protocol 0x2387
-  if (lowerAddr.startsWith("0x2387") || lowerAddr.includes("238766903ac07171f2ff4cc")) {
-    return "Protocol 0x2387";
-  }
-
   // Check for common protocols by partial match
   if (lowerAddr.startsWith("0x48271d39") || lowerAddr.includes("48271d39")) {
     return "ThalaSwap";
-  }
-
-  if (lowerAddr.startsWith("0x05a97986") || lowerAddr.includes("05a97986")) {
-    return "LiquidSwap";
-  }
-
-  if (
-    lowerAddr.startsWith("0x163df34f") ||
-    lowerAddr.includes("163df34f") ||
-    lowerAddr.startsWith("0xc7efb407") ||
-    lowerAddr.includes("c7efb407")
-  ) {
-    return "PancakeSwap";
-  }
-
-  if (lowerAddr.startsWith("0x31a6675c") || lowerAddr.includes("31a6675c")) {
-    return "SushiSwap";
-  }
-
-  if (lowerAddr.startsWith("0xbc35") || lowerAddr.includes("bc35f33a9cc8f1f95b59")) {
-    return "System Contracts";
   }
 
   // Return shortened address as fallback

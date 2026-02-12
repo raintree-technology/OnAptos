@@ -30,28 +30,12 @@ const stableLogos = [
 ];
 
 const protocolLogos = [
-  { src: "/icons/protocols/agdex.webp", alt: "AGDEX" },
   { src: "/icons/protocols/amnis.avif", alt: "Amnis" },
-  { src: "/icons/protocols/anqa.webp", alt: "ANQA" },
-  { src: "/icons/protocols/aries.avif", alt: "Aries" },
-  { src: "/icons/protocols/cellana.webp", alt: "Cellana" },
   { src: "/icons/protocols/echelon.avif", alt: "Echelon" },
-  { src: "/icons/protocols/hyperion.webp", alt: "Hyperion" },
-  { src: "/icons/protocols/ichi.jpg", alt: "ICHI" },
-  { src: "/icons/protocols/joule.webp", alt: "Joule" },
-  { src: "/icons/protocols/kana.webp", alt: "Kana" },
   { src: "/icons/protocols/kofi.avif", alt: "Kofi" },
-  { src: "/icons/protocols/liquidswap.webp", alt: "Liquidswap" },
-  { src: "/icons/protocols/merkle.webp", alt: "Merkle" },
-  { src: "/icons/protocols/meso.webp", alt: "Meso" },
   { src: "/icons/protocols/moar.webp", alt: "MOAR" },
-  { src: "/icons/protocols/pancake.webp", alt: "PancakeSwap" },
   { src: "/icons/protocols/panora.webp", alt: "Panora" },
-  { src: "/icons/protocols/superposition.webp", alt: "Superposition" },
-  { src: "/icons/protocols/sushi.webp", alt: "Sushi" },
   { src: "/icons/protocols/thala.avif", alt: "Thala" },
-  { src: "/icons/protocols/thetis.webp", alt: "Thetis" },
-  { src: "/icons/protocols/trufin.webp", alt: "Trufin" },
 ];
 
 interface LandingSectionProps {
@@ -135,9 +119,9 @@ export const LandingSection = ({ onManualAddressSubmit }: LandingSectionProps) =
       stableLogos[3], // USDC (index 3, not 4)
       stableLogos[5], // USDT (index 5, not 6)
       stableLogos[4], // USDe (index 4, not 5)
-      protocolLogos[17], // Panora (correct index)
-      protocolLogos[11], // Liquidswap (correct index)
-      protocolLogos[20], // Thala (correct index)
+      protocolLogos[9], // Panora
+      protocolLogos[2], // Echelon
+      protocolLogos[11], // Thala
     ].filter(Boolean); // Remove any undefined entries
     return selectedLogos;
   }, []);

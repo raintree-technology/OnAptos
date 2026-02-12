@@ -1,6 +1,7 @@
 import { GeistMono } from "geist/font/mono";
 import React, { useMemo } from "react";
 import { Tooltip as RechartsTooltip, ResponsiveContainer, Treemap } from "recharts";
+import { ChartAccessibility } from "@/components/shared/ChartAccessibility";
 import { formatCurrency, formatTokenAmount } from "@/lib/utils/format/format";
 import type { FungibleAsset } from "./PortfolioMetrics";
 import { TokenImage } from "./SmartImage";
@@ -102,7 +103,11 @@ export const TokenDetails = React.memo(
           </div>
         </div>
 
-        <button onClick={onBack} className="text-sm text-primary hover:underline mt-4">
+        <button
+          type="button"
+          onClick={onBack}
+          className="text-sm text-primary hover:underline mt-4"
+        >
           ← Back to portfolio overview
         </button>
       </div>
@@ -195,20 +200,29 @@ export const NFTTreemap = React.memo(
           </span>
         </div>
 
-        <div className="h-52 sm:h-64 w-full bg-neutral-50 dark:bg-neutral-900/50 rounded-lg overflow-hidden">
-          <ResponsiveContainer width="100%" height="100%" minHeight={200}>
-            <Treemap
-              data={treemapData}
-              dataKey="size"
-              nameKey="name"
-              aspectRatio={4 / 3}
-              stroke="none"
-              content={<TreemapContent />}
-            >
-              <RechartsTooltip content={<TreemapTooltip />} />
-            </Treemap>
-          </ResponsiveContainer>
-        </div>
+        <ChartAccessibility
+          label="NFT collection distribution"
+          data={treemapData.map((item) => ({ name: item.name, count: item.size }))}
+          columns={[
+            { key: "name", header: "Collection" },
+            { key: "count", header: "NFT Count" },
+          ]}
+        >
+          <div className="h-52 sm:h-64 w-full bg-neutral-50 dark:bg-neutral-900/50 rounded-lg overflow-hidden">
+            <ResponsiveContainer width="100%" height="100%" minHeight={200}>
+              <Treemap
+                data={treemapData}
+                dataKey="size"
+                nameKey="name"
+                aspectRatio={4 / 3}
+                stroke="none"
+                content={<TreemapContent />}
+              >
+                <RechartsTooltip content={<TreemapTooltip />} />
+              </Treemap>
+            </ResponsiveContainer>
+          </div>
+        </ChartAccessibility>
       </div>
     );
   },

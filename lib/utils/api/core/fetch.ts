@@ -1,13 +1,13 @@
 import { CACHE_CONFIG } from "@/lib/config/cache";
 import { ApiError, TimeoutError } from "@/lib/utils/core/errors";
 import { errorLogger } from "@/lib/utils/core/logger";
-import { dedupeFetch } from "../../cache/request-deduplication";
 import type {
   BatchRequestOptions,
   FetchOptions,
   GraphQLRequest,
   RateLimitInfo,
 } from "@/lib/utils/core/types";
+import { dedupeFetch } from "../../cache/request-deduplication";
 
 /**
  * Enhanced fetch with retry, timeout, and exponential backoff

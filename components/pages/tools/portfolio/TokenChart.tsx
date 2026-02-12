@@ -13,6 +13,7 @@ import {
   YAxis,
 } from "recharts";
 
+import { ChartAccessibility } from "@/components/shared/ChartAccessibility";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTokenChart } from "@/lib/hooks/portfolio/useTokenChart";
@@ -100,141 +101,165 @@ export function TokenChart({
   const strokeColor = isPositive ? "#22c55e" : "#ef4444";
   const gradientId = `gradient-${tokenSymbol.replace(/[^a-zA-Z0-9]/g, "")}-${isPositive ? "positive" : "negative"}`;
 
+  const accessibilityData =
+    data.length > 0
+      ? [
+          { metric: "Current Price", value: formatCurrency(displayPrice) },
+          {
+            metric: "24h Change",
+            value: `${(priceChange?.percentage || 0) >= 0 ? "+" : ""}${(priceChange?.percentage || 0).toFixed(2)}%`,
+          },
+          { metric: "High", value: formatCurrency(Math.max(...data.map((d) => d.price_usd))) },
+          { metric: "Low", value: formatCurrency(Math.min(...data.map((d) => d.price_usd))) },
+        ]
+      : [];
+
   return (
-    <div className="space-y-4">
-      {/* Header with price and change */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-semibold">{tokenSymbol} Price</h3>
-          <p className="text-sm text-muted-foreground">{tokenName}</p>
+    <ChartAccessibility
+      label={`${tokenSymbol} price chart`}
+      data={accessibilityData}
+      columns={[
+        { key: "metric", header: "Metric" },
+        { key: "value", header: "Value" },
+      ]}
+    >
+      <div className="space-y-4">
+        {/* Header with price and change */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold">{tokenSymbol} Price</h3>
+            <p className="text-sm text-muted-foreground">{tokenName}</p>
+          </div>
+          {data.length > 0 && (
+            <div className="text-right">
+              <p className={`font-semibold ${GeistMono.className}`}>
+                {formatCurrency(displayPrice)}
+              </p>
+              <div className="flex items-center gap-1">
+                {isPositive ? (
+                  <TrendingUp className="h-3 w-3 text-green-600 dark:text-green-400" />
+                ) : (
+                  <TrendingDown className="h-3 w-3 text-red-600 dark:text-red-400" />
+                )}
+                <span
+                  className={`text-xs font-medium ${
+                    isPositive
+                      ? "text-green-600 dark:text-green-400"
+                      : "text-red-600 dark:text-red-400"
+                  }`}
+                >
+                  {isPositive ? "+" : ""}
+                  {(priceChange?.percentage || 0).toFixed(2)}%
+                </span>
+              </div>
+            </div>
+          )}
         </div>
+
+        {/* Timeframe selector */}
+        <div className="flex gap-1 p-1 bg-muted/30 rounded-lg">
+          {timeframes.map((timeframe) => (
+            <Button
+              key={timeframe.value}
+              variant={selectedTimeframe === timeframe.value ? "default" : "ghost"}
+              size="sm"
+              className="h-7 px-2 text-xs font-medium"
+              onClick={() => setSelectedTimeframe(timeframe.value)}
+            >
+              {timeframe.label}
+            </Button>
+          ))}
+        </div>
+
+        {/* Chart */}
+        <div className="h-80">
+          {isLoading ? (
+            <div className="w-full h-full flex items-center justify-center">
+              <div className="space-y-2 w-full">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
+              </div>
+            </div>
+          ) : chartData.length > 0 ? (
+            <ResponsiveContainer width="100%" height="100%" minHeight={200}>
+              <AreaChart data={chartData} margin={{ top: 20, right: 10, left: 10, bottom: 20 }}>
+                <defs>
+                  <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={strokeColor} stopOpacity={0.4} />
+                    <stop offset="50%" stopColor={strokeColor} stopOpacity={0.1} />
+                    <stop offset="95%" stopColor={strokeColor} stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <XAxis
+                  dataKey="timestamp"
+                  type="number"
+                  scale="time"
+                  domain={["dataMin", "dataMax"]}
+                  tick={false}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  domain={["dataMin - dataMin * 0.02", "dataMax + dataMax * 0.02"]}
+                  tick={false}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="hsl(var(--muted-foreground))"
+                  opacity={0.1}
+                />
+                <RechartsTooltip content={<CustomTooltip />} />
+                <Area
+                  type="monotone"
+                  dataKey="price_usd"
+                  stroke={strokeColor}
+                  strokeWidth={2}
+                  fill={`url(#${gradientId})`}
+                  fillOpacity={1}
+                  connectNulls
+                  dot={false}
+                  activeDot={{
+                    r: 5,
+                    fill: strokeColor,
+                    stroke: "hsl(var(--background))",
+                    strokeWidth: 2,
+                  }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <Activity className="h-8 w-8 mx-auto mb-2 text-muted-foreground/50" />
+                <p className="text-sm text-muted-foreground">No price data available</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Summary stats */}
         {data.length > 0 && (
-          <div className="text-right">
-            <p className={`font-semibold ${GeistMono.className}`}>{formatCurrency(displayPrice)}</p>
-            <div className="flex items-center gap-1">
-              {isPositive ? (
-                <TrendingUp className="h-3 w-3 text-green-600 dark:text-green-400" />
-              ) : (
-                <TrendingDown className="h-3 w-3 text-red-600 dark:text-red-400" />
-              )}
-              <span
-                className={`text-xs font-medium ${
-                  isPositive
-                    ? "text-green-600 dark:text-green-400"
-                    : "text-red-600 dark:text-red-400"
-                }`}
-              >
-                {isPositive ? "+" : ""}
-                {(priceChange?.percentage || 0).toFixed(2)}%
-              </span>
+          <div className="grid grid-cols-2 gap-4 pt-4 border-t mt-4">
+            <div>
+              <p className="text-xs text-muted-foreground">High</p>
+              <p className={`font-semibold text-sm ${GeistMono.className}`}>
+                {formatCurrency(Math.max(...data.map((d) => d.price_usd)))}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Low</p>
+              <p className={`font-semibold text-sm ${GeistMono.className}`}>
+                {formatCurrency(Math.min(...data.map((d) => d.price_usd)))}
+              </p>
             </div>
           </div>
         )}
       </div>
-
-      {/* Timeframe selector */}
-      <div className="flex gap-1 p-1 bg-muted/30 rounded-lg">
-        {timeframes.map((timeframe) => (
-          <Button
-            key={timeframe.value}
-            variant={selectedTimeframe === timeframe.value ? "default" : "ghost"}
-            size="sm"
-            className="h-7 px-2 text-xs font-medium"
-            onClick={() => setSelectedTimeframe(timeframe.value)}
-          >
-            {timeframe.label}
-          </Button>
-        ))}
-      </div>
-
-      {/* Chart */}
-      <div className="h-80">
-        {isLoading ? (
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="space-y-2 w-full">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-4 w-1/2" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-2/3" />
-            </div>
-          </div>
-        ) : chartData.length > 0 ? (
-          <ResponsiveContainer width="100%" height="100%" minHeight={200}>
-            <AreaChart data={chartData} margin={{ top: 20, right: 10, left: 10, bottom: 20 }}>
-              <defs>
-                <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={strokeColor} stopOpacity={0.4} />
-                  <stop offset="50%" stopColor={strokeColor} stopOpacity={0.1} />
-                  <stop offset="95%" stopColor={strokeColor} stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <XAxis
-                dataKey="timestamp"
-                type="number"
-                scale="time"
-                domain={["dataMin", "dataMax"]}
-                tick={false}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                domain={["dataMin - dataMin * 0.02", "dataMax + dataMax * 0.02"]}
-                tick={false}
-                axisLine={false}
-                tickLine={false}
-              />
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="hsl(var(--muted-foreground))"
-                opacity={0.1}
-              />
-              <RechartsTooltip content={<CustomTooltip />} />
-              <Area
-                type="monotone"
-                dataKey="price_usd"
-                stroke={strokeColor}
-                strokeWidth={2}
-                fill={`url(#${gradientId})`}
-                fillOpacity={1}
-                connectNulls
-                dot={false}
-                activeDot={{
-                  r: 5,
-                  fill: strokeColor,
-                  stroke: "hsl(var(--background))",
-                  strokeWidth: 2,
-                }}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center">
-              <Activity className="h-8 w-8 mx-auto mb-2 text-muted-foreground/50" />
-              <p className="text-sm text-muted-foreground">No price data available</p>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Summary stats */}
-      {data.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 pt-4 border-t mt-4">
-          <div>
-            <p className="text-xs text-muted-foreground">High</p>
-            <p className={`font-semibold text-sm ${GeistMono.className}`}>
-              {formatCurrency(Math.max(...data.map((d) => d.price_usd)))}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground">Low</p>
-            <p className={`font-semibold text-sm ${GeistMono.className}`}>
-              {formatCurrency(Math.min(...data.map((d) => d.price_usd)))}
-            </p>
-          </div>
-        </div>
-      )}
-    </div>
+    </ChartAccessibility>
   );
 }

@@ -224,6 +224,7 @@ export function OnboardingPage() {
             <div className="hidden lg:flex items-center gap-2 bg-background/30 backdrop-blur-lg rounded-full px-2 py-2 border border-border/30">
               {navigationSections.map((section) => (
                 <button
+                  type="button"
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
                   className={`px-4 py-2 text-sm rounded-full transition-all duration-200 ${
@@ -238,6 +239,7 @@ export function OnboardingPage() {
             </div>
 
             {/* Mobile Navigation - Horizontal Scrollable with Auto-Centering */}
+            {/* biome-ignore lint/correctness/useUniqueElementIds: stable ID for scroll centering logic */}
             <div
               id="mobile-nav-container"
               className="lg:hidden w-full overflow-x-auto scrollbar-hide"

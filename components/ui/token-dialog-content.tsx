@@ -30,7 +30,6 @@ export const TokenDialogContent: React.FC<TokenDialogContentProps> = ({
     const name = normalizedIssuer.name || "";
     if (name.startsWith("Tether")) return "Tether";
     if (name.startsWith("Circle")) return "Circle";
-    if (name.startsWith("Ethena")) return "Ethena";
     return name.split(" ")[0];
   }, [metadata.issuer]);
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { GeistMono } from "geist/font/mono";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { MetricsCategory } from "@/components/metrics/MetricsCategory";
@@ -14,21 +14,10 @@ import { categorizeMetrics } from "@/lib/utils/monitoring/metrics";
 
 export default function MetricsPage() {
   const [isRotated, setIsRotated] = useState(false);
-  const [showButton, setShowButton] = useState(false);
   const { metrics, tableData, loading, error } = useMetricsData();
   const categorizedMetrics = categorizeMetrics(tableData || []);
 
-  // Show button when mouse is near bottom-left corner
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const threshold = 150; // pixels from corner
-      const isNearCorner = e.clientX < threshold && e.clientY > window.innerHeight - threshold;
-      setShowButton(isNearCorner);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  // Rotation toggle is now always visible in the desktop header
 
   // Show loading state
   if (loading && !metrics) {
@@ -157,6 +146,14 @@ export default function MetricsPage() {
 
               {/* Right: Buttons */}
               <div className="flex items-center gap-3">
+                <Button
+                  onClick={() => setIsRotated(!isRotated)}
+                  variant="outline"
+                  size="sm"
+                  title={isRotated ? "Switch to Standard View" : "Switch to Rotated View"}
+                >
+                  {isRotated ? "Standard" : "Rotated"}
+                </Button>
                 <RefreshButton />
                 <ThemeToggle />
               </div>
@@ -189,21 +186,6 @@ export default function MetricsPage() {
             </div>
           </div>
         </div>
-
-        {/* Orientation Toggle Button - Fixed bottom-left (Auto-hide) */}
-        <Button
-          onClick={() => setIsRotated(!isRotated)}
-          className={`fixed bottom-6 left-6 z-50 shadow-lg transition-all duration-300 ${
-            showButton
-              ? "opacity-100 translate-x-0"
-              : "opacity-0 -translate-x-20 pointer-events-none"
-          }`}
-          size="lg"
-          variant="default"
-          title={isRotated ? "Switch to Standard View" : "Switch to Rotated View"}
-        >
-          {isRotated ? "Standard" : "Rotated"}
-        </Button>
       </div>
     </ErrorBoundary>
   );

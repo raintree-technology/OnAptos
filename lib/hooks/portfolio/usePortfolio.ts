@@ -71,7 +71,7 @@ export const usePortfolio = (nfts?: NFT[], metricsProps?: UsePortfolioMetricsPro
 
     const shuffled = [...nfts];
     let currentIndex = shuffled.length;
-    let randomIndex;
+    let randomIndex: number;
 
     while (currentIndex !== 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);

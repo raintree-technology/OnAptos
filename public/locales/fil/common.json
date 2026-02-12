@@ -235,7 +235,7 @@
       "title": "Portfolio Tracking",
       "auto_discovery": "Auto-Discovery",
       "auto_discovery_desc": "Hanapin ang lahat ng posisyon kaagad.",
-      "auto_discovery_tooltip": "Saklaw ang Thala, Amnis, PancakeSwap, at higit sa 20 pang mga protocol",
+      "auto_discovery_tooltip": "Saklaw ang Thala, Amnis, at higit sa 20 pang mga protocol",
       "live_pricing": "Live na Presyo",
       "live_pricing_desc": "Real-time na USD values.",
       "live_pricing_tooltip": "Nag-a-update tuwing ilang segundo gamit ang tumpak na market data",

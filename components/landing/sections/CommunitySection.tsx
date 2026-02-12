@@ -3,17 +3,18 @@
 import { motion } from "framer-motion";
 import { Globe, Hash, MapPin } from "lucide-react";
 import Link from "next/link";
-import { FADE_UP, FADE_UP_DELAYED } from "@/lib/constants/animations";
 import {
-  socialLinks,
-  regionalCommunities,
   officialLinks,
+  regionalCommunities,
+  socialLinks,
 } from "@/components/landing/data/landing-data";
+import { FADE_UP, FADE_UP_DELAYED } from "@/lib/constants/animations";
 import { Section } from "../shared/Section";
 import SectionHeader from "../shared/SectionHeader";
 
 export default function CommunitySection() {
   return (
+    // biome-ignore lint/correctness/useUniqueElementIds: stable anchor ID for scroll navigation
     <Section id="community">
       <SectionHeader
         title="Community"

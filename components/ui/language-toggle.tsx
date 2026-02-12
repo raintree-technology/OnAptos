@@ -147,6 +147,7 @@ export function LanguageToggle() {
             <div className="flex items-center justify-between p-3 border-b sm:hidden">
               <h3 className="font-semibold text-sm">Select Language</h3>
               <button
+                type="button"
                 onClick={() => setShowMenu(false)}
                 className="p-1 rounded-md hover:bg-accent text-muted-foreground"
                 aria-label="Close language menu"
@@ -165,6 +166,7 @@ export function LanguageToggle() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                     {languages.map((lang) => (
                       <button
+                        type="button"
                         key={lang}
                         onClick={() => handleLanguageSelect(lang)}
                         className={cn(

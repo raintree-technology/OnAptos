@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
+import { APP_CONFIG } from "@/lib/config/app";
+import { CACHE_DURATIONS, getCacheHeaders } from "@/lib/utils/api/common";
 import { apiLogger } from "@/lib/utils/core/logger";
 import { serverCached } from "@/lib/utils/server/cache";
-import { CACHE_DURATIONS, getCacheHeaders } from "@/lib/utils/api/common";
-import { APP_CONFIG } from "@/lib/config/app";
 
 export const revalidate = 300; // 5 minute cache
 
@@ -29,7 +29,7 @@ interface AssetMetrics {
   };
 }
 
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
   try {
     const data = await serverCached(
       ["defi:asset-values"],

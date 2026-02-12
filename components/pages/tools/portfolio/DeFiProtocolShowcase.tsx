@@ -25,97 +25,20 @@ const SUPPORTED_PROTOCOLS: Protocol[] = [
     website: "https://www.thala.fi",
   },
   {
-    id: "liquidswap",
-    name: "LiquidSwap",
-    logo: "/icons/protocols/liquidswap.webp",
-    type: "DEX",
-    website: "https://liquidswap.com",
-  },
-  {
-    id: "pancakeswap",
-    name: "PancakeSwap",
-    logo: "/icons/protocols/pancake.webp",
-    type: "DEX",
-    website: "https://aptos.pancakeswap.finance",
-  },
-  {
-    id: "sushiswap",
-    name: "SushiSwap",
-    logo: "/icons/protocols/sushi.webp",
-    type: "DEX",
-    website: "https://sushi.com",
-  },
-  {
-    id: "cellana",
-    name: "Cellana",
-    logo: "/icons/protocols/cellana.webp",
-    type: "DEX",
-    website: "https://cellana.finance",
-  },
-  {
     id: "panora",
     name: "Panora",
     logo: "/icons/protocols/panora.webp",
     type: "DEX",
     website: "https://panora.exchange",
   },
-  {
-    id: "kana",
-    name: "Kana Labs",
-    logo: "/icons/protocols/kana.webp",
-    type: "DEX Aggregator",
-    website: "https://kanalabs.io",
-  },
-  {
-    id: "hyperion",
-    name: "Hyperion",
-    logo: "/icons/protocols/hyperion.webp",
-    type: "DEX",
-    website: "https://hyperion.markets",
-  },
 
   // Lending Protocols
-  {
-    id: "aries",
-    name: "Aries Markets",
-    logo: "/icons/protocols/aries.avif",
-    type: "Lending",
-    website: "https://ariesmarkets.xyz",
-  },
   {
     id: "echo",
     name: "Echo Lending",
     logo: "/icons/protocols/echo.webp",
     type: "Lending",
     website: "https://echo.xyz",
-  },
-  {
-    id: "meso",
-    name: "Meso Finance",
-    logo: "/icons/protocols/meso.webp",
-    type: "Lending",
-    website: "https://meso.finance",
-  },
-  {
-    id: "joule",
-    name: "Joule Finance",
-    logo: "/icons/protocols/joule.webp",
-    type: "Lending",
-    website: "https://joule.finance",
-  },
-  {
-    id: "superposition",
-    name: "Superposition",
-    logo: "/icons/protocols/superposition.webp",
-    type: "Lending",
-    website: "https://superposition.finance",
-  },
-  {
-    id: "thetis",
-    name: "Thetis Market",
-    logo: "/icons/protocols/thetis.webp",
-    type: "Lending",
-    website: "https://thetis.market",
   },
 
   // Liquid Staking Protocols
@@ -132,47 +55,6 @@ const SUPPORTED_PROTOCOLS: Protocol[] = [
     logo: "/icons/protocols/thala.avif",
     type: "Liquid Staking",
     website: "https://www.thala.fi",
-  },
-  {
-    id: "trufin",
-    name: "Trufin",
-    logo: "/icons/protocols/trufin.webp",
-    type: "Liquid Staking",
-    website: "https://www.trufin.io",
-  },
-
-  // Derivatives & Perps
-  {
-    id: "merkle",
-    name: "Merkle Trade",
-    logo: "/icons/protocols/merkle.webp",
-    type: "Derivatives",
-    website: "https://merkle.trade",
-  },
-
-  // Other DeFi
-
-  // Bridges
-  {
-    id: "wormhole",
-    name: "Wormhole",
-    logo: "/icons/protocols/wormhole.webp",
-    type: "Bridge",
-    website: "https://wormhole.com",
-  },
-  {
-    id: "celer",
-    name: "Celer",
-    logo: "/icons/protocols/celer.webp",
-    type: "Bridge",
-    website: "https://cbridge.celer.network",
-  },
-  {
-    id: "layerzero",
-    name: "LayerZero",
-    logo: "/icons/protocols/lz.webp",
-    type: "Bridge",
-    website: "https://layerzero.network",
   },
 ];
 
@@ -195,6 +77,7 @@ const ProtocolCategory: React.FC<ProtocolCategoryProps> = ({ title, protocols, c
       {protocols.map((protocol) => (
         <div key={protocol.id} className="group relative">
           <button
+            type="button"
             onClick={() => protocol.website && window.open(protocol.website, "_blank")}
             className="w-full aspect-square rounded-lg border border-border/40 bg-background/60 p-2 hover:bg-card hover:border-primary/50 hover:scale-105 hover:shadow-lg transition-all duration-200"
             aria-label={protocol.name}

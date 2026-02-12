@@ -219,12 +219,8 @@ export class UnifiedPanoraService {
     for (const address of tokenAddresses) {
       if (!priceMap.has(address)) {
         try {
-          // MKLP tokens - approximately 1:1 with USDC
-          if (address.includes("house_lp::MKLP")) {
-            priceMap.set(address, 1.0);
-          }
           // MOD token
-          else if (address.includes("mod_coin::MOD")) {
+          if (address.includes("mod_coin::MOD")) {
             const modPrice = await UnifiedPanoraService.getSpecialTokenPrice(
               "0x6f986d146e4a90b828d8c12c14b6f4e003fdff11a8eecceceb63744363eaac01::mod_coin::MOD",
               0.5

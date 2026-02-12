@@ -12,7 +12,6 @@ import { PROTOCOLS } from "@/lib/constants/protocols/protocol-registry";
 export const LIQUID_STAKING_PROTOCOLS = {
   THALA: PROTOCOLS.THALA_LSD.addresses[0],
   AMNIS: PROTOCOLS.AMNIS_FINANCE.addresses[0],
-  TRUFIN: PROTOCOLS.TRUFIN.addresses[0],
 } as const;
 
 /**

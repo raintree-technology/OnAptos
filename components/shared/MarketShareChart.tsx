@@ -2,6 +2,7 @@ import type React from "react";
 import { memo, useCallback, useMemo } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, type TooltipProps } from "recharts";
 
+import { ChartAccessibility } from "@/components/shared/ChartAccessibility";
 import { useResponsive } from "@/lib/hooks/useResponsive";
 import { errorLogger } from "@/lib/utils/core/logger";
 import {
@@ -228,71 +229,80 @@ export const MarketShareChart = memo<MarketShareChartProps>(
     }
 
     return (
-      <div className="relative w-full h-full">
-        {/* Top right content */}
-        {topRightContent && showTotalInfo && (
-          <div className="absolute top-4 right-4 z-10 hidden md:block">{topRightContent}</div>
-        )}
+      <ChartAccessibility
+        label="Market share distribution"
+        data={chartData.map((item) => ({ name: item.name, share: `${item.value.toFixed(2)}%` }))}
+        columns={[
+          { key: "name", header: "Asset" },
+          { key: "share", header: "Market Share" },
+        ]}
+      >
+        <div className="relative w-full h-full">
+          {/* Top right content */}
+          {topRightContent && showTotalInfo && (
+            <div className="absolute top-4 right-4 z-10 hidden md:block">{topRightContent}</div>
+          )}
 
-        <div
-          className={`flex items-center justify-center w-full h-full ${isMobile ? "p-4" : "p-6"}`}
-        >
           <div
-            className={`flex ${isMobile ? "flex-col items-center gap-6" : "flex-row items-center justify-center gap-12 w-full max-w-5xl"}`}
+            className={`flex items-center justify-center w-full h-full ${isMobile ? "p-4" : "p-6"}`}
           >
-            <div className={`${chartConfig.size} flex-shrink-0 relative`}>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={chartData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={chartConfig.innerRadius}
-                    outerRadius={chartConfig.outerRadius}
-                    paddingAngle={4}
-                    dataKey="value"
-                    startAngle={90}
-                    endAngle={450}
-                  >
-                    {chartData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${entry.name}-${index}`}
-                        fill={getCellColor(entry)}
-                        className="stroke-background hover:opacity-90 transition-opacity"
-                        strokeWidth={2}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    content={<CustomTooltip />}
-                    cursor={false}
-                    wrapperStyle={{ zIndex: 1000 }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-
-              {/* Center content */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="text-center">
-                  {centerContent || (
-                    <div
-                      className={`font-bold ${isMobile ? "text-xl" : "text-2xl sm:text-3xl lg:text-4xl"}`}
+            <div
+              className={`flex ${isMobile ? "flex-col items-center gap-6" : "flex-row items-center justify-center gap-12 w-full max-w-5xl"}`}
+            >
+              <div className={`${chartConfig.size} flex-shrink-0 relative`}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={chartData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={chartConfig.innerRadius}
+                      outerRadius={chartConfig.outerRadius}
+                      paddingAngle={4}
+                      dataKey="value"
+                      startAngle={90}
+                      endAngle={450}
                     >
-                      {formatAssetValue(totalValue, "USD")}
-                    </div>
-                  )}
+                      {chartData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${entry.name}-${index}`}
+                          fill={getCellColor(entry)}
+                          className="stroke-background hover:opacity-90 transition-opacity"
+                          strokeWidth={2}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      content={<CustomTooltip />}
+                      cursor={false}
+                      wrapperStyle={{ zIndex: 1000 }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+
+                {/* Center content */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="text-center">
+                    {centerContent || (
+                      <div
+                        className={`font-bold ${isMobile ? "text-xl" : "text-2xl sm:text-3xl lg:text-4xl"}`}
+                      >
+                        {formatAssetValue(totalValue, "USD")}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div
-              className={`flex flex-col justify-center ${isMobile ? "w-full" : "w-64 flex-shrink-0"}`}
-            >
-              <CustomLegend chartData={chartData} colors={colors} />
+              <div
+                className={`flex flex-col justify-center ${isMobile ? "w-full" : "w-64 flex-shrink-0"}`}
+              >
+                <CustomLegend chartData={chartData} colors={colors} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </ChartAccessibility>
     );
   }
 );

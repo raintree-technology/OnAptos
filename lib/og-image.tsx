@@ -47,6 +47,7 @@ export function createOgImage({ title, subtitle, stats, badge }: OgImageProps) {
         }}
       >
         <svg
+          aria-hidden="true"
           width="48"
           height="48"
           viewBox="0 0 24 24"

@@ -235,7 +235,7 @@
       "title": "Отслеживание портфеля",
       "auto_discovery": "Автообнаружение",
       "auto_discovery_desc": "Мгновенное нахождение всех позиций.",
-      "auto_discovery_tooltip": "Охватывает Thala, Amnis, PancakeSwap и более 20 протоколов",
+      "auto_discovery_tooltip": "Охватывает Thala, Amnis и более 20 протоколов",
       "live_pricing": "Цены в реальном времени",
       "live_pricing_desc": "Стоимость в USD в реальном времени.",
       "live_pricing_tooltip": "Обновляется каждые несколько секунд с точными рыночными данными",

@@ -11,12 +11,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { TokenDialogContent } from "@/components/ui/token-dialog-content";
 import { useTranslation } from "@/lib/hooks/useTranslation";
 import type { TokenMetadata } from "@/lib/types/tokens";
-import { copyToClipboard } from "@/lib/utils/browser/clipboard";
 import {
   formatTokenAmount,
   formatUSDValue,
   getTokenLogoUrlSync,
 } from "@/lib/utils/blockchain/tokens/token-utils";
+import { copyToClipboard } from "@/lib/utils/browser/clipboard";
 import { logger } from "@/lib/utils/core/logger";
 
 // Generic token dialog props

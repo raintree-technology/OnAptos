@@ -27,6 +27,7 @@ export interface RWATokenData {
   assetGoverningBody?: string;
   assetIssuerLegalStructureCountry?: string;
 }
+
 import { useResponsive } from "@/lib/hooks/useResponsive";
 import { useTranslation } from "@/lib/hooks/useTranslation";
 import { formatCurrency } from "@/lib/utils";

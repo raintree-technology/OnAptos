@@ -1,14 +1,16 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { TrendingDown, TrendingUp } from "lucide-react";
+import { Search, TrendingDown, TrendingUp } from "lucide-react";
 import type React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FixedSizeList as List } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UI_CONSTANTS } from "@/lib/config/portfolio";
 import type { TokenListItem, TokensResponse } from "@/lib/types/tokens";
@@ -169,6 +171,7 @@ function LoadingRow({ style }: { style: React.CSSProperties }) {
 export function VirtualizedTokenList() {
   const listRef = useRef<List>(null);
   const [listHeight, setListHeight] = useState<number>(UI_CONSTANTS.MIN_LIST_HEIGHT);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const updateHeight = () => {
@@ -195,10 +198,24 @@ export function VirtualizedTokenList() {
   const tokens = data?.pages.flatMap((page) => page.tokens) || [];
   const totalTokens = data?.pages[0]?.totalTokens || 0;
 
-  // Debug logging removed for production
+  // Filter tokens by search query
+  const filteredTokens = useMemo(() => {
+    if (!searchQuery.trim()) return tokens;
+    const query = searchQuery.toLowerCase();
+    return tokens.filter(
+      (token) =>
+        token.symbol?.toLowerCase().includes(query) ||
+        token.name?.toLowerCase().includes(query) ||
+        token.category?.toLowerCase().includes(query)
+    );
+  }, [tokens, searchQuery]);
 
   // Infinite loader item count
-  const itemCount = hasNextPage ? tokens.length + 1 : tokens.length;
+  const itemCount = searchQuery
+    ? filteredTokens.length
+    : hasNextPage
+      ? tokens.length + 1
+      : tokens.length;
 
   // Check if item is loaded
   const isItemLoaded = useCallback(
@@ -220,6 +237,15 @@ export function VirtualizedTokenList() {
   // Render row
   const Row = useCallback(
     ({ index, style }: { index: number; style: React.CSSProperties }) => {
+      if (searchQuery) {
+        const token = filteredTokens[index];
+        return token ? (
+          <TokenRow token={{ ...token, rank: index + 1 }} style={style} />
+        ) : (
+          <LoadingRow style={style} />
+        );
+      }
+
       if (!isItemLoaded(index)) {
         return <LoadingRow style={style} />;
       }
@@ -231,7 +257,7 @@ export function VirtualizedTokenList() {
         <LoadingRow style={style} />
       );
     },
-    [isItemLoaded, tokens]
+    [isItemLoaded, tokens, filteredTokens, searchQuery]
   );
 
   if (isLoading) {
@@ -250,12 +276,9 @@ export function VirtualizedTokenList() {
       <div className="flex items-center justify-center h-96">
         <div className="text-center text-red-500">
           <p>Failed to load tokens</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-2 px-4 py-2 bg-primary text-primary-foreground rounded-md"
-          >
+          <Button onClick={() => window.location.reload()} className="mt-2">
             Retry
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -267,8 +290,19 @@ export function VirtualizedTokenList() {
         <div className="flex items-center justify-between">
           <CardTitle className="text-2xl">All Tokens ({formatNumber(totalTokens)})</CardTitle>
           <div className="text-sm text-muted-foreground">
-            Showing {tokens.length} of {formatNumber(totalTokens)}
+            {searchQuery
+              ? `${filteredTokens.length} results of ${formatNumber(totalTokens)}`
+              : `Showing ${tokens.length} of ${formatNumber(totalTokens)}`}
           </div>
+        </div>
+        <div className="relative mt-2">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search by name, symbol, or category..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9"
+          />
         </div>
       </CardHeader>
       <CardContent className="p-0">

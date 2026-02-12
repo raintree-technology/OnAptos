@@ -1,6 +1,8 @@
 "use client";
 
-export default function Error({
+import { Button } from "@/components/ui/button";
+
+export default function ErrorPage({
   error,
   reset,
 }: {
@@ -8,25 +10,18 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+    <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4 px-4">
       <h1 className="text-4xl font-bold">Error</h1>
       <h2 className="text-xl text-muted-foreground">Something went wrong</h2>
       <p className="text-muted-foreground text-center max-w-md">
         An unexpected error occurred. Please try again or return to the home page.
       </p>
+      {error.digest && <p className="text-xs text-muted-foreground">Reference: {error.digest}</p>}
       <div className="flex gap-4 mt-4">
-        <button
-          onClick={reset}
-          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-        >
-          Try Again
-        </button>
-        <a
-          href="/"
-          className="px-4 py-2 border border-border rounded-md hover:bg-muted transition-colors"
-        >
-          Home
-        </a>
+        <Button onClick={reset}>Try Again</Button>
+        <Button variant="outline" asChild>
+          <a href="/">Home</a>
+        </Button>
       </div>
     </div>
   );

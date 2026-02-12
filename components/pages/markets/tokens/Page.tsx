@@ -8,7 +8,7 @@ const VirtualizedTokenList = dynamic(
     import("./VirtualizedTokenList").then((m) => ({
       default: m.VirtualizedTokenList,
     })),
-  { loading: () => <div className="h-96 animate-pulse bg-gray-200 rounded" /> },
+  { loading: () => <div className="h-96 animate-pulse bg-gray-200 rounded" /> }
 );
 
 export default function TokensPage() {

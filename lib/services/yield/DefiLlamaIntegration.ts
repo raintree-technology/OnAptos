@@ -94,7 +94,7 @@ export class DefiLlamaIntegration {
 
     // Parse symbol/asset info
     let assetSymbol = pool.symbol || "UNKNOWN";
-    let pairedAssetSymbol;
+    let pairedAssetSymbol: string | undefined;
 
     if (assetSymbol.includes("-")) {
       const parts = assetSymbol.split("-");

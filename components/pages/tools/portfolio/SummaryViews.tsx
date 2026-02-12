@@ -171,6 +171,7 @@ export const DeFiSummaryView: React.FC<DeFiSummaryViewProps> = ({
       <div className="text-center py-8">
         <div className="text-red-500 mb-2">Failed to load DeFi data</div>
         <button
+          type="button"
           onClick={fetchDefiData}
           className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
         >
@@ -217,6 +218,7 @@ export const DeFiSummaryView: React.FC<DeFiSummaryViewProps> = ({
         <h2 className="text-xl font-semibold">DeFi Portfolio</h2>
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={() => setViewMode("grid")}
             className={cn(
               "p-2 rounded-lg transition-colors",
@@ -229,6 +231,7 @@ export const DeFiSummaryView: React.FC<DeFiSummaryViewProps> = ({
             <Grid3x3 className="h-4 w-4" />
           </button>
           <button
+            type="button"
             onClick={() => setViewMode("list")}
             className={cn(
               "p-2 rounded-lg transition-colors",
@@ -286,6 +289,8 @@ export const DeFiSummaryView: React.FC<DeFiSummaryViewProps> = ({
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
+                  {/* biome-ignore lint/a11y/noStaticElementInteractions: click handler only prevents propagation */}
+                  {/* biome-ignore lint/a11y/useKeyWithClickEvents: no meaningful keyboard action */}
                   <div
                     className="relative cursor-pointer"
                     onClick={(e) => {
@@ -327,8 +332,11 @@ export const DeFiSummaryView: React.FC<DeFiSummaryViewProps> = ({
                 {/* Show clickable asset positions */}
                 <div className="pt-2 border-t space-y-1">
                   {protocol.assets.map((asset: any, i: number) => (
+                    // biome-ignore lint/a11y/useSemanticElements: complex layout not suitable for button element
                     <div
                       key={i}
+                      role="button"
+                      tabIndex={0}
                       className="flex justify-between text-xs p-1.5 rounded hover:bg-muted/50 cursor-pointer transition-colors"
                       onClick={() =>
                         handlePositionClick({
@@ -336,6 +344,15 @@ export const DeFiSummaryView: React.FC<DeFiSummaryViewProps> = ({
                           protocol: protocol.name,
                         })
                       }
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          handlePositionClick({
+                            ...asset,
+                            protocol: protocol.name,
+                          });
+                        }
+                      }}
                     >
                       <span className="text-muted-foreground">{asset.metadata.symbol}</span>
                       <span className="font-mono">{formatCurrency(asset.value)}</span>
@@ -395,8 +412,11 @@ export const DeFiSummaryView: React.FC<DeFiSummaryViewProps> = ({
               <CollapsibleContent className="px-4 pb-2">
                 <div className="space-y-2 mt-2">
                   {protocol.assets.map((asset: any, assetIndex: number) => (
+                    // biome-ignore lint/a11y/useSemanticElements: complex layout not suitable for button element
                     <div
                       key={assetIndex}
+                      role="button"
+                      tabIndex={0}
                       className="flex items-center justify-between p-3 ml-11 bg-muted/20 rounded-lg hover:bg-muted/30 cursor-pointer transition-colors"
                       onClick={() =>
                         handlePositionClick({
@@ -404,6 +424,15 @@ export const DeFiSummaryView: React.FC<DeFiSummaryViewProps> = ({
                           protocol: protocol.name,
                         })
                       }
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          handlePositionClick({
+                            ...asset,
+                            protocol: protocol.name,
+                          });
+                        }
+                      }}
                     >
                       <div className="flex items-center gap-3">
                         <div className="p-1.5 bg-background rounded">
@@ -541,6 +570,7 @@ export const DeFiSummaryView: React.FC<DeFiSummaryViewProps> = ({
                           : selectedPosition.asset_type}
                       </span>
                       <button
+                        type="button"
                         onClick={() => handleCopyAddress(selectedPosition.asset_type)}
                         className="p-1 hover:bg-muted rounded transition-colors"
                         title="Copy address"
@@ -741,6 +771,7 @@ export const NFTSummaryView: React.FC<NFTSummaryViewProps> = ({
             )}
 
             <button
+              type="button"
               onClick={() => onNFTSelect?.(null)}
               className="text-sm text-primary hover:underline"
             >
@@ -865,11 +896,13 @@ export const NFTSummaryView: React.FC<NFTSummaryViewProps> = ({
         {/* Mobile Toggle */}
         <div className="lg:hidden">
           <button
+            type="button"
             onClick={() => setShowMetrics(!showMetrics)}
             className="w-full flex items-center justify-between p-4 rounded-lg hover:bg-muted/50 transition-colors"
           >
             <span className="font-medium">Collector Metrics</span>
             <svg
+              aria-hidden="true"
               className={`w-5 h-5 transition-transform ${showMetrics ? "rotate-180" : ""}`}
               fill="none"
               stroke="currentColor"

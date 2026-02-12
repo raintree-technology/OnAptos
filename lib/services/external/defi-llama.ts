@@ -262,33 +262,18 @@ class DeFiLlamaService extends BaseAssetService {
     // Use protocol registry names where possible
     [PROTOCOLS.AMNIS_FINANCE.name]: "amnis-finance",
     [PROTOCOLS.THALA_LSD.name]: "thala-lsd",
-    [PROTOCOLS.ARIES_MARKETS.name]: "aries-markets",
-    [PROTOCOLS.MERKLE_TRADE.name]: "merkle-trade",
 
-    // Legacy mappings for protocols not in registry yet
     Echelon: "echelon-market",
     Echo: "echo-lending",
-    Meso: "meso-finance",
-    Joule: "joule-finance",
-    PancakeSwap: "pancakeswap-amm",
-    Sushiswap: "sushi",
     Thala: "thalaswap",
     ThalaSwap: "thalaswap",
     "ThalaSwap V2": "thalaswap-v2",
-    Liquidswap: "liquidswap",
-    Cetus: "cetus-amm",
-    Superposition: "superposition",
     Panora: "panora-exchange",
-    Cellana: "cellana-finance",
     "Echo Strategy": "echo-strategy",
     Kofi: "kofi-finance",
-    Satay: "satay-finance",
     Ondo: "ondo-finance",
     "Franklin Templeton": "franklin-templeton",
     "Thala CDP": "thala-cdp",
-    Mole: "mole",
-    Kana: "kana-labs",
-    "Gui Inu": "gui-inu",
   };
 
   // Get the correct DeFiLlama slug for a protocol
@@ -830,7 +815,7 @@ class DeFiLlamaService extends BaseAssetService {
 
       // Try to get Aptos-specific volume from chain breakdown
       let aptosVolume24h = 0;
-      let aptosChange24h;
+      let aptosChange24h: number | undefined;
 
       // Check if there's chain-specific volume data
       if (data.totalDataChartBreakdown && data.totalDataChartBreakdown.length > 0) {
@@ -932,7 +917,7 @@ class DeFiLlamaService extends BaseAssetService {
         }
 
         // Calculate Aptos-specific changes
-        let aptosChange1d, aptosChange7d;
+        let aptosChange1d: number | undefined, aptosChange7d: number | undefined;
         if (data.chainTvls?.Aptos?.tvl && data.chainTvls.Aptos.tvl.length > 1) {
           const aptosTvl = data.chainTvls.Aptos;
           const oneDayAgo = aptosTvl.tvl[Math.max(0, aptosTvl.tvl.length - 2)];
@@ -1127,7 +1112,20 @@ class DeFiLlamaService extends BaseAssetService {
         return null;
 
       // Extract COMPREHENSIVE metrics from details - APTOS SPECIFIC
-      let tvl, mcap, tokenPrice, fdv, staking, historicalTvl, tokenBreakdown;
+      let tvl:
+          | {
+              current: number;
+              change24h: number | undefined;
+              change7d: number | undefined;
+              tokens: unknown;
+            }
+          | undefined,
+        mcap: number | undefined,
+        tokenPrice: number | undefined,
+        fdv: number | undefined,
+        staking: number | undefined,
+        historicalTvl: Array<{ date: number; totalLiquidityUSD: number }> | undefined,
+        tokenBreakdown: unknown;
       if (details) {
         // Use Aptos-specific TVL if available
         tvl = {
@@ -1158,7 +1156,8 @@ class DeFiLlamaService extends BaseAssetService {
       }
 
       // Extract lending/borrowing rates from pools
-      let borrowRates, supplyRates;
+      let borrowRates: DeFiLlamaBorrowRate[] | undefined,
+        supplyRates: DeFiLlamaSupplyRate[] | undefined;
       if (pools?.lending) {
         const protocolPools = pools.lending.filter(
           (p: DeFiLlamaBorrowRate) => p.project?.toLowerCase() === protocolName.toLowerCase()

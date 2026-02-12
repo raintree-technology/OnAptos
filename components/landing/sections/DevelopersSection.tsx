@@ -5,10 +5,10 @@ import { BookOpen, Check, Copy, ExternalLink, Github, Terminal } from "lucide-re
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
-import { FADE_UP } from "@/lib/constants/animations";
 import { developerTools } from "@/components/landing/data/landing-data";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FADE_UP } from "@/lib/constants/animations";
 import { Section } from "../shared/Section";
 import SectionHeader from "../shared/SectionHeader";
 
@@ -27,6 +27,7 @@ export default function DevelopersSection() {
   };
 
   return (
+    // biome-ignore lint/correctness/useUniqueElementIds: stable anchor ID for scroll navigation
     <Section id="developers">
       <SectionHeader title="Build on Aptos" description="Everything you need to start building" />
 
@@ -67,6 +68,7 @@ export default function DevelopersSection() {
                     <span className="text-xs text-zinc-500 font-mono ml-2">terminal</span>
                   </div>
                   <button
+                    type="button"
                     onClick={copyToClipboard}
                     className="flex items-center gap-1.5 px-2 py-1 rounded text-xs text-zinc-400 hover:text-zinc-200 hover:bg-zinc-700/50 transition-colors"
                   >

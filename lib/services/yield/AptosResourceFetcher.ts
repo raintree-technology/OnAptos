@@ -204,14 +204,9 @@ export class AptosResourceFetcher {
    */
   static get PROTOCOL_ADDRESSES() {
     return {
-      ARIES: PROTOCOLS.ARIES_MARKETS.addresses[0],
       ECHELON: PROTOCOLS.ECHELON.addresses[0],
       ECHO: PROTOCOLS.ECHO_LENDING.addresses[0],
-      MESO: PROTOCOLS.MESO_FINANCE.addresses[0],
       THALA: PROTOCOLS.THALA_INFRA.addresses[0],
-      LIQUIDSWAP: PROTOCOLS.LIQUIDSWAP.addresses[6],
-      PANCAKESWAP: PROTOCOLS.PANCAKESWAP.addresses[3],
-      SUSHISWAP: PROTOCOLS.SUSHISWAP.addresses[0],
       AMNIS: PROTOCOLS.AMNIS_FINANCE.addresses[0],
       THALA_FARM: PROTOCOLS.THALA_FARM.addresses[0],
       THALA_CDP: PROTOCOLS.THALA_CDP.addresses[0],

@@ -1,6 +1,6 @@
 "use client";
 
-import { type UseQueryResult, useQuery } from "@tanstack/react-query";
+import { type UseQueryResult, useQueries, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { logger } from "@/lib/utils/core/logger";
 
@@ -39,7 +39,21 @@ interface UseMultipleMetricsQueriesOptions {
 }
 
 export const useMultipleMetricsQueries = ({ queries }: UseMultipleMetricsQueriesOptions) => {
-  const results = queries.map((queryOptions) => useMetricsQuery(queryOptions));
+  const results = useQueries({
+    queries: queries.map((queryOptions) => ({
+      queryKey: queryOptions.queryKey,
+      queryFn: async () => {
+        const response = await fetch(queryOptions.endpoint);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch from ${queryOptions.endpoint}`);
+        }
+        return await response.json();
+      },
+      refetchInterval: queryOptions.refetchInterval ?? 300000,
+      retry: queryOptions.retry ?? 3,
+      enabled: queryOptions.enabled ?? true,
+    })),
+  });
 
   const isLoading = results.some((result) => result.isLoading);
   const isError = results.some((result) => result.isError);

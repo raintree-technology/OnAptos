@@ -5,9 +5,9 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { FADE_UP } from "@/lib/constants/animations";
 import { bridges, exchanges, wallets } from "@/components/landing/data/landing-data";
 import { Badge } from "@/components/ui/badge";
+import { FADE_UP } from "@/lib/constants/animations";
 import ExchangeCard from "../shared/ExchangeCard";
 import { ExpandToggle } from "../shared/ExpandToggle";
 import { Section } from "../shared/Section";
@@ -22,6 +22,7 @@ export default function GettingStartedSection() {
   const liveBridges = useMemo(() => bridges.filter((b) => b.status === "Live"), []);
 
   return (
+    // biome-ignore lint/correctness/useUniqueElementIds: stable anchor ID for scroll navigation
     <Section id="getting-started">
       <SectionHeader
         title="Getting Started"

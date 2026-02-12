@@ -44,7 +44,7 @@ export function renderVerificationBadge(isVerified: boolean) {
 export function renderProtocolBadge(protocolInfo: any) {
   if (!protocolInfo) return null;
   return (
-    <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 font-normal">
+    <Badge variant="secondary" className="text-[11px] px-1.5 py-0 h-4 font-normal">
       {protocolInfo.protocolLabel}
     </Badge>
   );

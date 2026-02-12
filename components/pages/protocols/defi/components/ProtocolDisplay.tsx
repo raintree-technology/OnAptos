@@ -20,8 +20,11 @@ export const ProtocolDisplay = React.memo(function ProtocolDisplay({
   if (filteredProtocols.length === 0) {
     return (
       <div className="text-center py-8 md:py-12 px-4">
-        <p className="text-muted-foreground mb-4 text-sm md:text-base">
+        <p className="text-muted-foreground mb-2 text-sm md:text-base">
           {t("defi:search.no_results", "No protocols found matching your criteria.")}
+        </p>
+        <p className="text-muted-foreground/70 mb-4 text-xs md:text-sm">
+          Try adjusting your search terms or browse by category.
         </p>
         <Button
           variant="outline"

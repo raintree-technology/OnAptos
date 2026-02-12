@@ -151,6 +151,7 @@ export function PortfolioMainContent({
       <div className="border-b">
         <div className="flex">
           <button
+            type="button"
             onClick={() => setMainTab("charts")}
             className={cn(
               "flex-1 flex items-center justify-center gap-1.5 px-2 py-2 text-sm font-medium transition-colors relative",
@@ -165,6 +166,7 @@ export function PortfolioMainContent({
             )}
           </button>
           <button
+            type="button"
             onClick={() => setMainTab("transactions")}
             className={cn(
               "flex-1 flex items-center justify-center gap-1.5 px-2 py-2 text-sm font-medium transition-colors relative",

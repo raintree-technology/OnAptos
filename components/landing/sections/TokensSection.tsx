@@ -38,6 +38,7 @@ export default function TokensSection({
   fetchInitialData,
 }: TokensSectionProps) {
   return (
+    // biome-ignore lint/correctness/useUniqueElementIds: stable anchor ID for scroll navigation
     <Section id="tokens">
       <SectionHeader
         title="Token Market"
@@ -70,6 +71,7 @@ export default function TokensSection({
               <h3 className="font-medium text-foreground mb-1">Failed to load data</h3>
               <p className="text-sm text-muted-foreground mb-4">{error}</p>
               <button
+                type="button"
                 onClick={fetchInitialData}
                 className="px-4 py-2 bg-foreground text-background rounded-lg hover:bg-foreground/90 transition-colors text-sm"
               >

@@ -111,7 +111,9 @@ class GraphQLBatcher {
       const result = await response.json();
       if (result.errors) {
         // Handle partial failures
-        batch.forEach((q) => q.reject(new Error(result.errors[0]?.message || "GraphQL Error")));
+        for (const q of batch) {
+          q.reject(new Error(result.errors[0]?.message || "GraphQL Error"));
+        }
         return;
       }
 

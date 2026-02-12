@@ -22,6 +22,7 @@ export function ThemeToggle() {
 
   return (
     <button
+      type="button"
       className="rounded-lg p-2 bg-gradient-to-r from-[#F4603E]/10 to-[#1E1870]/10 hover:from-[#F4603E]/20 hover:to-[#1E1870]/20 transition-all duration-200 border-2 border-[#F4603E]/20 hover:border-[#F4603E]/40"
       aria-label={`Switch to ${nextTheme} mode`}
       onClick={() => setTheme(nextTheme)}

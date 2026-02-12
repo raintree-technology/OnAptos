@@ -272,6 +272,25 @@ export function MetricsCharts({ activityPatterns }: MetricsChartsProps) {
       aria-label="Hourly transaction activity heatmap"
     >
       <svg ref={hourlyChartRef} className="w-full h-full" />
+      <div className="sr-only">
+        <table>
+          <caption>Hourly transaction activity heatmap</caption>
+          <thead>
+            <tr>
+              <th scope="col">Time Block</th>
+              <th scope="col">Transactions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {activityPatterns.slice(0, 24).map((pattern, i) => (
+              <tr key={i}>
+                <td>{pattern.hour}</td>
+                <td>{pattern.transactions}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

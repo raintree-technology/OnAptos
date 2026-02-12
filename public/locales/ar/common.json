@@ -235,7 +235,7 @@
       "title": "تتبع المحفظة",
       "auto_discovery": "الاكتشاف التلقائي",
       "auto_discovery_desc": "اعثر على جميع المراكز على الفور.",
-      "auto_discovery_tooltip": "يغطي Thala و Amnis و PancakeSwap وأكثر من 20 بروتوكولًا",
+      "auto_discovery_tooltip": "يغطي Thala و Amnis وأكثر من 20 بروتوكولًا",
       "live_pricing": "التسعير المباشر",
       "live_pricing_desc": "قيم الدولار الأمريكي في الوقت الفعلي.",
       "live_pricing_tooltip": "يتم التحديث كل بضع ثوانٍ ببيانات السوق الدقيقة",

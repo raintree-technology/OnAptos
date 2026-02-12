@@ -1,1 +1,1 @@
-export { FaGlobe, FaGithub, FaXTwitter } from "./SocialIcons";
+export { FaGithub, FaGlobe, FaXTwitter } from "./SocialIcons";

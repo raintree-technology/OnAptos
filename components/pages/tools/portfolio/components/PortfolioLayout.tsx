@@ -175,13 +175,22 @@ export function PortfolioLayout({
                   <h3 className="text-sm font-semibold mb-2">Tokens</h3>
                   <div className="space-y-1">
                     {visibleAssets.map((asset, i) => (
+                      // biome-ignore lint/a11y/useSemanticElements: complex card layout
                       <div
                         key={i}
+                        role="button"
+                        tabIndex={0}
                         className={cn(
                           "flex items-center justify-between p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors",
                           selectedAsset === asset && "bg-muted"
                         )}
                         onClick={() => onItemSelect("asset", asset)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            onItemSelect("asset", asset);
+                          }
+                        }}
                       >
                         <div className="flex items-center gap-2">
                           <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center text-xs">
@@ -212,10 +221,19 @@ export function PortfolioLayout({
                   </h3>
                   <div className="grid grid-cols-3 gap-2">
                     {nfts.slice(0, 6).map((nft, i) => (
+                      // biome-ignore lint/a11y/useSemanticElements: complex card layout
                       <div
                         key={i}
+                        role="button"
+                        tabIndex={0}
                         className="aspect-square rounded-lg overflow-hidden bg-muted cursor-pointer"
                         onClick={() => onItemSelect("nft", nft)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            onItemSelect("nft", nft);
+                          }
+                        }}
                       >
                         {nft.cdn_image_uri && (
                           <img
@@ -239,13 +257,22 @@ export function PortfolioLayout({
                   <h3 className="text-sm font-semibold mb-2">DeFi</h3>
                   <div className="space-y-1">
                     {groupedDeFiPositions.map((position, i) => (
+                      // biome-ignore lint/a11y/useSemanticElements: complex card layout
                       <div
                         key={i}
+                        role="button"
+                        tabIndex={0}
                         className={cn(
                           "flex items-center justify-between p-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors",
                           selectedDeFiPosition === position && "bg-muted"
                         )}
                         onClick={() => onItemSelect("defi", position)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            onItemSelect("defi", position);
+                          }
+                        }}
                       >
                         <div className="flex items-center gap-2">
                           <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center text-xs">

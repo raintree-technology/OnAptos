@@ -34,6 +34,7 @@ export default function HeroSection({ assetValues, isLoadingValues }: HeroSectio
   }, [assetValues, stables, rwas, btc, tokens]);
 
   return (
+    // biome-ignore lint/correctness/useUniqueElementIds: stable anchor ID for scroll navigation
     <section
       id="overview"
       className="pt-16 pb-20 md:pt-24 md:pb-28 px-4 sm:px-6 relative overflow-hidden"
@@ -116,12 +117,18 @@ export default function HeroSection({ assetValues, isLoadingValues }: HeroSectio
             }}
           >
             <Link href="/portfolio">
-              <button className="px-6 py-3 bg-foreground text-background font-medium rounded-lg hover:bg-foreground/90 transition-colors">
+              <button
+                type="button"
+                className="px-6 py-3 bg-foreground text-background font-medium rounded-lg hover:bg-foreground/90 transition-colors"
+              >
                 View Portfolio
               </button>
             </Link>
             <Link href="#defi">
-              <button className="px-6 py-3 border border-border text-foreground font-medium rounded-lg hover:bg-muted transition-colors">
+              <button
+                type="button"
+                className="px-6 py-3 border border-border text-foreground font-medium rounded-lg hover:bg-muted transition-colors"
+              >
                 Explore Protocols
               </button>
             </Link>

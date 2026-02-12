@@ -89,21 +89,11 @@ export class FungibleAssetService {
   }
 
   /**
-   * Get MKLP balances specifically
-   */
-  static async getMKLPBalances(walletAddress: string): Promise<FungibleAssetBalance[]> {
-    const balances = await FungibleAssetService.getBalances(walletAddress);
-    return balances.filter(
-      (b) => b.asset_type.includes("house_lp::MKLP") || b.asset_type.includes("mklp::MKLP")
-    );
-  }
-
-  /**
    * Extract FA address from resource type
    */
   static extractFAAddress(resourceType: string): string | null {
     // Extract the FA address from patterns like:
-    // 0x5ae6789dd2fec1a9ec9cccfb3acaf12e93d432f0a3a42c92fe1a9d490b7bbc06::house_lp::MKLP<...>
+    // 0x1234...::module::Type<...>
     const match = resourceType.match(/(0x[a-f0-9]+::[^<]+)/);
     return match ? match[1] : null;
   }

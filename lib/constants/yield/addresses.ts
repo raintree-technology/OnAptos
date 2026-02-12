@@ -12,16 +12,11 @@ import { COMMON_TOKENS } from "@/lib/constants/tokens/addresses";
  */
 export const YIELD_PROTOCOL_ADDRESSES = {
   // Lending
-  ARIES: PROTOCOLS.ARIES_MARKETS.addresses[0],
   ECHELON: PROTOCOLS.ECHELON.addresses[0],
   ECHO: PROTOCOLS.ECHO_LENDING.addresses[0],
-  MESO: PROTOCOLS.MESO_FINANCE.addresses[0],
 
   // DEX
   THALA: PROTOCOLS.THALA_INFRA.addresses[0],
-  LIQUIDSWAP: PROTOCOLS.LIQUIDSWAP.addresses[6], // pool deployer v0
-  PANCAKESWAP: PROTOCOLS.PANCAKESWAP.addresses[3], // Main masterchef
-  SUSHISWAP: PROTOCOLS.SUSHISWAP.addresses[0],
 
   // LST
   AMNIS: PROTOCOLS.AMNIS_FINANCE.addresses[0],

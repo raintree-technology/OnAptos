@@ -316,7 +316,9 @@ export function clearCache(cacheName?: CacheInstanceName): void {
   if (cacheName) {
     cacheInstances[cacheName].clear();
   } else {
-    Object.values(cacheInstances).forEach((cache) => cache.clear());
+    for (const cache of Object.values(cacheInstances)) {
+      cache.clear();
+    }
   }
 }
 

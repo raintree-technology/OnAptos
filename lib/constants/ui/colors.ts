@@ -94,13 +94,6 @@ export const STABLECOIN_COLORS = createColorMap(
     [["whUSDC"], BASE_COLORS.blue100], // blue-100
     [["ceUSDC"], BASE_COLORS.indigo300], // indigo-300
 
-    // Ethena - darker pastel grays
-    [["USDe", "sUSDe/USDe"], BASE_COLORS.gray300], // gray-300
-    [["sUSDe"], BASE_COLORS.gray200], // gray-200
-
-    // Mirage mUSD - darker pastel orange
-    [["mUSD"], BASE_COLORS.amber300], // amber-300
-
     // MOD - darker pastel purple
     [["MOD"], BASE_COLORS.purple300], // purple-300
   ],
@@ -146,9 +139,6 @@ export const LST_COLORS = createColorMap(
 
     // Kofi tokens - Soft pastel green tones
     [["kAPT", "stkAPT", "kAPT / stkAPT", "kAPT/stkAPT", "Kofi"], BASE_COLORS.green300], // green-300
-
-    // Trustake/Turfin tokens - Soft pastel gray tones
-    [["truAPT", "Trustake", "turAPT", "Turfin"], BASE_COLORS.gray300], // gray-300
   ],
   BASE_COLORS.gray300 // gray-300
 );
@@ -213,12 +203,6 @@ export const YIELD_COLORS = {
 export const PROTOCOL_COLORS = {
   echelon: BASE_COLORS.teal500, // teal/aqua
   echo: BASE_COLORS.violet500, // violet-500
-  axelar: BASE_COLORS.amber500, // amber-500
-  debridge: BASE_COLORS.pink500, // pink-500
-  wormhole: BASE_COLORS.teal400, // teal-400
-  pontem: BASE_COLORS.sky500, // sky-500
-  aries: BASE_COLORS.sky700, // sky-700
-  liquidswap: BASE_COLORS.blue500, // blue-500
 };
 
 /**

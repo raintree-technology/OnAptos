@@ -78,6 +78,7 @@ export function FilterControls({
   };
 
   // Mobile dropdown for categories and subcategories - single level with indentation
+  // biome-ignore lint/correctness/noNestedComponentDefinitions: uses closure variables from parent
   const MobileFilterDropdown = () => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -208,6 +209,7 @@ export function FilterControls({
   );
 
   // Desktop category buttons (existing implementation)
+  // biome-ignore lint/correctness/noNestedComponentDefinitions: uses closure variables from parent
   const DesktopCategoryButtons = () => (
     <>
       <div className="flex flex-wrap items-center gap-1.5 md:gap-2">
@@ -234,6 +236,7 @@ export function FilterControls({
               <Tooltip key={category}>
                 <TooltipTrigger asChild>
                   <button
+                    type="button"
                     onClick={() => handleCategoryClick(category)}
                     className={`flex items-center gap-1.5 h-10 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
                       isSelected
@@ -324,6 +327,7 @@ export function FilterControls({
                           <Tooltip key={subcategory}>
                             <TooltipTrigger asChild>
                               <button
+                                type="button"
                                 onClick={() => handleSubcategoryClick(subcategory)}
                                 className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                                   selectedSubcategory === subcategory

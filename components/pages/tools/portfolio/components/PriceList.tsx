@@ -332,6 +332,7 @@ export function PriceList({ className }: PriceListProps) {
             {/* Left side - Category buttons */}
             <div className="flex items-center gap-1 flex-1 min-w-0">
               <button
+                type="button"
                 onClick={() => handleCategoryChange("all")}
                 className={cn(
                   "px-2 py-1 text-xs rounded transition-colors",
@@ -343,6 +344,7 @@ export function PriceList({ className }: PriceListProps) {
                 All ({categoryCounts.all || 0})
               </button>
               <button
+                type="button"
                 onClick={() => handleCategoryChange("defi")}
                 className={cn(
                   "px-2 py-1 text-xs rounded transition-colors",
@@ -354,6 +356,7 @@ export function PriceList({ className }: PriceListProps) {
                 DeFi ({categoryCounts.defi || 0})
               </button>
               <button
+                type="button"
                 onClick={() => handleCategoryChange("memes")}
                 className={cn(
                   "px-2 py-1 text-xs rounded transition-colors",
@@ -369,6 +372,7 @@ export function PriceList({ className }: PriceListProps) {
             {/* Right side - Category dropdown */}
             <div ref={dropdownRef} className="relative flex-shrink-0">
               <button
+                type="button"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center gap-1 px-2 py-1 text-xs rounded transition-colors bg-muted hover:bg-muted/80"
               >
@@ -384,6 +388,7 @@ export function PriceList({ className }: PriceListProps) {
                       .sort(([, a], [, b]) => b - a)
                       .map(([category, count]) => (
                         <button
+                          type="button"
                           key={category}
                           onClick={() => handleCategoryChange(category)}
                           className={cn(

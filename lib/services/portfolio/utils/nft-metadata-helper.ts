@@ -153,7 +153,7 @@ export function isSafeImageUrl(url: string): boolean {
       "magiceden.dev",
       "bluemove.net",
       "aptoslabs.com",
-      "cellana.finance",
+
       "aptosnames.com",
       "panora.exchange",
       "wav3.net",

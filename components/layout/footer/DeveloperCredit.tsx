@@ -5,7 +5,7 @@ import { DEVELOPER_CONFIG } from "@/lib/config/app";
 
 export const DeveloperCredit = memo(function DeveloperCredit() {
   return (
-    <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
+    <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] xs:text-xs sm:text-sm text-muted-foreground">
       <span>
         Built by{" "}
         <a

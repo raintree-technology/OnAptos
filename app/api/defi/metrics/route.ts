@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
+import { CACHE_DURATIONS, getCacheHeaders } from "@/lib/utils/api/common";
 import { apiLogger } from "@/lib/utils/core/logger";
 import { serverCached } from "@/lib/utils/server/cache";
-import { CACHE_DURATIONS, getCacheHeaders } from "@/lib/utils/api/common";
 
 export const revalidate = 300; // 5 minutes
 
@@ -52,8 +52,8 @@ export async function GET() {
           apiLogger.warn("Failed to fetch fees data:", error);
         }
 
-        let tvlChange24h;
-        let tvlChange7d;
+        let tvlChange24h: number | undefined;
+        let tvlChange7d: number | undefined;
         try {
           const historicalResponse = await fetch(
             "https://api.llama.fi/v2/historicalChainTvl/Aptos"

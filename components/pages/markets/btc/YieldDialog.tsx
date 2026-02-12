@@ -5,12 +5,12 @@ import type React from "react";
 
 import type { Market } from "@/components/pages/markets/btc/types";
 import { BaseDialog, DialogInfoRow, DialogSection, TokenIcon } from "@/components/shared/dialogs";
-import { formatPercentage } from "@/lib/utils/format/format";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PROTOCOL_ICONS } from "@/lib/config/protocols/echo";
 import { type PROTOCOL_COLORS, UI_COLORS, YIELD_COLORS } from "@/lib/constants/ui/colors";
 import { cn, formatAmount, formatCurrency } from "@/lib/utils";
+import { formatPercentage } from "@/lib/utils/format/format";
 
 interface YieldDialogProps {
   isOpen: boolean;

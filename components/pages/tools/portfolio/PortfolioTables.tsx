@@ -116,14 +116,24 @@ export const AssetsTable = (props: any) => {
     : otherAssets.slice(0, Math.min(displayedCount - 1, otherAssets.length));
 
   // Mobile card component
+  // biome-ignore lint/correctness/noNestedComponentDefinitions: uses closure variables from parent
   const AssetCard = ({ asset, showDivider = false }: { asset: any; showDivider?: boolean }) => (
     <React.Fragment key={`asset-card-${asset.asset_type}-${asset.amount}`}>
+      {/* biome-ignore lint/a11y/useSemanticElements: complex card layout not suitable for button element */}
       <div
+        role="button"
+        tabIndex={0}
         className={cn(
           "p-4 cursor-pointer transition-all hover:bg-muted/50 rounded-lg active:scale-[0.98]",
           selectedItem?.asset_type === asset.asset_type && "bg-muted/80"
         )}
         onClick={() => onItemSelect(asset)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onItemSelect(asset);
+          }
+        }}
       >
         <div className="flex items-center gap-4">
           <div className="h-12 w-12 rounded-full flex items-center justify-center flex-shrink-0">
@@ -167,7 +177,7 @@ export const AssetsTable = (props: any) => {
                   </span>
                 )}
                 {asset.protocolInfo && (
-                  <Badge variant="secondary" className="text-[10px] px-2 py-0.5 h-5 font-normal">
+                  <Badge variant="secondary" className="text-[11px] px-2 py-0.5 h-5 font-normal">
                     {asset.protocolInfo.protocolLabel}
                   </Badge>
                 )}
@@ -249,7 +259,7 @@ export const AssetsTable = (props: any) => {
                   </span>
                 )}
                 {asset.protocolInfo && (
-                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 font-normal">
+                  <Badge variant="secondary" className="text-[11px] px-1.5 py-0 h-4 font-normal">
                     {asset.protocolInfo.protocolLabel}
                   </Badge>
                 )}
@@ -558,6 +568,7 @@ export const DeFiPositionsTable = (props: any) => {
   }
 
   // Mobile DeFi Card Component
+  // biome-ignore lint/correctness/noNestedComponentDefinitions: uses closure variables from parent
   const DeFiCard = ({ groupedPosition, index }: { groupedPosition: any; index: number }) => {
     const positionId = `defi-card-${groupedPosition.protocol}-${index}`;
     const isSelected = selectedItem?.protocol === groupedPosition.protocol;
@@ -565,13 +576,22 @@ export const DeFiPositionsTable = (props: any) => {
     const protocolInfo = getDetailedProtocolInfo(groupedPosition.protocol);
 
     return (
+      // biome-ignore lint/a11y/useSemanticElements: complex card layout not suitable for button element
       <div
         key={positionId}
+        role="button"
+        tabIndex={0}
         className={cn(
           "p-4 cursor-pointer transition-all hover:bg-muted/50 rounded-lg active:scale-[0.98]",
           isSelected && "bg-muted/80"
         )}
         onClick={() => onItemSelect(groupedPosition)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onItemSelect(groupedPosition);
+          }
+        }}
       >
         <div className="flex items-center gap-4">
           <div className="flex-shrink-0">
@@ -604,7 +624,7 @@ export const DeFiPositionsTable = (props: any) => {
 
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="text-[10px] px-2 py-0.5 h-5 font-normal">
+                <Badge variant="secondary" className="text-[11px] px-2 py-0.5 h-5 font-normal">
                   {groupedPosition.protocolTypes.size > 1
                     ? "Multiple"
                     : primaryType === "derivatives"
@@ -668,7 +688,7 @@ export const DeFiPositionsTable = (props: any) => {
               >
                 Type{" "}
                 {defiSortBy === "type" && (
-                  <span className="text-[10px]">{defiSortOrder === "asc" ? "↑" : "↓"}</span>
+                  <span className="text-[11px]">{defiSortOrder === "asc" ? "↑" : "↓"}</span>
                 )}
               </TableHead>
               <TableHead
@@ -677,7 +697,7 @@ export const DeFiPositionsTable = (props: any) => {
               >
                 Value{" "}
                 {defiSortBy === "value" && (
-                  <span className="text-[10px]">{defiSortOrder === "asc" ? "↑" : "↓"}</span>
+                  <span className="text-[11px]">{defiSortOrder === "asc" ? "↑" : "↓"}</span>
                 )}
               </TableHead>
             </TableRow>
@@ -742,7 +762,7 @@ export const DeFiPositionsTable = (props: any) => {
                     </div>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell py-2">
-                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 font-normal">
+                    <Badge variant="secondary" className="text-[11px] px-1.5 py-0 h-4 font-normal">
                       {groupedPosition.protocolTypes.size > 1
                         ? "Multiple"
                         : primaryType === "derivatives"

@@ -1,17 +1,21 @@
 // Development logger that uses console
 const isDevelopment = process.env.NODE_ENV === "development";
 
-/* eslint-disable no-console */
 export const logger = {
+  // biome-ignore lint/suspicious/noConsole: logger utility
   info: (...args: unknown[]) => isDevelopment && console.log("[INFO]", ...args),
+  // biome-ignore lint/suspicious/noConsole: logger utility
   debug: (...args: unknown[]) => isDevelopment && console.debug("[DEBUG]", ...args),
+  // biome-ignore lint/suspicious/noConsole: logger utility
   warn: (...args: unknown[]) => isDevelopment && console.warn("[WARN]", ...args),
+  // biome-ignore lint/suspicious/noConsole: logger utility
   error: (...args: unknown[]) => isDevelopment && console.error("[ERROR]", ...args),
+  // biome-ignore lint/suspicious/noConsole: logger utility
   fatal: (...args: unknown[]) => console.error("[FATAL]", ...args),
+  // biome-ignore lint/suspicious/noConsole: logger utility
   trace: (...args: unknown[]) => isDevelopment && console.trace("[TRACE]", ...args),
   child: () => logger,
 };
-/* eslint-enable no-console */
 
 // Create child loggers for different modules
 export const createLogger = (_module: string) => {

@@ -4,7 +4,6 @@ import { GeistMono } from "geist/font/mono";
 import { AlertTriangle, Check, HelpCircle } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import USDTCostChart from "./USDTCostChart";
@@ -47,7 +46,7 @@ function calculateCostMultiplier(
     multiplierText =
       multiplier >= 10
         ? `${Math.round(multiplier)}x`
-        : multiplier.toFixed(1).replace(".0", "") + "x";
+        : `${multiplier.toFixed(1).replace(".0", "")}x`;
   }
 
   const multiplier = numericCost / aptosCost;

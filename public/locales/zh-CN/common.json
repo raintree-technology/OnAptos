@@ -235,7 +235,7 @@
       "title": "投资组合跟踪",
       "auto_discovery": "自动发现",
       "auto_discovery_desc": "瞬间找到所有仓位。",
-      "auto_discovery_tooltip": "涵盖 Thala、Amnis、PancakeSwap 和 20 多个协议",
+      "auto_discovery_tooltip": "涵盖 Thala、Amnis 和 20 多个协议",
       "live_pricing": "实时价格",
       "live_pricing_desc": "实时美元价值。",
       "live_pricing_tooltip": "每几秒更新一次，提供准确的市场数据",

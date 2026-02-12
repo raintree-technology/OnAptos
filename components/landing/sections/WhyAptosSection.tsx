@@ -5,70 +5,109 @@ import { ArrowRight, Code, Layers, Shield, TrendingUp, Users, Zap } from "lucide
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import { FADE_UP, FADE_UP_DELAYED } from "@/lib/constants/animations";
-import { usdtCostData } from "@/components/landing/data/landing-data";
 import USDTCostChart from "@/app/performance/usdt-comparison/USDTCostChart";
-import FeatureCard from "../shared/FeatureCard";
+import { usdtCostData } from "@/components/landing/data/landing-data";
+import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
+import { FADE_UP } from "@/lib/constants/animations";
 import { Section } from "../shared/Section";
 import SectionHeader from "../shared/SectionHeader";
 
+const bentoFeatures = [
+  {
+    Icon: Zap,
+    name: "Lightning Fast",
+    description: "20k+ TPS with sub-second finality — 6,000x faster than Ethereum",
+    className: "col-span-3 lg:col-span-2",
+    background: (
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] dark:opacity-[0.05]">
+        <Zap className="h-[300px] w-[300px] -rotate-12" strokeWidth={0.5} />
+      </div>
+    ),
+  },
+  {
+    Icon: Shield,
+    name: "Secure by Design",
+    description: "Move language with fair ordering prevents common vulnerabilities",
+    className: "col-span-3 lg:col-span-1",
+    background: (
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] dark:opacity-[0.05]">
+        <Shield className="h-[200px] w-[200px] rotate-6" strokeWidth={0.5} />
+      </div>
+    ),
+  },
+  {
+    Icon: Code,
+    name: "Low, Fixed Network Fees",
+    description: "Fixed fees priced in USD, paid in APT — up to 40,000x cheaper than other chains",
+    className: "col-span-3 lg:col-span-1",
+    background: (
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] dark:opacity-[0.05]">
+        <Code className="h-[200px] w-[200px] -rotate-6" strokeWidth={0.5} />
+      </div>
+    ),
+  },
+  {
+    Icon: TrendingUp,
+    name: "Massively Scalable",
+    description: "Parallel execution engine processes thousands of transactions simultaneously",
+    className: "col-span-3 lg:col-span-2",
+    background: (
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] dark:opacity-[0.05]">
+        <TrendingUp className="h-[300px] w-[300px] rotate-12" strokeWidth={0.5} />
+      </div>
+    ),
+  },
+  {
+    Icon: Layers,
+    name: "Modular & Composable",
+    description: "Flexible architecture for DeFi, gaming, and enterprise solutions",
+    className: "col-span-3 lg:col-span-1",
+    background: (
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] dark:opacity-[0.05]">
+        <Layers className="h-[200px] w-[200px] rotate-3" strokeWidth={0.5} />
+      </div>
+    ),
+  },
+  {
+    Icon: Users,
+    name: "Thriving Community",
+    description: "Thousands of builders, investors, and developers worldwide",
+    className: "col-span-3 lg:col-span-1",
+    background: (
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] dark:opacity-[0.05]">
+        <Users className="h-[200px] w-[200px] -rotate-3" strokeWidth={0.5} />
+      </div>
+    ),
+  },
+  {
+    Icon: Code,
+    name: "Developer Friendly",
+    description: "Ship in days with Move, comprehensive SDKs, and extensive documentation",
+    className: "col-span-3 lg:col-span-1",
+    background: (
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] dark:opacity-[0.05]">
+        <Code className="h-[200px] w-[200px] rotate-6" strokeWidth={0.5} />
+      </div>
+    ),
+  },
+];
+
 export default function WhyAptosSection() {
   return (
+    // biome-ignore lint/correctness/useUniqueElementIds: stable anchor ID for scroll navigation
     <Section id="why-aptos">
       <SectionHeader
         title="Why Aptos?"
         description="Fast, secure, and scalable blockchain infrastructure"
       />
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-20">
-        <motion.div {...FADE_UP}>
-          <FeatureCard
-            icon={Zap}
-            title="Lightning Fast"
-            description="20k+ TPS with sub-second finality"
-          />
-        </motion.div>
-
-        <motion.div {...FADE_UP_DELAYED(0.05)}>
-          <FeatureCard
-            icon={Shield}
-            title="Secure by Design"
-            description="Move language with fair ordering ensures secure transactions"
-          />
-        </motion.div>
-
-        <motion.div {...FADE_UP_DELAYED(0.1)}>
-          <FeatureCard
-            icon={TrendingUp}
-            title="Massively Scalable"
-            description="Parallel execution processes thousands of transactions simultaneously"
-          />
-        </motion.div>
-
-        <motion.div {...FADE_UP_DELAYED(0.15)}>
-          <FeatureCard
-            icon={Code}
-            title="Low, Fixed Network Fees"
-            description="Fixed fees priced in USD, paid in APT"
-          />
-        </motion.div>
-
-        <motion.div {...FADE_UP_DELAYED(0.2)}>
-          <FeatureCard
-            icon={Layers}
-            title="Modular & Composable"
-            description="Build DeFi, gaming, and enterprise solutions"
-          />
-        </motion.div>
-
-        <motion.div {...FADE_UP_DELAYED(0.25)}>
-          <FeatureCard
-            icon={Users}
-            title="Thriving Community"
-            description="Thousands of builders, investors, and developers"
-          />
-        </motion.div>
-      </div>
+      <motion.div className="mb-20" {...FADE_UP}>
+        <BentoGrid className="auto-rows-[18rem] md:auto-rows-[20rem]">
+          {bentoFeatures.map((feature) => (
+            <BentoCard key={feature.name} {...feature} />
+          ))}
+        </BentoGrid>
+      </motion.div>
 
       {/* Network Performance Stats */}
       <motion.div className="border-t border-border pt-16 mb-20" {...FADE_UP}>

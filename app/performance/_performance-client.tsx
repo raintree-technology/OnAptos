@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useTranslation } from "@/lib/hooks/useTranslation";
@@ -380,6 +381,18 @@ function MetricBox({
           )}
           {tooltip}
         </div>
+        {/* Screen reader severity description */}
+        {percentageDifference && !isWinner && !isPrimary && (
+          <span className="sr-only">
+            {percentageDifference.severity === "moderate"
+              ? "slight difference"
+              : percentageDifference.severity === "severe"
+                ? "significant difference"
+                : percentageDifference.severity === "critical"
+                  ? "major difference"
+                  : "extreme difference"}
+          </span>
+        )}
         {advantageTextVariants && !isPrimary && (
           <div className="text-xs text-muted-foreground mt-1 font-medium px-1">
             {/* Check if this is equivalent performance */}
@@ -549,6 +562,7 @@ export default function PerformancePage() {
                   </h2>
                   {selectedEcosystems.length > 0 && (
                     <button
+                      type="button"
                       onClick={clearAll}
                       className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                     >
@@ -564,6 +578,7 @@ export default function PerformancePage() {
 
                     return (
                       <button
+                        type="button"
                         key={ecosystem.name}
                         onClick={() => toggleEcosystem(ecosystem)}
                         disabled={!canSelect}
@@ -636,7 +651,12 @@ export default function PerformancePage() {
                       </a>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <HelpCircle className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground cursor-help flex-shrink-0" />
+                          <HelpCircle
+                            className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground cursor-help flex-shrink-0"
+                            tabIndex={0}
+                            role="button"
+                            aria-label="More information"
+                          />
                         </TooltipTrigger>
                         <TooltipContent>
                           <p className="text-sm max-w-xs">
@@ -665,6 +685,55 @@ export default function PerformancePage() {
                     <span className="sm:hidden">{t("tabs.usdt_short", "USDt")}</span>
                   </TabsTrigger>
                 </TabsList>
+
+                {/* Mobile Chain Selector - visible below lg */}
+                {activeTab === "performance" && (
+                  <div className="block lg:hidden mt-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h2 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        {t("sidebar.compare_count", "Compare ({{count}}/3)", {
+                          count: selectedEcosystems.length,
+                        })}
+                      </h2>
+                      {selectedEcosystems.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={clearAll}
+                          className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          {t("sidebar.clear", "Clear")}
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                      {ecosystems.map((ecosystem) => {
+                        const isSelected = selectedEcosystems.some(
+                          (e) => e.name === ecosystem.name
+                        );
+                        const canSelect = selectedEcosystems.length < 3 || isSelected;
+                        return (
+                          <Button
+                            key={ecosystem.name}
+                            variant={isSelected ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => toggleEcosystem(ecosystem)}
+                            disabled={!canSelect}
+                            className="flex-shrink-0 gap-1.5"
+                          >
+                            <Image
+                              src={ecosystem.logo}
+                              alt={ecosystem.name}
+                              width={16}
+                              height={16}
+                              className={`rounded-sm ${ecosystem.logo.includes("/apt.png") ? "dark:invert" : ""}`}
+                            />
+                            {ecosystem.name}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 <TabsContent value="performance" className="mt-6">
                   {selectedEcosystems.length > 0 ? (
@@ -752,7 +821,6 @@ export default function PerformancePage() {
                                         "maxTps",
                                         aptosMetrics.maxTps,
                                         winner.metrics.maxTps,
-                                        true,
                                         winner.name
                                       );
                                     } else {
@@ -768,7 +836,6 @@ export default function PerformancePage() {
                                         "maxTps",
                                         aptosMetrics.maxTps,
                                         bestCompetitor.metrics.maxTps,
-                                        false,
                                         bestCompetitor.name
                                       );
                                     }
@@ -778,7 +845,6 @@ export default function PerformancePage() {
                                       "maxTps",
                                       aptosMetrics.maxTps,
                                       chain.metrics.maxTps,
-                                      false,
                                       chain.name
                                     );
                                   }
@@ -802,7 +868,6 @@ export default function PerformancePage() {
                                         "maxTpsOneBlock",
                                         aptosMetrics.maxTpsOneBlock,
                                         winner.metrics.maxTpsOneBlock,
-                                        true,
                                         winner.name
                                       );
                                     } else {
@@ -819,7 +884,6 @@ export default function PerformancePage() {
                                         "maxTpsOneBlock",
                                         aptosMetrics.maxTpsOneBlock,
                                         bestCompetitor.metrics.maxTpsOneBlock,
-                                        false,
                                         bestCompetitor.name
                                       );
                                     }
@@ -828,7 +892,6 @@ export default function PerformancePage() {
                                       "maxTpsOneBlock",
                                       aptosMetrics.maxTpsOneBlock,
                                       chain.metrics.maxTpsOneBlock,
-                                      false,
                                       chain.name
                                     );
                                   }
@@ -852,7 +915,6 @@ export default function PerformancePage() {
                                         "finality",
                                         aptosMetrics.finality,
                                         winner.metrics.finality,
-                                        true,
                                         winner.name
                                       );
                                     } else {
@@ -867,7 +929,6 @@ export default function PerformancePage() {
                                         "finality",
                                         aptosMetrics.finality,
                                         bestCompetitor.metrics.finality,
-                                        false,
                                         bestCompetitor.name
                                       );
                                     }
@@ -876,7 +937,6 @@ export default function PerformancePage() {
                                       "finality",
                                       aptosMetrics.finality,
                                       chain.metrics.finality,
-                                      false,
                                       chain.name
                                     );
                                   }
@@ -900,7 +960,6 @@ export default function PerformancePage() {
                                         "blockTime",
                                         aptosMetrics.blockTime,
                                         winner.metrics.blockTime,
-                                        true,
                                         winner.name
                                       );
                                     } else {
@@ -915,7 +974,6 @@ export default function PerformancePage() {
                                         "blockTime",
                                         aptosMetrics.blockTime,
                                         bestCompetitor.metrics.blockTime,
-                                        false,
                                         bestCompetitor.name
                                       );
                                     }
@@ -924,7 +982,6 @@ export default function PerformancePage() {
                                       "blockTime",
                                       aptosMetrics.blockTime,
                                       chain.metrics.blockTime,
-                                      false,
                                       chain.name
                                     );
                                   }
@@ -948,7 +1005,6 @@ export default function PerformancePage() {
                                         "nakamotoCoeff",
                                         aptosMetrics.nakamotoCoeff,
                                         winner.metrics.nakamotoCoeff,
-                                        true,
                                         winner.name
                                       );
                                     } else {
@@ -965,7 +1021,6 @@ export default function PerformancePage() {
                                         "nakamotoCoeff",
                                         aptosMetrics.nakamotoCoeff,
                                         bestCompetitor.metrics.nakamotoCoeff,
-                                        false,
                                         bestCompetitor.name
                                       );
                                     }
@@ -974,7 +1029,6 @@ export default function PerformancePage() {
                                       "nakamotoCoeff",
                                       aptosMetrics.nakamotoCoeff,
                                       chain.metrics.nakamotoCoeff,
-                                      false,
                                       chain.name
                                     );
                                   }
@@ -982,7 +1036,12 @@ export default function PerformancePage() {
                                 tooltip={
                                   <Tooltip>
                                     <TooltipTrigger asChild>
-                                      <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                                      <HelpCircle
+                                        className="h-4 w-4 text-muted-foreground cursor-help"
+                                        tabIndex={0}
+                                        role="button"
+                                        aria-label="More information"
+                                      />
                                     </TooltipTrigger>
                                     <TooltipContent>
                                       <p className="text-sm max-w-xs">
@@ -1013,7 +1072,6 @@ export default function PerformancePage() {
                                         "validators",
                                         aptosMetrics.validators,
                                         winner.metrics.validators,
-                                        true,
                                         winner.name
                                       );
                                     } else {
@@ -1028,7 +1086,6 @@ export default function PerformancePage() {
                                         "validators",
                                         aptosMetrics.validators,
                                         bestCompetitor.metrics.validators,
-                                        false,
                                         bestCompetitor.name
                                       );
                                     }
@@ -1037,7 +1094,6 @@ export default function PerformancePage() {
                                       "validators",
                                       aptosMetrics.validators,
                                       chain.metrics.validators,
-                                      false,
                                       chain.name
                                     );
                                   }
@@ -1082,7 +1138,12 @@ export default function PerformancePage() {
                         tooltip={
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                              <HelpCircle
+                                className="h-4 w-4 text-muted-foreground cursor-help"
+                                tabIndex={0}
+                                role="button"
+                                aria-label="More information"
+                              />
                             </TooltipTrigger>
                             <TooltipContent>
                               <p className="text-sm max-w-xs">

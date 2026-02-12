@@ -134,26 +134,42 @@ export const ProtocolLogos: React.FC<ProtocolLogosProps> = ({
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       <div className="flex flex-wrap gap-3">
-        {visibleProtocols.map((protocol, index) => (
-          <div
-            key={index}
-            className={`${sizeClasses[size]} rounded-lg bg-background border flex items-center justify-center overflow-hidden hover:border-muted-foreground/50 transition-colors ${
-              onProtocolClick ? "cursor-pointer" : ""
-            }`}
-            onClick={() => onProtocolClick?.(protocol)}
-            title={protocol.name}
-          >
-            <img
-              src={protocol.logo}
-              alt={`${protocol.name} logo`}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                const img = e.target as HTMLImageElement;
-                img.src = "/placeholder.jpg";
-              }}
-            />
-          </div>
-        ))}
+        {visibleProtocols.map((protocol, index) => {
+          return (
+            // biome-ignore lint/a11y/noStaticElementInteractions: role is conditionally set based on onProtocolClick
+            // biome-ignore lint/a11y/useKeyWithClickEvents: onKeyDown is conditionally set based on onProtocolClick
+            <div
+              key={index}
+              role={onProtocolClick ? "button" : undefined}
+              tabIndex={onProtocolClick ? 0 : undefined}
+              className={`${sizeClasses[size]} rounded-lg bg-background border flex items-center justify-center overflow-hidden hover:border-muted-foreground/50 transition-colors ${
+                onProtocolClick ? "cursor-pointer" : ""
+              }`}
+              onClick={onProtocolClick ? () => onProtocolClick(protocol) : undefined}
+              onKeyDown={
+                onProtocolClick
+                  ? (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        onProtocolClick(protocol);
+                      }
+                    }
+                  : undefined
+              }
+              title={protocol.name}
+            >
+              <img
+                src={protocol.logo}
+                alt={`${protocol.name} logo`}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const img = e.target as HTMLImageElement;
+                  img.src = "/placeholder.jpg";
+                }}
+              />
+            </div>
+          );
+        })}
       </div>
 
       {remainingCount > 0 && (
@@ -203,6 +219,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         </a>
       ) : (
         <button
+          type="button"
           onClick={action.onClick}
           className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 rounded-md transition-colors"
         >

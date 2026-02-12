@@ -10,6 +10,8 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 // Import transition to enable .transition() on selections
 import "d3-transition";
 
+import { ChartAccessibility } from "@/components/shared/ChartAccessibility";
+
 interface ChainCost {
   chain: string;
   cost: string;
@@ -572,17 +574,26 @@ const USDTCostChart = memo(function USDTCostChart({ data }: USDTCostChartProps) 
   }, [parsedData, isDark, getResponsiveMargins, getResponsiveFontSizes]);
 
   return (
-    <div className="w-full h-full relative">
-      <svg
-        ref={svgRef}
-        className="w-full h-full"
-        style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-          display: "block",
-        }}
-      />
-    </div>
+    <ChartAccessibility
+      label="USDT transfer cost comparison across blockchains"
+      data={parsedData.map((d) => ({ chain: d.chain, cost: d.displayCost }))}
+      columns={[
+        { key: "chain", header: "Blockchain" },
+        { key: "cost", header: "Transfer Cost" },
+      ]}
+    >
+      <div className="w-full h-full relative">
+        <svg
+          ref={svgRef}
+          className="w-full h-full"
+          style={{
+            maxWidth: "100%",
+            maxHeight: "100%",
+            display: "block",
+          }}
+        />
+      </div>
+    </ChartAccessibility>
   );
 });
 

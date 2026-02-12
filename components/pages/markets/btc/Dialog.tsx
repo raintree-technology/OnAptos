@@ -1,6 +1,7 @@
 "use client";
 
 import { Bitcoin } from "lucide-react";
+import type { StaticImageData } from "next/image";
 import { memo, useMemo } from "react";
 import {
   AddressDisplay,
@@ -10,7 +11,6 @@ import {
   DialogSection,
   TokenHeader,
 } from "@/components/shared/dialogs";
-import type { StaticImageData } from "next/image";
 
 interface DialogTokenMetadata {
   symbol: string;
@@ -22,6 +22,7 @@ interface DialogTokenMetadata {
   description?: string;
   type?: string;
 }
+
 import { usePageTranslation } from "@/lib/hooks/useTranslation";
 import { convertRawTokenAmount } from "@/lib/utils";
 import { logger } from "@/lib/utils/core/logger";

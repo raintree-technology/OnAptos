@@ -8,6 +8,8 @@ export { default as BitcoinPage } from "./btc/Page";
 export type { BtcSupplyData, Market, ProtocolData, Token } from "./btc/types";
 export { default as RWAPage } from "./rwas/Page";
 export type { RWASupplyData, RWAToken, RWATokenSupply } from "./rwas/types";
+// Shared components
+export { MarketPageHeader } from "./shared";
 export { default as StablecoinPage } from "./stables/Page";
 export type {
   StableSupplyData,
@@ -15,6 +17,3 @@ export type {
   StableTokenSupply,
 } from "./stables/types";
 export { default as TokensPage } from "./tokens/Page";
-
-// Shared components
-export { MarketPageHeader } from "./shared";

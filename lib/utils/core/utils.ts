@@ -81,7 +81,9 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
     }
   };
 }

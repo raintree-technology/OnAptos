@@ -30,36 +30,16 @@ export class ProtocolLoader {
       logger.info("Loading core protocols...");
 
       // Dynamic import for code splitting
-      const {
-        ThalaProtocol,
-        AriesProtocol,
-        LiquidSwapProtocol,
-        PancakeSwapProtocol,
-        AmnisProtocol,
-        ThalaLSDProtocol,
-        SushiSwapProtocol,
-        CellanaProtocol,
-        MerkleProtocol,
-      } = await import("./definitions");
+      const { ThalaProtocol, AmnisProtocol, ThalaLSDProtocol } = await import("./definitions");
 
       // Register core protocols
       const coreProtocols = [
         // DEX Protocols
         ThalaProtocol,
-        LiquidSwapProtocol,
-        PancakeSwapProtocol,
-        SushiSwapProtocol,
-        CellanaProtocol,
-
-        // Lending Protocols
-        AriesProtocol,
 
         // Liquid Staking Protocols
         AmnisProtocol,
         ThalaLSDProtocol,
-
-        // Derivatives Protocols
-        MerkleProtocol,
       ];
 
       protocolRegistry.registerBulk(coreProtocols);

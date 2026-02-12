@@ -202,7 +202,7 @@ export function usePortfolioData(
           break; // Exit the loop but keep existing transactions
         }
 
-        let result;
+        let result: { data?: Transaction[] };
         try {
           result = await response.json();
         } catch (parseError) {

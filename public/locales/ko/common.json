@@ -235,7 +235,7 @@
       "title": "포트폴리오 추적",
       "auto_discovery": "자동 탐지",
       "auto_discovery_desc": "모든 포지션을 즉시 찾기.",
-      "auto_discovery_tooltip": "Thala, Amnis, PancakeSwap 및 20개 이상의 프로토콜 포함",
+      "auto_discovery_tooltip": "Thala, Amnis 및 20개 이상의 프로토콜 포함",
       "live_pricing": "실시간 가격",
       "live_pricing_desc": "실시간 USD 가치.",
       "live_pricing_tooltip": "정확한 시장 데이터로 몇 초마다 업데이트",

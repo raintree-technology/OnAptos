@@ -90,23 +90,11 @@ const getProtocolDisplayName = (protocolName: string): string => {
     thala: "Thala",
     thalav: "Thala",
     thalaswap: "Thala",
-    pancakeswap: "PancakeSwap",
-    pancake: "PancakeSwap",
-    liquidswap: "LiquidSwap",
-    cellana: "Cellana",
-    aries: "Aries",
-    merkle: "Merkle",
     echelon: "Echelon",
     echelonmarket: "Echelon",
     amnis: "Amnis",
     amnisfinance: "Amnis",
-    sushi: "Sushi",
-    sushiswap: "Sushi",
-    kana: "Kana",
     echo: "Echo",
-    joule: "Joule",
-    thetis: "Thetis",
-    hyperion: "Hyperion",
     tapp: "Tapp",
     tappexchange: "Tapp",
   };
@@ -117,49 +105,20 @@ const getProtocolDisplayName = (protocolName: string): string => {
 const getProtocolLogoPath = (protocolName: string): string | null => {
   const protocolIcons: Record<string, string> = {
     // Main protocols (grouped by base name)
-    pancakeswap: "/icons/protocols/pancake.webp",
-    pancake: "/icons/protocols/pancake.webp",
     thala: "/icons/protocols/thala.avif",
     thalav: "/icons/protocols/thala.avif", // Covers thala v2, etc
     thalaswap: "/icons/protocols/thala.avif", // thalaswap-v2
-    liquidswap: "/icons/protocols/liquidswap.webp",
-    cellana: "/icons/protocols/cellana.webp",
-    aries: "/icons/protocols/aries.avif",
-    merkle: "/icons/protocols/merkle.webp",
     echelon: "/icons/protocols/echelon.avif",
     echelonmarket: "/icons/protocols/echelon.avif",
     amnis: "/icons/protocols/amnis.avif",
     amnisfinance: "/icons/protocols/amnis.avif",
-    sushi: "/icons/protocols/sushi.webp",
-    sushiswap: "/icons/protocols/sushi.webp",
-    kana: "/icons/protocols/kana.webp",
     echo: "/icons/protocols/echo.webp",
-    joule: "/icons/protocols/joule.webp",
-    thetis: "/icons/protocols/thetis.webp",
-    hyperion: "/icons/protocols/hyperion.webp",
-    // Additional protocols from directory
-    agdex: "/icons/protocols/agdex.webp",
-    anqa: "/icons/protocols/anqa.webp",
-    celer: "/icons/protocols/celer.webp",
-    crossmint: "/icons/protocols/crossmint.webp",
-    eliza: "/icons/protocols/eliza.webp",
     goblin: "/icons/protocols/goblin.webp",
-    ichi: "/icons/protocols/ichi.webp",
     kofi: "/icons/protocols/kofi.avif",
-    lz: "/icons/protocols/lz.webp",
-    layerzero: "/icons/protocols/lz.webp",
-    meso: "/icons/protocols/meso.webp",
-    metamove: "/icons/protocols/metamove.webp",
     moar: "/icons/protocols/moar.webp",
     panora: "/icons/protocols/panora.webp",
-    pumpuptos: "/icons/protocols/pump-uptos.webp",
-    superposition: "/icons/protocols/superposition.webp",
     tapp: "/icons/protocols/tapp.webp",
     tappexchange: "/icons/protocols/tapp.webp",
-    tradeport: "/icons/protocols/tradeport.webp",
-    trufin: "/icons/protocols/trufin.webp",
-    vibrantx: "/icons/protocols/vibrantx.webp",
-    wormhole: "/icons/protocols/wormhole.webp",
   };
 
   const normalizedName = normalizeProtocolName(protocolName);
@@ -238,10 +197,8 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
         includeInactive: false,
       });
 
-      // Filter out Tortuga opportunities and sort by TVL (highest first)
-      const filteredOpps = allOpps
-        .filter((opp) => !opp.protocol.toLowerCase().includes("tortuga"))
-        .sort((a, b) => b.tvl - a.tvl);
+      // Sort by TVL (highest first)
+      const filteredOpps = allOpps.sort((a, b) => b.tvl - a.tvl);
 
       setOpportunities(filteredOpps);
       logger.info(`Loaded ${filteredOpps.length} yield opportunities`);
@@ -253,7 +210,7 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
     } finally {
       setLoading(false);
     }
-  }, [walletAddress]);
+  }, [walletAddress, yieldService.discoverOpportunities]);
 
   useEffect(() => {
     loadOpportunities();
@@ -347,7 +304,6 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
 
     // Explicit mappings for specific assets
     const explicitMappings: Record<string, string> = {
-      TRUAPT: "truAPT",
       AMAPT: "amAPT",
       STAPT: "stAPT",
       KAPT: "kAPT",
@@ -377,7 +333,6 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
       THL: "THL",
       USDA: "USDA",
       USDY: "USDY",
-      MKLP: "MKLP",
     };
 
     // Check explicit mappings first
@@ -777,7 +732,7 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
       </div>
 
       {/* Filter Buttons */}
-      <div className="w-full">
+      <div className="w-full overflow-x-auto scrollbar-hide">
         {/* Asset Filters */}
         <div className="flex flex-wrap items-center gap-1.5">
           {topAssets.map((option, _index) => (
@@ -939,6 +894,8 @@ export function YieldTable({ walletAddress, limit, compact = false }: YieldTable
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}
+                    role="link"
+                    aria-label={`Open ${getProtocolDisplayName(row.original.protocol)} - ${formatAssetSymbol(row.original.assetSymbol)} with ${formatPercentage(row.original.apy)} APY (opens in new tab)`}
                     className="cursor-pointer hover:bg-muted/50"
                     onClick={() => {
                       const protocol = row.original.protocol.toLowerCase().replace(/\s+/g, "");

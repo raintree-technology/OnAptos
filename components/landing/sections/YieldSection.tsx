@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import { ArrowRight, ExternalLink, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { FADE_UP, FADE_UP_DELAYED } from "@/lib/constants/animations";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { FADE_UP, FADE_UP_DELAYED } from "@/lib/constants/animations";
 import { Section } from "../shared/Section";
 
 // Featured yield protocols
@@ -27,14 +27,7 @@ const featuredYieldProtocols = [
     type: "DEX & Stablecoin",
     logo: "/icons/protocols/thala.avif",
   },
-  {
-    name: "Aries Markets",
-    description: "Lending and borrowing with competitive rates",
-    href: "https://ariesmarkets.xyz",
-    apy: "Variable",
-    type: "Lending",
-    logo: "/icons/protocols/aries.avif",
-  },
+
   {
     name: "Echelon",
     description: "Money markets for lending and borrowing",
@@ -43,31 +36,13 @@ const featuredYieldProtocols = [
     type: "Money Market",
     logo: "/icons/protocols/echelon.avif",
   },
-  {
-    name: "Joule Finance",
-    description: "Lending protocol with isolated markets",
-    href: "https://joule.finance",
-    apy: "Variable",
-    type: "Lending",
-    logo: "/icons/protocols/joule.webp",
-  },
-  {
-    name: "Merkle Trade",
-    description: "Perpetual trading with LP yield opportunities",
-    href: "https://merkle.trade",
-    apy: "Variable",
-    type: "Perpetuals",
-    logo: "/icons/protocols/merkle.avif",
-  },
 ];
 
 export default function YieldSection() {
   return (
+    // biome-ignore lint/correctness/useUniqueElementIds: stable anchor ID for scroll navigation
     <Section id="yields" className="bg-muted/30">
-      <motion.div
-        className="flex items-center justify-between mb-8"
-        {...FADE_UP}
-      >
+      <motion.div className="flex items-center justify-between mb-8" {...FADE_UP}>
         <div>
           <div className="flex items-center gap-2 mb-1">
             <TrendingUp className="w-5 h-5 text-primary" />
@@ -126,9 +101,7 @@ export default function YieldSection() {
                           {protocol.description}
                         </p>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-muted-foreground">
-                            {protocol.type}
-                          </span>
+                          <span className="text-xs text-muted-foreground">{protocol.type}</span>
                           <ExternalLink className="w-3 h-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                       </div>

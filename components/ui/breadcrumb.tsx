@@ -51,6 +51,8 @@ function BreadcrumbLink({
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: UI library component uses span with role by design
+    // biome-ignore lint/a11y/useFocusableInteractive: disabled breadcrumb page does not need focus
     <span
       data-slot="breadcrumb-page"
       role="link"

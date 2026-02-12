@@ -99,7 +99,7 @@ export function QueryExplorer() {
         <img src="/Dune-IconLarge.png" alt="Dune" className="w-8 h-8" />
         <div>
           <div className="text-sm font-bold text-[#F4603E]">Dune Analytics</div>
-          <div className="text-[10px] text-muted-foreground font-mono">
+          <div className="text-[11px] text-muted-foreground font-mono">
             Blockchain data, query ready.
           </div>
         </div>
@@ -112,11 +112,11 @@ export function QueryExplorer() {
           <h3 className="text-sm font-semibold mb-1">How It Works</h3>
           <p className="text-xs text-muted-foreground leading-relaxed">
             Query Aptos data using SQL tables like{" "}
-            <code className="text-[10px] bg-[#1E1870]/10 px-1 py-0.5 rounded font-mono">
+            <code className="text-[11px] bg-[#1E1870]/10 px-1 py-0.5 rounded font-mono">
               aptos.transactions
             </code>{" "}
             and{" "}
-            <code className="text-[10px] bg-[#1E1870]/10 px-1 py-0.5 rounded font-mono">
+            <code className="text-[11px] bg-[#1E1870]/10 px-1 py-0.5 rounded font-mono">
               aptos.blocks
             </code>
             .
@@ -128,7 +128,7 @@ export function QueryExplorer() {
       <div className="space-y-2 text-xs text-muted-foreground">
         <div className="flex items-start gap-2">
           <div className="w-5 h-5 rounded-full bg-[#F4603E]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <span className="text-[10px] font-semibold text-[#F4603E]">1</span>
+            <span className="text-[11px] font-semibold text-[#F4603E]">1</span>
           </div>
           <p className="leading-relaxed">
             <strong className="text-foreground">Index:</strong> Blockchain data is continuously
@@ -137,7 +137,7 @@ export function QueryExplorer() {
         </div>
         <div className="flex items-start gap-2">
           <div className="w-5 h-5 rounded-full bg-[#1E1870]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <span className="text-[10px] font-semibold text-[#1E1870]">2</span>
+            <span className="text-[11px] font-semibold text-[#1E1870]">2</span>
           </div>
           <p className="leading-relaxed">
             <strong className="text-foreground">Query:</strong> SQL aggregates and analyzes data to
@@ -146,7 +146,7 @@ export function QueryExplorer() {
         </div>
         <div className="flex items-start gap-2">
           <div className="w-5 h-5 rounded-full bg-[#F4603E]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <span className="text-[10px] font-semibold text-[#F4603E]">3</span>
+            <span className="text-[11px] font-semibold text-[#F4603E]">3</span>
           </div>
           <p className="leading-relaxed">
             <strong className="text-foreground">Display:</strong> Results render as cards and charts
@@ -168,12 +168,13 @@ export function QueryExplorer() {
             <div key={queryName} className="border border-border rounded-lg overflow-hidden">
               {/* Query Header */}
               <button
+                type="button"
                 onClick={() => toggleQuery(queryName)}
                 className="w-full flex items-center justify-between p-3 hover:bg-muted/50 transition-colors text-left"
               >
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-medium mb-0.5">{queryName}</div>
-                  <div className="text-[10px] text-muted-foreground line-clamp-1">
+                  <div className="text-[11px] text-muted-foreground line-clamp-1">
                     {query.description}
                   </div>
                 </div>
@@ -198,7 +199,7 @@ export function QueryExplorer() {
               {/* Query SQL (Expandable) */}
               {expandedQuery === queryName && (
                 <div className="p-3 bg-muted/30 border-t border-border">
-                  <pre className="text-[9px] overflow-x-auto">
+                  <pre className="text-xs overflow-x-auto">
                     <code className="text-muted-foreground">{query.sql}</code>
                   </pre>
                 </div>

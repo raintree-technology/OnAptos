@@ -27,13 +27,6 @@ const featuredYieldProtocols = [
     type: "DEX & Stablecoin",
   },
   {
-    name: "Aries Markets",
-    description: "Lending and borrowing with competitive rates",
-    href: "https://ariesmarkets.xyz",
-    apy: "Variable",
-    type: "Lending",
-  },
-  {
     name: "Echelon",
     description: "Money markets for Aptos assets",
     href: "https://echelon.market",
@@ -69,10 +62,7 @@ function YieldsContent() {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {featuredYieldProtocols.map((protocol) => (
-              <Card
-                key={protocol.name}
-                className="group hover:border-primary/50 transition-colors"
-              >
+              <Card key={protocol.name} className="group hover:border-primary/50 transition-colors">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
                     <h3 className="font-semibold">{protocol.name}</h3>
@@ -80,13 +70,9 @@ function YieldsContent() {
                       {protocol.apy}
                     </span>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    {protocol.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground mb-3">{protocol.description}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">
-                      {protocol.type}
-                    </span>
+                    <span className="text-xs text-muted-foreground">{protocol.type}</span>
                     <a
                       href={protocol.href}
                       target="_blank"
@@ -126,10 +112,7 @@ export default function YieldsPage() {
               <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-64 mb-8"></div>
               <div className="space-y-4">
                 {[...Array(5)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-16 bg-gray-200 dark:bg-gray-800 rounded"
-                  ></div>
+                  <div key={i} className="h-16 bg-gray-200 dark:bg-gray-800 rounded"></div>
                 ))}
               </div>
             </div>

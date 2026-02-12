@@ -39,7 +39,7 @@ export function AddressBar({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder={t("wallet.search_placeholder", "View any wallet address...")}
+              placeholder={t("wallet.search_placeholder", "0x... (64 hex characters)")}
               value={manualAddress}
               onChange={(e) => {
                 setManualAddress(e.target.value);
@@ -56,6 +56,7 @@ export function AddressBar({
             />
             {manualAddress && (
               <button
+                type="button"
                 onClick={onClear}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors touch-target"
                 aria-label="Clear address"
@@ -63,10 +64,16 @@ export function AddressBar({
                 <X className="h-4 w-4" />
               </button>
             )}
-            {addressError && (
+            {addressError ? (
               <p className="absolute -bottom-6 left-0 text-xs text-destructive px-1">
                 {addressError}
               </p>
+            ) : (
+              !manualAddress && (
+                <p className="absolute -bottom-6 left-0 text-xs text-muted-foreground/60 px-1">
+                  Enter an Aptos wallet address to view its portfolio
+                </p>
+              )
             )}
           </div>
         )}
@@ -78,6 +85,7 @@ export function AddressBar({
               {normalizedAddress?.slice(-4)}
             </span>
             <button
+              type="button"
               onClick={onClear}
               className="ml-1 text-muted-foreground hover:text-foreground transition-colors touch-target flex-shrink-0"
               aria-label="Clear viewing mode"

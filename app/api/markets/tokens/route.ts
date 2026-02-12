@@ -1,10 +1,9 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-
-import { PanoraTokenListService } from "@/lib/utils/api/panora-token-list";
-import { serverCached } from "@/lib/utils/server/cache";
 import { CACHE_DURATIONS, getCacheHeaders, successResponse } from "@/lib/utils/api/common";
+import { PanoraTokenListService } from "@/lib/utils/api/panora-token-list";
 import { apiLogger } from "@/lib/utils/core/logger";
+import { serverCached } from "@/lib/utils/server/cache";
 
 export const revalidate = 900; // 15 minutes for token list
 
@@ -73,7 +72,7 @@ export async function GET(request: NextRequest) {
     }));
 
     // Compute summary + distribution (best-effort with available fields)
-    const prices = mapped.map((m) => m.price).filter((n) => typeof n === "number");
+    const _prices = mapped.map((m) => m.price).filter((n) => typeof n === "number");
     const totalMarketCap = 0; // Unknown without supplies; keep 0
     const aptPrice = 0; // not used directly
     const totalTokens = mapped.length;

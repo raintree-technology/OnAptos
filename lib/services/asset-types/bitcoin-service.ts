@@ -469,7 +469,6 @@ export class BitcoinService extends BaseAssetService {
             );
             return BitcoinService.fetchCoinSupplyViaRestAPI(token);
           }
-          break;
 
         case "coin":
           // For new coins, use REST API to get CoinInfo resource

@@ -31,7 +31,7 @@ export function MetricCard({ metric, compact = false }: MetricCardProps) {
         <div className="flex items-start justify-between mb-1.5">
           <div className="flex-1 min-w-0 pr-2">
             <div
-              className={`text-muted-foreground/80 font-semibold tracking-tight leading-tight ${compact ? "text-[10px]" : "text-xs"}`}
+              className={`text-muted-foreground/80 font-semibold tracking-tight leading-tight ${compact ? "text-[11px]" : "text-xs"}`}
             >
               {shortenMetricName(metric.name)}
             </div>
@@ -70,7 +70,7 @@ export function MetricCard({ metric, compact = false }: MetricCardProps) {
             className={`inline-flex items-center gap-1 text-[#F4603E] hover:text-[#1E1870]
               font-medium transition-all duration-200
               opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0
-              ${compact ? "text-[9px]" : "text-[10px]"}`}
+              ${compact ? "text-xs" : "text-[11px]"}`}
           >
             <span>View Query</span>
             <ExternalLink className={compact ? "w-2.5 h-2.5" : "w-3 h-3"} />

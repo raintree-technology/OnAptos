@@ -6,10 +6,9 @@ import { apiLogger } from "@/lib/utils/core/logger";
 
 // DeFi protocol detection patterns
 const DEFI_PATTERNS = {
-  LP_TOKENS: ["MKLP", "THALA-LP"],
+  LP_TOKENS: ["THALA-LP"],
   STAKING_TOKENS: ["vstAPT", "stAPT"],
   DEFI_CONTRACTS: [
-    "0x5ae6789dd2fec1a9ec9cccfb3acaf12e93d432f0a3a42c92fe1a9d490b7bbc06", // Merkle Finance
     "0x48271d39d0b05bd6efca2278f22277d6fcc375504f9839fd73f74ace240861af", // Thala protocol
   ],
 };
@@ -55,18 +54,6 @@ function getProtocolInfo(asset: any): {
 } {
   const symbol = asset.metadata?.symbol || "";
   const assetType = asset.asset_type || "";
-
-  // Merkle Finance
-  if (
-    symbol.includes("MKLP") ||
-    assetType.includes("5ae6789dd2fec1a9ec9cccfb3acaf12e93d432f0a3a42c92fe1a9d490b7bbc06")
-  ) {
-    return {
-      protocol: "Merkle Finance",
-      defiType: "lp",
-      logoUrl: "/icons/protocols/merkle.png",
-    };
-  }
 
   // Thala
   if (

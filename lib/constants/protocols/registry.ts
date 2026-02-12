@@ -16,41 +16,13 @@ export const DEFI_PROTOCOL_NAME_MAPPINGS: Record<string, string> = {
   "thala finance": "Thala",
   "thala farm": "Thala",
 
-  // Pancake variations
-  pancake: "PancakeSwap",
-  pancakeswap: "PancakeSwap",
-  "pancake swap": "PancakeSwap",
-
   // Liquid staking variations
   amnis: "Amnis",
   "amnis finance": "Amnis",
 
-  // DEX variations
-  liquidswap: "LiquidSwap",
-  "liquid swap": "LiquidSwap",
-  cellana: "Cellana",
-  "cellana finance": "Cellana",
-  sushi: "SushiSwap",
-  sushiswap: "SushiSwap",
-  "sushi swap": "SushiSwap",
-
   // Aggregator variations
   panora: "Panora",
   "panora exchange": "Panora",
-  kana: "Kana",
-  kanalabs: "Kana",
-  "kana labs": "Kana",
-  anqa: "Anqa",
-
-  // Lending variations
-  aries: "Aries Markets",
-  "aries markets": "Aries Markets",
-
-  // Other protocols
-  hippo: "Hippo Labs",
-  "hippo labs": "Hippo Labs",
-  aux: "AUX",
-  "aux exchange": "AUX",
 } as const;
 
 /**

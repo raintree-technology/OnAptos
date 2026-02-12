@@ -108,10 +108,6 @@ export class UnifiedDeFiScanner {
       // Enrich positions with fungible asset balances
       positions = await this.enrichPositionsWithFungibleAssets(positions, walletAddress);
 
-      // Add direct fungible asset positions (like MKLP)
-      const faPositions = await this.createFungibleAssetPositions(walletAddress);
-      positions = [...positions, ...faPositions];
-
       // Add regular tokens if requested
       if (options.includeTokens !== false) {
         const tokenPositions = await this.scanTokens(resources, walletAddress);
@@ -266,7 +262,7 @@ export class UnifiedDeFiScanner {
             {
               type: "supplied",
               tokenAddress: faBalance.asset_type,
-              symbol: faBalance.metadata?.symbol || "MKLP",
+              symbol: faBalance.metadata?.symbol || "Unknown",
               amount: amount.toString(),
               valueUSD: 0, // Will be updated with price
               metadata: {
@@ -380,61 +376,6 @@ export class UnifiedDeFiScanner {
     }
 
     return Array.from(seen.values());
-  }
-
-  /**
-   * Create positions directly from fungible assets (for tokens like MKLP)
-   */
-  private async createFungibleAssetPositions(walletAddress: string): Promise<DeFiPosition[]> {
-    const positions: DeFiPosition[] = [];
-
-    try {
-      // Get MKLP balances specifically
-      const mklpBalances = await FungibleAssetService.getMKLPBalances(walletAddress);
-
-      for (const balance of mklpBalances) {
-        if (balance.amount === 0) continue;
-
-        const decimals = balance.metadata?.decimals || 6;
-        const amount = balance.amount / 10 ** decimals;
-
-        positions.push({
-          positionId: `mklp-${balance.asset_type}`,
-          protocol: "Merkle",
-          protocolType: "DEX",
-          totalValue: 0,
-          address: walletAddress,
-          type: "lp",
-          assets: [
-            {
-              type: "supplied",
-              tokenAddress: balance.asset_type,
-              symbol: balance.metadata?.symbol || "MKLP",
-              amount: amount.toString(),
-              valueUSD: 0, // Will be updated with price
-            },
-          ],
-          totalValueUSD: 0,
-          position: {},
-          metadata: {
-            protocolId: "merkle",
-            protocolType: "DERIVATIVES",
-            confidence: 100,
-            lpType: "house_lp",
-            protocolName: "Merkle Trade",
-            positionType: "Liquidity Provider",
-            assetType: balance.asset_type,
-            decimals,
-          },
-        });
-      }
-
-      logger.info(`Created ${positions.length} fungible asset positions`);
-      return positions;
-    } catch (error) {
-      logger.warn("Failed to create fungible asset positions", { error });
-      return [];
-    }
   }
 
   /**

@@ -143,8 +143,11 @@ export const UnifiedNFTGrid: React.FC<UnifiedNFTGridProps> = ({
 
     if (variant === "minimal") {
       return (
+        // biome-ignore lint/a11y/useSemanticElements: complex NFT card layout
         <div
           key={uniqueKey}
+          role="button"
+          tabIndex={0}
           className={cn(
             "group relative aspect-square cursor-pointer overflow-hidden bg-neutral-50 dark:bg-neutral-950 rounded-lg",
             "transition-all duration-200",
@@ -152,6 +155,12 @@ export const UnifiedNFTGrid: React.FC<UnifiedNFTGridProps> = ({
             className
           )}
           onClick={() => onNFTSelect(nft)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onNFTSelect(nft);
+            }
+          }}
         >
           <NFTImage
             src={imageUrl}
@@ -176,8 +185,11 @@ export const UnifiedNFTGrid: React.FC<UnifiedNFTGridProps> = ({
 
     if (variant === "enhanced") {
       return (
+        // biome-ignore lint/a11y/useSemanticElements: complex NFT card layout
         <div
           key={uniqueKey}
+          role="button"
+          tabIndex={0}
           className={cn(
             "group relative rounded-xl bg-card border overflow-hidden cursor-pointer transition-all duration-200 shadow-sm",
             "hover:shadow-lg hover:ring-1 hover:ring-primary/30 hover:-translate-y-1",
@@ -185,6 +197,12 @@ export const UnifiedNFTGrid: React.FC<UnifiedNFTGridProps> = ({
             className
           )}
           onClick={() => onNFTSelect(nft)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onNFTSelect(nft);
+            }
+          }}
         >
           <div className="relative overflow-hidden bg-muted aspect-square">
             <NFTImage
@@ -207,14 +225,23 @@ export const UnifiedNFTGrid: React.FC<UnifiedNFTGridProps> = ({
 
     // Standard variant (default)
     return (
+      // biome-ignore lint/a11y/useSemanticElements: complex NFT card layout
       <div
         key={uniqueKey}
+        role="button"
+        tabIndex={0}
         className={cn(
           "relative group cursor-pointer transition-all duration-200",
           isSelected && "ring-2 ring-primary ring-offset-2",
           className
         )}
         onClick={() => onNFTSelect(nft)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onNFTSelect(nft);
+          }
+        }}
       >
         <div className="aspect-square rounded-lg overflow-hidden border hover:border-primary/50 transition-colors">
           <NFTImage

@@ -1,4 +1,4 @@
-import { MetricCard, type Metric } from "./MetricCard";
+import { type Metric, MetricCard } from "./MetricCard";
 
 interface MetricsCategoryProps {
   category: string;

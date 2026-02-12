@@ -239,6 +239,7 @@ export default function MetricsPage(): React.ReactElement {
                             {row.name}
                             {row.queryUrl && (
                               <svg
+                                aria-hidden="true"
                                 className="w-4 h-4 text-muted-foreground opacity-50"
                                 fill="none"
                                 stroke="currentColor"

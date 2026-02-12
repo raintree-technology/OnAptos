@@ -573,11 +573,6 @@ function getTokenDecimals(assetType?: string, metadataDecimals?: number): number
     "0x6f4b2376e61b7493774d6a4a1c07797622be14f5af6e8c1cd0c1c4cddf7e522": 6,
     // APT has 8 decimals
     "0x1::aptos_coin::AptosCoin": 8,
-    // MKLP (Merkle LP) has 8 decimals
-    MKLP: 8,
-    // UPT (Uptos) has 8 decimals
-    UPT: 8,
-    UPTOS: 8,
     // Add other tokens with known decimal issues here
   };
 

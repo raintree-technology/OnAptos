@@ -94,6 +94,7 @@ export function NewSidebar({
 
     return (
       <button
+        type="button"
         key={asset.asset_type || asset.fa_address || asset.token_address}
         onClick={() => onAssetSelect?.(asset)}
         className={cn(
@@ -153,6 +154,7 @@ export function NewSidebar({
 
     return (
       <button
+        type="button"
         key={nft.token_data_id}
         onClick={() => onNFTSelect?.(nft)}
         className={cn(
@@ -185,6 +187,7 @@ export function NewSidebar({
 
     return (
       <button
+        type="button"
         key={`${defi.protocol}-${defi.type}-${defi.totalValueUSD}`}
         onClick={() => onDeFiSelect?.(defi)}
         className={cn(
@@ -286,6 +289,7 @@ export function NewSidebar({
         <div className="flex">
           {tabs.map((tab) => (
             <button
+              type="button"
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(

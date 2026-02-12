@@ -206,16 +206,7 @@ export class YieldAggregatorService {
 
     try {
       // Use generalized protocol fetcher
-      const [aries, echelon, echo, meso] = await Promise.allSettled([
-        this.fetchProtocolOpportunities("Aries", PROTOCOLS.ARIES_MARKETS.addresses[0], {
-          resourceFilters: [
-            `${PROTOCOLS.ARIES_MARKETS.addresses[0]}::reserve::ReserveCoinContainer`,
-          ],
-          opportunityType: "lending",
-          protocolType: "lending",
-          risk: "low",
-          features: ["Auto-compound", "No lock period"],
-        }),
+      const [echelon, echo] = await Promise.allSettled([
         this.fetchProtocolOpportunities("Echelon", PROTOCOLS.ECHELON.addresses[0], {
           resourceFilters: [`${PROTOCOLS.ECHELON.addresses[0]}::lending::Lending`],
           opportunityType: "lending",
@@ -230,19 +221,10 @@ export class YieldAggregatorService {
           risk: "low",
           features: ["Bitcoin lending"],
         }),
-        this.fetchProtocolOpportunities("Meso", PROTOCOLS.MESO_FINANCE.addresses[0], {
-          resourceFilters: [`${PROTOCOLS.MESO_FINANCE.addresses[0]}::lending`],
-          opportunityType: "lending",
-          protocolType: "lending",
-          risk: "medium",
-          features: ["Cross-chain lending"],
-        }),
       ]);
 
       // Process results and convert to YieldOpportunity format
-      const allResults = [aries, echelon, echo, meso].filter(
-        (result) => result.status === "fulfilled"
-      );
+      const allResults = [echelon, echo].filter((result) => result.status === "fulfilled");
       for (const result of allResults) {
         if (result.status === "fulfilled") {
           opportunities.push(...result.value.map(this.convertProtocolToYieldOpportunity));
@@ -287,7 +269,7 @@ export class YieldAggregatorService {
     const opportunities: YieldOpportunity[] = [];
 
     try {
-      const [thala, liquidswap] = await Promise.allSettled([
+      const [thala] = await Promise.allSettled([
         this.fetchProtocolOpportunities("Thala", PROTOCOLS.THALA_INFRA.addresses[0], {
           resourceFilters: [
             `${PROTOCOLS.THALA_INFRA.addresses[0]}::stable_pool::StablePool`,
@@ -298,17 +280,10 @@ export class YieldAggregatorService {
           risk: "medium",
           features: ["Trading fees", "THL rewards"],
         }),
-        this.fetchProtocolOpportunities("LiquidSwap", PROTOCOLS.LIQUIDSWAP.addresses[6], {
-          resourceFilters: [`liquidity_pool::LiquidityPool`],
-          opportunityType: "liquidity",
-          protocolType: "dex",
-          risk: "medium",
-          features: ["Low fees", "Stable pools"],
-        }),
       ]);
 
       // Process results
-      const allResults = [thala, liquidswap].filter((result) => result.status === "fulfilled");
+      const allResults = [thala].filter((result) => result.status === "fulfilled");
       for (const result of allResults) {
         if (result.status === "fulfilled") {
           opportunities.push(...result.value.map(this.convertProtocolToYieldOpportunity));

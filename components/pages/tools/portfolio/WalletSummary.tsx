@@ -172,11 +172,10 @@ export const WalletSummary: React.FC<WalletSummaryProps> = ({
         : nfts.length
           ? (() => {
               const map = {} as Record<string, number>;
-              nfts.forEach(
-                (n) =>
-                  (map[n.collection_name || "Unknown"] =
-                    (map[n.collection_name || "Unknown"] || 0) + 1)
-              );
+              nfts.forEach((n) => {
+                map[n.collection_name || "Unknown"] =
+                  (map[n.collection_name || "Unknown"] || 0) + 1;
+              });
               const collections = Object.entries(map)
                 .map(([name, count]) => ({ name, count }))
                 .sort((a, b) => b.count - a.count);

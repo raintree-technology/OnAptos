@@ -18,6 +18,7 @@ export function RefreshButton() {
 
   return (
     <button
+      type="button"
       onClick={handleRefresh}
       disabled={isRefreshing}
       className="p-2 rounded-lg

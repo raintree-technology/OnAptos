@@ -71,9 +71,7 @@ const TokenCard = memo(function TokenCard({
       let dollars: number;
       if (isRaw) {
         // Use correct decimals for each token
-        const decimals = ["MOD", "USDA"].includes(symbol)
-          ? 100_000_000
-          : 1_000_000;
+        const decimals = ["MOD", "USDA"].includes(symbol) ? 100_000_000 : 1_000_000;
         dollars = Number(supplyVal) / decimals;
       } else {
         dollars = Number(supplyVal);
@@ -90,8 +88,7 @@ const TokenCard = memo(function TokenCard({
 
     // Centralized currency formatting function
     const formatCurrencyShort = (dollars: number): string => {
-      if (dollars >= 1_000_000_000)
-        return `$${(dollars / 1_000_000_000).toFixed(1)}b`;
+      if (dollars >= 1_000_000_000) return `$${(dollars / 1_000_000_000).toFixed(1)}b`;
       if (dollars >= 1_000_000) return `$${(dollars / 1_000_000).toFixed(1)}m`;
       if (dollars >= 1_000) return `$${(dollars / 1_000).toFixed(1)}k`;
       return `$${dollars.toFixed(0)}`;
@@ -103,17 +100,13 @@ const TokenCard = memo(function TokenCard({
           formatSingle(
             component.supply_raw || component.supply,
             component.symbol,
-            !!component.supply_raw,
-          ),
+            !!component.supply_raw
+          )
         );
         return parts.join(" / ");
       }
 
-      return formatSingle(
-        token.supply_raw || token.supply,
-        token.symbol,
-        !!token.supply_raw,
-      );
+      return formatSingle(token.supply_raw || token.supply, token.symbol, !!token.supply_raw);
     };
 
     return {
@@ -138,8 +131,8 @@ const TokenCard = memo(function TokenCard({
                     <div className="w-5 h-5 relative flex-shrink-0 mr-1">
                       <Image
                         src={
-                          (TOKEN_METADATA[component.symbol]
-                            ?.thumbnail as string) || "/placeholder.jpg"
+                          (TOKEN_METADATA[component.symbol]?.thumbnail as string) ||
+                          "/placeholder.jpg"
                         }
                         alt={`${component.symbol} icon`}
                         width={20}
@@ -152,9 +145,7 @@ const TokenCard = memo(function TokenCard({
                       />
                     </div>
                   </div>
-                  {index === 0 && (
-                    <span className="mx-1 text-muted-foreground">/</span>
-                  )}
+                  {index === 0 && <span className="mx-1 text-muted-foreground">/</span>}
                 </React.Fragment>
               ))}
           </div>
@@ -176,17 +167,11 @@ const TokenCard = memo(function TokenCard({
         <h3 className="text-base font-semibold">{symbol}</h3>
       </div>
       <div>
-        <p className="text-lg font-bold font-mono mb-0.5">
-          {formattedDisplaySupply}
-        </p>
+        <p className="text-lg font-bold font-mono mb-0.5">{formattedDisplaySupply}</p>
       </div>
       <div className="flex items-baseline justify-between mb-1">
-        <span className="text-xs text-muted-foreground">
-          {t("stables:stats.market_share")}
-        </span>
-        <span className="text-xs text-muted-foreground font-mono">
-          {marketSharePercent}%
-        </span>
+        <span className="text-xs text-muted-foreground">{t("stables:stats.market_share")}</span>
+        <span className="text-xs text-muted-foreground font-mono">{marketSharePercent}%</span>
       </div>
       <Progress className="h-1" value={Number(marketSharePercent)} />
     </div>
@@ -279,20 +264,14 @@ const ErrorState = memo(function ErrorState({
             {t("stables:loading.error_title")}
           </h3>
           {status && (
-            <p className="text-muted-foreground text-sm mb-1">
-              HTTP error! Status: {status}
-            </p>
+            <p className="text-muted-foreground text-sm mb-1">HTTP error! Status: {status}</p>
           )}
 
           {isCustomMessage ? (
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-medium">
-                {t("stables:loading.rate_limit_message")}
-              </span>
+              <span className="font-medium">{t("stables:loading.rate_limit_message")}</span>
               {countdown > 0 && (
-                <span className="text-muted-foreground">
-                  {t("stables:loading.try_again_in")}
-                </span>
+                <span className="text-muted-foreground">{t("stables:loading.try_again_in")}</span>
               )}
               <Button
                 onClick={onRetry}
@@ -301,20 +280,13 @@ const ErrorState = memo(function ErrorState({
                 className="h-8 px-3"
                 disabled={countdown > 0}
               >
-                {countdown > 0
-                  ? `${countdown}s`
-                  : t("stables:loading.try_again")}
+                {countdown > 0 ? `${countdown}s` : t("stables:loading.try_again")}
               </Button>
             </div>
           ) : (
             <p className="text-muted-foreground">
               {t("stables:loading.request_failed")}
-              <Button
-                onClick={onRetry}
-                variant="outline"
-                className="ml-3"
-                size="sm"
-              >
+              <Button onClick={onRetry} variant="outline" className="ml-3" size="sm">
                 {t("stables:loading.try_again")}
               </Button>
             </p>
@@ -352,19 +324,15 @@ function StablesPage(): React.ReactElement {
       }
 
       const responseData = await response.json();
-      logger.info(
-        `[Stables Page] Fetched data: ${JSON.stringify(responseData).substring(0, 200)}`,
-      );
+      logger.info(`[Stables Page] Fetched data: ${JSON.stringify(responseData).substring(0, 200)}`);
       // Extract the data from the response wrapper
       const data = responseData.data || responseData;
       setStablesData(data);
     } catch (error) {
       logger.error(
-        `[Stables Page] Error fetching data: ${error instanceof Error ? error.message : String(error)}`,
+        `[Stables Page] Error fetching data: ${error instanceof Error ? error.message : String(error)}`
       );
-      setStablesError(
-        error instanceof Error ? error : new Error(String(error)),
-      );
+      setStablesError(error instanceof Error ? error : new Error(String(error)));
     } finally {
       setIsLoading(false);
       setIsFetching(false);
@@ -399,15 +367,11 @@ function StablesPage(): React.ReactElement {
   // Debug logging
   if (data) {
     logger.info(
-      `[Stables Page] Data structure: has supplies = ${!!data.supplies}, supplies length = ${data.supplies?.length}`,
+      `[Stables Page] Data structure: has supplies = ${!!data.supplies}, supplies length = ${data.supplies?.length}`
     );
-    logger.info(
-      `[Stables Page] Full data keys: ${Object.keys(data).join(", ")}`,
-    );
+    logger.info(`[Stables Page] Full data keys: ${Object.keys(data).join(", ")}`);
     if (data.supplies && data.supplies.length > 0) {
-      logger.info(
-        `[Stables Page] First supply item: ${JSON.stringify(data.supplies[0])}`,
-      );
+      logger.info(`[Stables Page] First supply item: ${JSON.stringify(data.supplies[0])}`);
     }
   } else {
     logger.warn(`[Stables Page] Data is null or undefined`);
@@ -426,10 +390,7 @@ function StablesPage(): React.ReactElement {
     if (["MOD"].includes(symbol)) {
       return "Algorithmic Stablecoin";
     }
-    if (
-      symbol.includes(".lz") ||
-      ["sUSDe", "USDe", "sUSDe/USDe"].includes(symbol)
-    ) {
+    if (symbol.includes(".lz") || ["sUSDe", "USDe", "sUSDe/USDe"].includes(symbol)) {
       return "Bridged via LayerZero";
     }
     if (symbol.includes(".wh")) {
@@ -488,14 +449,10 @@ function StablesPage(): React.ReactElement {
 
       const usdeToken = supplies.find((t: any) => t.symbol === "USDe");
       const susdeToken = supplies.find((t: any) => t.symbol === "sUSDe");
-      const otherTokens = supplies.filter(
-        (t: any) => !["USDe", "sUSDe"].includes(t.symbol),
-      );
+      const otherTokens = supplies.filter((t: any) => !["USDe", "sUSDe"].includes(t.symbol));
 
       const displayTokens: DisplayToken[] = [...otherTokens];
-      const ethenaComponents = [usdeToken, susdeToken].filter(
-        Boolean,
-      ) as Token[];
+      const ethenaComponents = [usdeToken, susdeToken].filter(Boolean) as Token[];
 
       if (ethenaComponents.length > 0) {
         displayTokens.push({
@@ -505,11 +462,7 @@ function StablesPage(): React.ReactElement {
             .reduce((acc, curr) => acc + BigInt(curr?.supply || "0"), 0n)
             .toString(),
           supply_raw: ethenaComponents
-            .reduce(
-              (acc, curr) =>
-                acc + BigInt(curr?.supply_raw || curr?.supply || "0"),
-              0n,
-            )
+            .reduce((acc, curr) => acc + BigInt(curr?.supply_raw || curr?.supply || "0"), 0n)
             .toString(),
           components: ethenaComponents,
         });
@@ -547,8 +500,8 @@ function StablesPage(): React.ReactElement {
       const dollars = Number(
         processedSuppliesForCards.reduce(
           (sum: number, t: any) => sum + parseFloat(t.supply || "0"),
-          0,
-        ),
+          0
+        )
       );
       return new Intl.NumberFormat("en-US", {
         style: "currency",
@@ -568,9 +521,7 @@ function StablesPage(): React.ReactElement {
 
   return (
     <ErrorBoundary>
-      <div
-        className={`min-h-screen flex flex-col relative ${GeistMono.className}`}
-      >
+      <div className={`min-h-screen flex flex-col relative ${GeistMono.className}`}>
         {/* Background gradient removed - using global textured background */}
 
         <div className="fixed top-0 left-0 right-0 h-1 z-30">
@@ -593,13 +544,9 @@ function StablesPage(): React.ReactElement {
               {/* Mobile: Show total supply at top */}
               <div className="md:hidden mb-6">
                 <div className="flex items-center justify-between mb-1">
-                  <h2 className="text-sm text-muted-foreground">
-                    Total Supply
-                  </h2>
+                  <h2 className="text-sm text-muted-foreground">Total Supply</h2>
                 </div>
-                <p className="text-xl font-bold font-mono">
-                  {formattedTotalSupply}
-                </p>
+                <p className="text-xl font-bold font-mono">{formattedTotalSupply}</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
@@ -639,14 +586,11 @@ function StablesPage(): React.ReactElement {
                         processedSupplies?.map((token: any) => {
                           const dollarSupply = parseFloat(token.supply || "0");
                           const totalDollarSupply = processedSupplies.reduce(
-                            (sum: number, t: any) =>
-                              sum + parseFloat(t.supply || "0"),
-                            0,
+                            (sum: number, t: any) => sum + parseFloat(t.supply || "0"),
+                            0
                           );
                           const percentage =
-                            totalDollarSupply > 0
-                              ? (dollarSupply / totalDollarSupply) * 100
-                              : 0;
+                            totalDollarSupply > 0 ? (dollarSupply / totalDollarSupply) * 100 : 0;
                           return {
                             name: token.symbol,
                             value: percentage, // Pie chart expects percentage in value field
@@ -660,22 +604,17 @@ function StablesPage(): React.ReactElement {
                       }
                       totalValue={
                         processedSupplies?.reduce(
-                          (sum: number, t: any) =>
-                            sum + parseFloat(t.supply || "0"),
-                          0,
+                          (sum: number, t: any) => sum + parseFloat(t.supply || "0"),
+                          0
                         ) || 0
                       }
                       colors={STABLECOIN_COLORS}
                       topRightContent={
                         <div className="text-right">
                           <div className="flex items-center justify-end gap-3 mb-1">
-                            <h2 className="text-sm text-muted-foreground">
-                              Total Supply
-                            </h2>
+                            <h2 className="text-sm text-muted-foreground">Total Supply</h2>
                           </div>
-                          <p className="text-lg font-bold font-mono">
-                            {formattedTotalSupply}
-                          </p>
+                          <p className="text-lg font-bold font-mono">{formattedTotalSupply}</p>
                         </div>
                       }
                     />
@@ -706,34 +645,27 @@ function StablesPage(): React.ReactElement {
               <div className="mt-8 w-full overflow-hidden">
                 <hr className="border-t border-border mb-6" />
                 <div className="w-full overflow-x-auto">
-                  <Table>
+                  <Table className="table-sticky-first">
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="min-w-[120px] sm:min-w-[150px]">
-                          Token
-                        </TableHead>
+                        <TableHead className="min-w-[120px] sm:min-w-[150px]">Token</TableHead>
                         <TableHead className="min-w-[140px] sm:min-w-[160px] hidden sm:table-cell">
                           Type
                         </TableHead>
                         <TableHead className="min-w-[140px] sm:min-w-[160px] hidden sm:table-cell">
                           Address
                         </TableHead>
-                        <TableHead className="min-w-[100px] sm:min-w-[120px]">
-                          Supply
-                        </TableHead>
-                        <TableHead className="min-w-[60px] sm:min-w-[80px] text-right">
-                          %
-                        </TableHead>
+                        <TableHead className="min-w-[100px] sm:min-w-[120px]">Supply</TableHead>
+                        <TableHead className="min-w-[60px] sm:min-w-[80px] text-right">%</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {processedSuppliesForTable?.map((token: any) => {
                         const metadata = TOKEN_METADATA[token.symbol];
-                        const totalDollarSupply =
-                          processedSuppliesForTable.reduce(
-                            (sum: number, t: any) => sum + Number(t.supply),
-                            0,
-                          );
+                        const totalDollarSupply = processedSuppliesForTable.reduce(
+                          (sum: number, t: any) => sum + Number(t.supply),
+                          0
+                        );
                         const marketSharePercent = (
                           (Number(token.supply) / totalDollarSupply) *
                           100
@@ -744,10 +676,7 @@ function StablesPage(): React.ReactElement {
                             <TableCell className="whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <Image
-                                  src={
-                                    (metadata?.thumbnail as string) ||
-                                    "/placeholder.jpg"
-                                  }
+                                  src={(metadata?.thumbnail as string) || "/placeholder.jpg"}
                                   alt={token.symbol}
                                   width={20}
                                   height={20}
@@ -757,9 +686,7 @@ function StablesPage(): React.ReactElement {
                                     img.src = "/placeholder.jpg";
                                   }}
                                 />
-                                <span className="font-medium">
-                                  {token.symbol}
-                                </span>
+                                <span className="font-medium">{token.symbol}</span>
                               </div>
                             </TableCell>
                             <TableCell className="whitespace-nowrap hidden sm:table-cell">
@@ -770,10 +697,11 @@ function StablesPage(): React.ReactElement {
                             <TableCell className="whitespace-nowrap hidden sm:table-cell">
                               {metadata?.assetAddress ? (
                                 <button
+                                  type="button"
                                   onClick={() =>
                                     copyToClipboard(
                                       metadata.assetAddress!,
-                                      `${token.symbol} address`,
+                                      `${token.symbol} address`
                                     )
                                   }
                                   className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors group"
@@ -785,9 +713,7 @@ function StablesPage(): React.ReactElement {
                                   <Copy className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </button>
                               ) : (
-                                <span className="text-sm text-muted-foreground">
-                                  —
-                                </span>
+                                <span className="text-sm text-muted-foreground">—</span>
                               )}
                             </TableCell>
                             <TableCell className="font-mono whitespace-nowrap">
@@ -799,8 +725,7 @@ function StablesPage(): React.ReactElement {
                                       return `$${(value / 1_000_000_000).toFixed(1)}b`;
                                     if (value >= 1_000_000)
                                       return `$${(value / 1_000_000).toFixed(1)}m`;
-                                    if (value >= 1_000)
-                                      return `$${(value / 1_000).toFixed(1)}k`;
+                                    if (value >= 1_000) return `$${(value / 1_000).toFixed(1)}k`;
                                     return `$${value.toFixed(0)}`;
                                   })()}
                                 </span>

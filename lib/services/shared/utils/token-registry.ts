@@ -222,9 +222,6 @@ export class TokenRegistry {
     // Check symbol for known tokens
     const upperSymbol = symbol?.toUpperCase();
     if (upperSymbol === "APT") return 8;
-    if (upperSymbol === "MKLP") return 8; // Merkle LP token uses 8 decimals
-    if (upperSymbol === "UPT" || upperSymbol === "UPTOS") return 8; // Uptos token uses 8 decimals
-
     // Stablecoins typically use 6 decimals
     if (TokenRegistry.isStablecoin(address, symbol)) {
       if (symbol?.toUpperCase().includes("USDC") || symbol?.toUpperCase().includes("USDT")) {
