@@ -36,20 +36,30 @@
         "noConsole": {
           "level": "error",
           "options": {
-            "allow": []
+            "allow": ["assert", "error", "info", "warn"]
           }
         }
       },
       "correctness": {
         "useExhaustiveDependencies": "warn",
-        "useHookAtTopLevel": "error"
+        "useHookAtTopLevel": "error",
+        "noUnusedVariables": "warn"
       },
       "complexity": {
         "noUselessFragments": "warn"
+      },
+      "performance": {
+        "noAccumulatingSpread": "warn"
       }
     }
   },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
