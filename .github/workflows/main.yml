@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
       - name: Cache node_modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ steps.cache-key.outputs.key }}
@@ -42,7 +42,7 @@ jobs:
         with:
           bun-version: ${{ env.BUN_VERSION }}
       - name: Restore cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ needs.setup.outputs.cache-key }}
@@ -71,7 +71,7 @@ jobs:
         with:
           bun-version: ${{ env.BUN_VERSION }}
       - name: Restore cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ needs.setup.outputs.cache-key }}
@@ -90,7 +90,7 @@ jobs:
         with:
           bun-version: ${{ env.BUN_VERSION }}
       - name: Restore cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ needs.setup.outputs.cache-key }}
@@ -109,7 +109,7 @@ jobs:
         with:
           bun-version: ${{ env.BUN_VERSION }}
       - name: Restore cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ needs.setup.outputs.cache-key }}
@@ -131,7 +131,7 @@ jobs:
         with:
           bun-version: ${{ env.BUN_VERSION }}
       - name: Restore cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ needs.setup.outputs.cache-key }}
@@ -185,7 +185,7 @@ jobs:
         with:
           bun-version: ${{ env.BUN_VERSION }}
       - name: Restore cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ needs.setup.outputs.cache-key }}
