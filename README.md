@@ -1,5 +1,8 @@
 # On Aptos
 
+[![CI/CD Pipeline](https://github.com/raintree-technology/OnAptos/actions/workflows/main.yml/badge.svg)](https://github.com/raintree-technology/OnAptos/actions/workflows/main.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A comprehensive blockchain analytics platform for the Aptos ecosystem, providing real-time insights into DeFi protocols, stablecoins, Bitcoin on Aptos, RWAs, and portfolio management.
 
 ## Features
@@ -30,8 +33,8 @@ A comprehensive blockchain analytics platform for the Aptos ecosystem, providing
 #### Option 1: Automated Setup (Recommended)
 
 ```bash
-git clone https://github.com/yourusername/on-aptos.git
-cd on-aptos
+git clone https://github.com/raintree-technology/OnAptos.git
+cd OnAptos
 bun run setup
 ```
 
@@ -42,8 +45,8 @@ The setup script will install dependencies and create your `.env` file.
 1. Clone and install:
 
 ```bash
-git clone https://github.com/yourusername/on-aptos.git
-cd on-aptos
+git clone https://github.com/raintree-technology/OnAptos.git
+cd OnAptos
 bun install
 ```
 
@@ -57,12 +60,12 @@ cp .env.example .env
 
 ```env
 # Required
-CMC_API_KEY=your_key           # From coinmarketcap.com/api
-RWA_API_KEY=your_key           # Contact RWA.xyz for access
+CMC_API_KEY=your_key     # From coinmarketcap.com/api
+RWA_API_KEY=your_key     # Contact RWA.xyz for access
 
 # Optional (for better rate limits)
-APTOS_BUILD_SECRET=your_key    # From developers.aptoslabs.com
-PANORA_API_KEY=your_key        # Leave empty for public key
+APTOS_BUILD_SECRET=your_key  # From developers.aptoslabs.com
+PANORA_API_KEY=your_key      # Leave empty for public key
 ```
 
 4. (Optional) Customize branding in `.env`:
@@ -75,7 +78,7 @@ NEXT_PUBLIC_DEVELOPER_GITHUB=https://github.com/yourusername/your-repo
 # See .env.example for all customization options
 ```
 
-4. Start development:
+5. Start development:
 
 ```bash
 bun dev
@@ -84,11 +87,11 @@ bun dev
 ## Development
 
 ```bash
-bun dev           # Start development server
-bun run build     # Create production build
-bun run lint      # Run linting with Biome
+bun dev          # Start development server
+bun run build    # Create production build
+bun run lint     # Run linting with Biome
 bun run typecheck # TypeScript checking
-bun run test      # Run tests
+bun run test     # Run tests
 ```
 
 ## Forking & Customization
@@ -112,7 +115,8 @@ To fully customize your fork:
 
 ## Security
 
-Multi-layer security with automated secret detection, pre-commit hooks, and CI/CD scanning. See `.github/SECURITY_SETUP.md` for details.
+Multi-layer security with automated secret detection, pre-commit hooks, and CI/CD scanning.
+See `.github/SECURITY_SETUP.md` for details.
 
 ## Contributing
 
@@ -127,5 +131,5 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Support
 
-- Issues: [GitHub Issues](https://github.com/yourusername/on-aptos/issues)
-- Community: [Discord](https://discord.gg/aptos)
+- Issues: [GitHub Issues](https://github.com/raintree-technology/OnAptos/issues)
+- Live App: [on-aptos.com](https://on-aptos.com)
