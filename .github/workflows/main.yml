@@ -197,7 +197,7 @@ jobs:
           NEXT_PUBLIC_APTOS_BUILD_SECRET: ${{ secrets.NEXT_PUBLIC_APTOS_BUILD_SECRET }}
           APTOS_BUILD_SECRET: ${{ secrets.APTOS_BUILD_SECRET }}
       - name: Run Lighthouse CI
-        uses: treosh/lighthouse-ci-action@v11
+        uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: './lighthouserc.json'
           uploadArtifacts: true
