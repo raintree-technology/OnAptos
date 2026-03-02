@@ -115,7 +115,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.2.3",
     "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/config-conventional": "^20.4.2",
     "@next/bundle-analyzer": "^15.5.2",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/postcss": "^4.1.13",
