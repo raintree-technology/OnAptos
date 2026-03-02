@@ -84,7 +84,7 @@
     "form-data": "^4.0.4",
     "framer-motion": "^12.23.12",
     "geist": "^1.5.1",
-    "i18next": "^23.16.8",
+    "i18next": "^25.8.13",
     "i18next-http-backend": "^3.0.2",
     "input-otp": "^1.4.2",
     "json-buffer": "^3.0.1",
